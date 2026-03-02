@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
+import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/resources/styles_manager.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 
@@ -16,8 +18,8 @@ class VerifyOtpView extends StatefulWidget {
 }
 
 class _VerifyOtpViewState extends State<VerifyOtpView> {
-  final List<TextEditingController> _controllers = List.generate(4, (_) => TextEditingController());
-  final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
+  final List<TextEditingController> _controllers = List.generate(5, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(5, (_) => FocusNode());
   int _timerSeconds = 59;
   Timer? _timer;
 
@@ -71,12 +73,12 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
             children: [
               SizedBox(height: 20.h),
               Text(
-                "التحقق من OTP",
+                AppStrings.verifyOTPTitle.tr(),
                 style: getBoldStyle(color: ColorManager.textColor, fontSize: 24.sp),
               ),
               SizedBox(height: 10.h),
               Text(
-                "أدخل رمز التحقق المكون من 4 أرقام المرسل إلى رقم الهاتف",
+                AppStrings.verifyOTPSubtitle.tr(),
                 textAlign: TextAlign.center,
                 style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
               ),
@@ -85,7 +87,7 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: List.generate(
-                  4,
+                  5,
                   (index) => SizedBox(
                     width: 60.w,
                     height: 60.h,
@@ -108,7 +110,7 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
                         ),
                       ),
                       onChanged: (value) {
-                        if (value.isNotEmpty && index < 3) {
+                        if (value.isNotEmpty && index < 4) {
                           _focusNodes[index + 1].requestFocus();
                         } else if (value.isEmpty && index > 0) {
                           _focusNodes[index - 1].requestFocus();
@@ -124,7 +126,7 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
                 onPressed: () {
                   context.push(AppRouters.resetPasswordView);
                 },
-                text: "تحقق",
+                text: AppStrings.verify.tr(),
                 color: ColorManager.primary,
                 textColor: ColorManager.white,
                 radius: 12.r,
@@ -132,7 +134,7 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
               SizedBox(height: 30.h),
               // Resend text
               Text(
-                "لم تتلق الرمز؟ إعادة الإرسال",
+                AppStrings.resendOTP.tr(),
                 style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
               ),
               SizedBox(height: 10.h),

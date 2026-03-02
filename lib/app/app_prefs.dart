@@ -81,7 +81,7 @@ class AppPreferences {
   }
 
   String getUserName() {
-    return _sharedPreferences.getString(prefsKeySaveUserName) ?? AppStrings.guest.tr();
+    return _sharedPreferences.getString(prefsKeySaveUserName) ?? '';
   }
 
   Future<void> saveStudentCode(String name) async {

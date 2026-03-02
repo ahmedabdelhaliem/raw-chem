@@ -12,16 +12,25 @@ import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/resources/styles_manager.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 
-class SuccessView extends StatelessWidget {
-  const SuccessView({super.key});
+class SignupSuccessView extends StatelessWidget {
+  const SignupSuccessView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.white,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: ColorManager.textColor),
+          onPressed: () => context.pop(),
+        ),
+      ),
       body: Stack(
         children: [
-          // Background Gradient & Floating Particles
+          // Premium Animated Background
           _buildPremiumBackground(),
 
           // Main Content
@@ -38,22 +47,22 @@ class SuccessView extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _buildAnimatedIcon(),
+                          _buildAnimatedCelebrateIcon(),
                           SizedBox(height: 32.h),
                           Text(
-                            AppStrings.passwordChangedTitle.tr(),
+                            AppStrings.signupSuccessTitle.tr(),
                             textAlign: TextAlign.center,
                             style: getBoldStyle(color: ColorManager.textColor, fontSize: 26.sp),
-                          ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1, end: 0),
+                          ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1, end: 0),
                           SizedBox(height: 12.h),
                           Text(
-                            AppStrings.passwordChangedSubtitle.tr(),
+                            AppStrings.signupSuccessSubtitle.tr(),
                             textAlign: TextAlign.center,
                             style: getRegularStyle(
                               color: ColorManager.greyTextColor,
                               fontSize: 15.sp,
-                            ).copyWith(height: 1.5),
-                          ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.1, end: 0),
+                            ).copyWith(height: 1.6),
+                          ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.1, end: 0),
                         ],
                       ),
                     ),
@@ -61,11 +70,11 @@ class SuccessView extends StatelessWidget {
                     // Action Button
                     DefaultButtonWidget(
                       onPressed: () => context.go(AppRouters.loginView),
-                      text: AppStrings.backToLogin.tr(),
+                      text: AppStrings.exploreApp.tr(),
                       color: ColorManager.primary,
                       textColor: ColorManager.white,
                       radius: 16.r,
-                    ).animate().fadeIn(delay: 1.seconds).slideY(begin: 0.5, end: 0),
+                    ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.5, end: 0),
                   ],
                 ),
               ),
@@ -85,35 +94,35 @@ class SuccessView extends StatelessWidget {
       height: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
           colors: [
-            ColorManager.primary.withOpacity(0.08),
+            ColorManager.primary.withOpacity(0.06),
             ColorManager.white,
-            ColorManager.primary.withOpacity(0.04),
+            ColorManager.primary.withOpacity(0.06),
           ],
         ),
       ),
       child: Stack(
-        children: List.generate(6, (index) {
-          final random = math.Random(index);
+        children: List.generate(8, (index) {
+          final random = math.Random(index + 100);
           return Positioned(
             top: random.nextDouble() * 1.sh,
             left: random.nextDouble() * 1.sw,
             child:
                 Container(
-                      width: (40 + random.nextInt(60)).w,
-                      height: (40 + random.nextInt(60)).w,
+                      width: (30 + random.nextInt(50)).w,
+                      height: (30 + random.nextInt(50)).w,
                       decoration: BoxDecoration(
-                        color: ColorManager.primary.withOpacity(0.03),
+                        color: ColorManager.primary.withOpacity(0.04),
                         shape: BoxShape.circle,
                       ),
                     )
                     .animate(onPlay: (controller) => controller.repeat(reverse: true))
                     .move(
                       begin: Offset.zero,
-                      end: Offset(random.nextDouble() * 20, random.nextDouble() * 20),
-                      duration: (3 + random.nextInt(4)).seconds,
+                      end: Offset(random.nextDouble() * 30, random.nextDouble() * 30),
+                      duration: (4 + random.nextInt(3)).seconds,
                       curve: Curves.easeInOut,
                     ),
           );
@@ -126,18 +135,18 @@ class SuccessView extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(32.r),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 40.h),
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 48.h),
           decoration: BoxDecoration(
-            color: ColorManager.white.withOpacity(0.7),
+            color: ColorManager.white.withOpacity(0.6),
             borderRadius: BorderRadius.circular(32.r),
-            border: Border.all(color: ColorManager.white.withOpacity(0.5)),
+            border: Border.all(color: ColorManager.white.withOpacity(0.4)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 30,
+                offset: const Offset(0, 15),
               ),
             ],
           ),
@@ -145,50 +154,56 @@ class SuccessView extends StatelessWidget {
         ),
       ),
     ).animate().scale(
-      begin: const Offset(0.8, 0.8),
+      begin: const Offset(0.7, 0.7),
       end: const Offset(1, 1),
-      duration: 600.ms,
+      duration: 700.ms,
       curve: Curves.easeOutBack,
     );
   }
 
-  Widget _buildAnimatedIcon() {
+  Widget _buildAnimatedCelebrateIcon() {
     return Stack(
       alignment: Alignment.center,
       children: [
-        // Outer Glow
-        Container(
-              width: 100.w,
-              height: 100.w,
-              decoration: BoxDecoration(
-                color: ColorManager.primary.withOpacity(0.15),
-                shape: BoxShape.circle,
-              ),
-            )
-            .animate(onPlay: (controller) => controller.repeat(reverse: true))
-            .scale(begin: const Offset(1, 1), end: const Offset(1.3, 1.3), duration: 2.seconds),
+        // Pulsing background circles
+        ...List.generate(2, (index) {
+          return Container(
+                width: (110 + (index * 30)).w,
+                height: (110 + (index * 30)).w,
+                decoration: BoxDecoration(
+                  color: ColorManager.primary.withOpacity(0.08 - (index * 0.03)),
+                  shape: BoxShape.circle,
+                ),
+              )
+              .animate(onPlay: (controller) => controller.repeat(reverse: true))
+              .scale(
+                begin: const Offset(1, 1),
+                end: Offset(1.1 + (index * 0.1), 1.1 + (index * 0.1)),
+                duration: (2 + index).seconds,
+              );
+        }),
 
-        // Main Icon Circle
+        // Main Icon
         Container(
-          width: 75.w,
-          height: 75.w,
+          width: 85.w,
+          height: 85.w,
           decoration: const BoxDecoration(
             color: ColorManager.primary,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
                 color: ColorManager.primary,
-                blurRadius: 15,
+                blurRadius: 20,
                 spreadRadius: -5,
-                offset: Offset(0, 5),
+                offset: Offset(0, 8),
               ),
             ],
           ),
-          child: const Icon(Icons.check_rounded, color: ColorManager.white, size: 45),
+          child: const Icon(Icons.celebration_rounded, color: ColorManager.white, size: 45),
         ).animate().scale(
           begin: Offset.zero,
           end: const Offset(1, 1),
-          duration: 500.ms,
+          duration: 600.ms,
           curve: Curves.elasticOut,
         ),
       ],
@@ -196,36 +211,36 @@ class SuccessView extends StatelessWidget {
   }
 
   List<Widget> _buildConfetti(BuildContext context) {
-    final colors = [ColorManager.primary, Colors.orange, Colors.blue, Colors.pink, Colors.yellow];
-    return List.generate(40, (index) {
-      final random = math.Random(index);
+    final colors = [ColorManager.primary, Colors.amber, Colors.lightBlue, Colors.pinkAccent];
+    return List.generate(50, (index) {
+      final random = math.Random(index + 200);
       final color = colors[random.nextInt(colors.length)];
-      final size = (4 + random.nextInt(6)).toDouble();
+      final size = (5 + random.nextInt(5)).toDouble();
 
       return Positioned(
-        top: 0.4.sh, // Start from center
+        top: 0.45.sh,
         left: 0.5.sw,
         child:
             Container(
                   width: size,
                   height: size,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.8),
-                    shape: random.nextBool() ? BoxShape.circle : BoxShape.rectangle,
+                    color: color.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(random.nextBool() ? 2 : 10),
                   ),
                 )
                 .animate()
                 .move(
                   begin: Offset.zero,
                   end: Offset(
-                    (random.nextDouble() - 0.5) * 1.5.sw, // Spread wide
-                    (random.nextDouble() + 0.5) * 0.6.sh, // Fall down
+                    (random.nextDouble() - 0.5) * 1.8.sw,
+                    (random.nextDouble() + 0.5) * 0.7.sh,
                   ),
-                  duration: (1.5 + random.nextDouble()).seconds,
-                  curve: Curves.easeOutQuart,
+                  duration: (2 + random.nextDouble()).seconds,
+                  curve: Curves.easeOutCubic,
                 )
-                .rotate(begin: 0, end: random.nextDouble() * 4, duration: 2.seconds)
-                .fadeOut(delay: 1.seconds, duration: 500.ms),
+                .rotate(begin: 0, end: random.nextDouble() * 6, duration: 2.5.seconds)
+                .fadeOut(delay: 1.2.seconds, duration: 800.ms),
       );
     });
   }

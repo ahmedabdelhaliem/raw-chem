@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
+import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/resources/styles_manager.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 import 'package:raw_chem/common/widgets/default_form_field.dart';
@@ -48,26 +50,26 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
               children: [
                 SizedBox(height: 20.h),
                 Text(
-                  "كلمة المرور الجديدة",
+                  AppStrings.newPassword.tr(),
                   style: getBoldStyle(color: ColorManager.textColor, fontSize: 24.sp),
                 ),
                 SizedBox(height: 10.h),
-                const Text(
-                  "أهلاً بك مجدداً!\nيرجى إدخال كلمة المرور الجديدة",
+                Text(
+                  AppStrings.resetPasswordSubtitle.tr(),
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: ColorManager.greyTextColor),
+                  style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
                 ),
                 SizedBox(height: 50.h),
                 DefaultFormField(
                   controller: _passwordController,
-                  hintText: "كلمة المرور الجديدة",
+                  hintText: AppStrings.newPassword.tr(),
                   obscureText: true,
                   prefixWidget: const Icon(Icons.lock_outline, color: ColorManager.greyTextColor),
                 ),
                 SizedBox(height: 20.h),
                 DefaultFormField(
                   controller: _confirmPasswordController,
-                  hintText: "تأكيد كلمة المرور",
+                  hintText: AppStrings.confirmPassword.tr(),
                   obscureText: true,
                   prefixWidget: const Icon(Icons.lock_outline, color: ColorManager.greyTextColor),
                 ),
@@ -77,7 +79,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                     const Icon(Icons.check_circle_outline, size: 16, color: ColorManager.primary),
                     SizedBox(width: 5.w),
                     Text(
-                      "يجب أن تكون 8 أحرف، أرقام و رموز",
+                      AppStrings.passwordRequirements.tr(),
                       style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 12.sp),
                     ),
                   ],
@@ -89,7 +91,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       context.push(AppRouters.successView);
                     }
                   },
-                  text: "تعيين",
+                  text: AppStrings.reset.tr(),
                   color: ColorManager.primary,
                   textColor: ColorManager.white,
                   radius: 12.r,

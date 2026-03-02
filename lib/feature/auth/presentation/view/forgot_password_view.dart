@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
+import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/resources/styles_manager.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 import 'package:raw_chem/common/widgets/default_form_field.dart';
@@ -47,13 +49,13 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 SizedBox(height: 20.h),
                 // Heading
                 Text(
-                  "نسيت كلمة السر",
+                  AppStrings.forgotPasswordTitle.tr(),
                   style: getBoldStyle(color: ColorManager.textColor, fontSize: 24.sp),
                 ),
                 SizedBox(height: 10.h),
                 // Subtitle
                 Text(
-                  "أدخل عنوان رقم الهاتف لاستعادة كلمة السر",
+                  AppStrings.forgotPasswordSubtitle.tr(),
                   textAlign: TextAlign.center,
                   style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
                 ),
@@ -61,7 +63,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 // Phone Field
                 DefaultFormField(
                   controller: _phoneController,
-                  hintText: "رقم الهاتف",
+                  hintText: AppStrings.phoneNumber.tr(),
                   keyboardType: TextInputType.phone,
                   prefixWidget: const Icon(Icons.phone_outlined, color: ColorManager.greyTextColor),
                 ),
@@ -73,7 +75,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                       context.push(AppRouters.verifyOtpView);
                     }
                   },
-                  text: "إرسال رمز التحقق OTP",
+                  text: AppStrings.sendOTP.tr(),
                   color: ColorManager.primary,
                   textColor: ColorManager.white,
                   radius: 12.r,

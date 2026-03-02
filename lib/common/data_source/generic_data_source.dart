@@ -40,7 +40,7 @@ class GenericDataSource {
         } catch (e, stackTrace) {
           log(stackTrace.toString());
           log(e.toString());
-          return Left(ParsingFailure(message: AppStrings.unKnownError.tr()));
+          return Left(ParsingFailure(message: AppStrings.unknownError.tr()));
         }
       },
     );

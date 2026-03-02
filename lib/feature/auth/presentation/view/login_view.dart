@@ -46,13 +46,13 @@ class _LoginViewState extends State<LoginView> {
                 SizedBox(height: 30.h),
                 // Heading
                 Text(
-                  "هيا نسجل الدخول!",
+                  AppStrings.loginTitle.tr(),
                   style: getBoldStyle(color: ColorManager.textColor, fontSize: 24.sp),
                 ),
                 SizedBox(height: 10.h),
                 // Subtitle
                 Text(
-                  "تسجيل الدخول إلى حسابك لمتابعة شراء منتجاتك.",
+                  AppStrings.loginSubtitle.tr(),
                   textAlign: TextAlign.center,
                   style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
                 ),
@@ -60,7 +60,7 @@ class _LoginViewState extends State<LoginView> {
                 // Phone Field
                 DefaultFormField(
                   controller: _phoneController,
-                  hintText: "رقم الهاتف",
+                  hintText: AppStrings.phoneNumber.tr(),
                   keyboardType: TextInputType.phone,
                   prefixWidget: const Icon(Icons.phone_outlined, color: ColorManager.greyTextColor),
                 ),
@@ -68,7 +68,7 @@ class _LoginViewState extends State<LoginView> {
                 // Password Field
                 DefaultFormField(
                   controller: _passwordController,
-                  hintText: "كلمة المرور",
+                  hintText: AppStrings.password.tr(),
                   obscureText: true,
                   prefixWidget: const Icon(Icons.lock_outline, color: ColorManager.greyTextColor),
                 ),
@@ -81,7 +81,7 @@ class _LoginViewState extends State<LoginView> {
                       context.push(AppRouters.forgotPasswordView);
                     },
                     child: Text(
-                      "هل نسيت كلمة السر؟",
+                      AppStrings.forgotPassword.tr(),
                       style: getMediumStyle(color: ColorManager.primary, fontSize: 13.sp),
                     ),
                   ),
@@ -105,7 +105,7 @@ class _LoginViewState extends State<LoginView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "ليس لديك حساب ؟",
+                      AppStrings.dontHaveAccount.tr(),
                       style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
                     ),
                     TextButton(
@@ -113,7 +113,7 @@ class _LoginViewState extends State<LoginView> {
                         context.push(AppRouters.signupView);
                       },
                       child: Text(
-                        "إنشاء حساب",
+                        AppStrings.signup.tr(),
                         style: getBoldStyle(color: ColorManager.primary, fontSize: 14.sp),
                       ),
                     ),

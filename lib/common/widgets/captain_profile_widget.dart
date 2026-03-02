@@ -88,7 +88,7 @@ class CaptainProfileWidget extends StatelessWidget {
               if (subTitle != null || (nametype != null && nametype!.isNotEmpty)) ...[
                 SizedBox(height: 4.h),
                 Text(
-                  subTitle ?? (nametype == 'parent' ? AppStrings.parent.tr() : nametype ?? ''),
+                  subTitle ?? (nametype == 'parent' ? 'ولي أمر' : nametype ?? ''),
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w400,
@@ -138,7 +138,7 @@ class CaptainProfileWidget extends StatelessWidget {
               SizedBox(width: 4.w),
             ],
             Text(
-              hasChild ? childName : AppStrings.children.tr(),
+              hasChild ? childName : 'الأبناء',
               style: TextStyle(
                 color: hasChild ? Colors.white : ColorManager.black,
                 fontSize: 12.sp,

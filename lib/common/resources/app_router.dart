@@ -4,6 +4,8 @@ import 'package:raw_chem/app/app.dart';
 import 'package:raw_chem/feature/auth/presentation/view/forgot_password_view.dart';
 import 'package:raw_chem/feature/auth/presentation/view/login_view.dart';
 import 'package:raw_chem/feature/auth/presentation/view/reset_password_view.dart';
+import 'package:raw_chem/feature/auth/presentation/view/signup_success_view.dart';
+import 'package:raw_chem/feature/auth/presentation/view/signup_view.dart';
 import 'package:raw_chem/feature/auth/presentation/view/success_view.dart';
 import 'package:raw_chem/feature/auth/presentation/view/verify_otp_view.dart';
 import 'package:raw_chem/feature/onboarding/presentation/view/onboarding_view.dart';
@@ -18,6 +20,7 @@ abstract class AppRouters {
   static const String forgotPasswordView = '/forgotPassword';
   static const String resetPasswordView = '/resetPassword';
   static const String signupView = '/signup';
+  static const String signupSuccessView = '/signupSuccess';
   static const String verifyOtpView = '/verifyOtp';
   static const String successView = '/success';
   static const String privateTripView = '/PrivateTrip';
@@ -102,6 +105,11 @@ abstract class AppRouters {
         builder: (context, state) => const ResetPasswordView(),
       ),
       GoRoute(path: AppRouters.successView, builder: (context, state) => const SuccessView()),
+      GoRoute(path: AppRouters.signupView, builder: (context, state) => const SignupView()),
+      GoRoute(
+        path: AppRouters.signupSuccessView,
+        builder: (context, state) => const SignupSuccessView(),
+      ),
     ],
   );
 

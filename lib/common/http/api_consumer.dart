@@ -399,7 +399,7 @@ final class BaseApiConsumer implements ApiConsumer {
               return ServerFailure(message: 'network failure ${error.message}');
             }
             if (error.response?.statusCode == 500) {
-              return ServerFailure(message: AppStrings.unKnownError.tr());
+              return ServerFailure(message: AppStrings.serverConnectionError.tr());
             }
             if (error.response?.statusCode == 401) {
               if (instance<AppPreferences>().getToken().isNotEmpty)
@@ -460,7 +460,7 @@ final class BaseApiConsumer implements ApiConsumer {
             }
 
             if (error.response?.statusCode == 404) {
-              return ServerFailure(message: AppStrings.unKnownError.tr());
+              return ServerFailure(message: AppStrings.noDataFound.tr());
             }
           } catch (e) {
             // scaffoldMessengerKey.currentContext!.showToast(text: texttext: )(e.toString());
@@ -485,7 +485,7 @@ final class BaseApiConsumer implements ApiConsumer {
         }
         return ServerFailure(message: AppStrings.serverConnectionError.tr());
       case DioExceptionType.unknown:
-        return UnknownFailure(message: AppStrings.unKnownError.tr());
+        return UnknownFailure(message: AppStrings.unknownError.tr());
     }
   }
 }

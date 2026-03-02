@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:raw_chem/app/app_prefs.dart';
-import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/assets_manager.dart';
 
@@ -17,7 +15,6 @@ class SplashView extends StatefulWidget {
 
 class _SplashViewState extends State<SplashView> {
   Timer? _timer;
-  final AppPreferences _appPreferences = instance<AppPreferences>();
 
   _startDelay() {
     _timer = Timer(const Duration(seconds: 3), _goNext);
