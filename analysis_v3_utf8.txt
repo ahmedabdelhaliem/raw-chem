@@ -1,0 +1,200 @@
+﻿Analyzing raw_chem...                                           
+
+  error - Target of URI doesn't exist: 'package:raw_chem/feature/auth/signup/cubit/parent_cubit/children_cubit.dart' - lib\app\app.dart:3:8 - uri_does_not_exist
+  error - The name 'ChildrenCubit' isn't a type, so it can't be used as a type argument - lib\app\app.dart:39:27 - non_type_as_type_argument
+  error - The method 'showToast' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:23:5 - undefined_method
+  error - The method 'getBoldStyle' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:25:18 - undefined_method
+  error - The getter 'sp' isn't defined for the type 'int' - lib\app\app_functions.dart:25:44 - undefined_getter
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:25:55 - undefined_identifier
+  error - Undefined name 'StyledToastAnimation' - lib\app\app_functions.dart:27:18 - undefined_identifier
+  error - Undefined name 'StyledToastAnimation' - lib\app\app_functions.dart:28:25 - undefined_identifier
+  error - Undefined name 'StyledToastPosition' - lib\app\app_functions.dart:29:17 - undefined_identifier
+  error - The method 'DateFormat' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:41:28 - undefined_method
+  error - The method 'DateFormat' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:49:28 - undefined_method
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:55:29 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:55:114 - undefined_identifier
+  error - The method 'PageTransition' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:55:146 - undefined_method
+  error - Undefined name 'PageTransitionType' - lib\app\app_functions.dart:57:13 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:65:22 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:65:119 - undefined_identifier
+  error - The method 'PageTransition' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:65:162 - undefined_method
+  error - Undefined name 'PageTransitionType' - lib\app\app_functions.dart:67:13 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:75:22 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:75:140 - undefined_identifier
+  error - The method 'PageTransition' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:75:186 - undefined_method
+  error - Undefined name 'PageTransitionType' - lib\app\app_functions.dart:77:13 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:86:5 - undefined_identifier
+  error - The method 'PageTransition' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:86:37 - undefined_method
+  error - Undefined name 'PageTransitionType' - lib\app\app_functions.dart:88:13 - undefined_identifier
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:129:80 - undefined_getter
+  error - The getter 'h' isn't defined for the type 'int' - lib\app\app_functions.dart:130:61 - undefined_getter
+  error - The getter 'w' isn't defined for the type 'int' - lib\app\app_functions.dart:130:78 - undefined_getter
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:131:28 - undefined_identifier
+  error - The method 'getBoldStyle' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:133:31 - undefined_method
+  error - The getter 'sp' isn't defined for the type 'int' - lib\app\app_functions.dart:133:57 - undefined_getter
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:133:68 - undefined_identifier
+  error - The getter 'h' isn't defined for the type 'int' - lib\app\app_functions.dart:134:33 - undefined_getter
+  error - The method 'DefaultButtonWidget' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:138:26 - undefined_method
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:143:28 - undefined_identifier
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:144:32 - undefined_identifier
+  error - Undefined name 'AppStrings' - lib\app\app_functions.dart:145:27 - undefined_identifier
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:146:31 - undefined_getter
+  error - The getter 'w' isn't defined for the type 'int' - lib\app\app_functions.dart:149:36 - undefined_getter
+  error - The method 'DefaultButtonWidget' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:151:26 - undefined_method
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:153:28 - undefined_identifier
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:154:32 - undefined_identifier
+  error - Undefined name 'AppStrings' - lib\app\app_functions.dart:155:27 - undefined_identifier
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:156:31 - undefined_getter
+  error - Undefined name 'AppStrings' - lib\app\app_functions.dart:171:55 - undefined_identifier
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:171:83 - undefined_identifier
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\app\app_functions.dart:171:110 - use_build_context_synchronously
+  error - The getter 'h' isn't defined for the type 'int' - lib\app\app_functions.dart:180:50 - undefined_getter
+  error - The getter 'w' isn't defined for the type 'int' - lib\app\app_functions.dart:180:67 - undefined_getter
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:182:18 - undefined_identifier
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:184:41 - undefined_getter
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:185:42 - undefined_getter
+  error - The getter 'w' isn't defined for the type 'int' - lib\app\app_functions.dart:192:23 - undefined_getter
+  error - The getter 'h' isn't defined for the type 'int' - lib\app\app_functions.dart:193:23 - undefined_getter
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:195:22 - undefined_identifier
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:196:54 - undefined_getter
+  error - The getter 'h' isn't defined for the type 'int' - lib\app\app_functions.dart:199:31 - undefined_getter
+  error - Target of URI doesn't exist: 'package:raw_chem/feature/auth/signup/models/auth_model.dart' - lib\app\current_user.dart:5:8 - uri_does_not_exist
+  error - Undefined class 'CurrentSubscription' - lib\app\current_user.dart:14:3 - undefined_class
+  error - Undefined class 'CurrentSubscription' - lib\app\current_user.dart:17:3 - undefined_class
+  error - Undefined class 'CurrentSubscription' - lib\app\current_user.dart:28:24 - undefined_class
+  error - The name 'ChildrenCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:52:46 - non_type_as_type_argument
+  error - The name 'LoginDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:110:34 - non_type_as_type_argument
+  error - The function 'LoginDataSourceImpl' isn't defined - lib\app\di.dart:110:57 - undefined_function
+  error - The name 'LoginCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:111:28 - non_type_as_type_argument
+  error - The function 'LoginCubit' isn't defined - lib\app\di.dart:111:46 - undefined_function
+  error - The name 'RegisterDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:112:34 - non_type_as_type_argument
+  error - The function 'RegisterDataSourceImpl' isn't defined - lib\app\di.dart:112:60 - undefined_function
+  error - The name 'RegisterCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:113:28 - non_type_as_type_argument
+  error - The function 'RegisterCubit' isn't defined - lib\app\di.dart:113:49 - undefined_function
+  error - The name 'IntroDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:115:34 - non_type_as_type_argument
+  error - The function 'IntroDataSourceImpl' isn't defined - lib\app\di.dart:115:57 - undefined_function
+  error - The name 'IntroCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:116:28 - non_type_as_type_argument
+  error - The function 'IntroCubit' isn't defined - lib\app\di.dart:116:46 - undefined_function
+  error - The name 'VerifyOtpDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:118:34 - non_type_as_type_argument
+  error - The function 'VerifyOtpDataSourceImpl' isn't defined - lib\app\di.dart:118:61 - undefined_function
+  error - The name 'VerifyOtpCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:119:28 - non_type_as_type_argument
+  error - The function 'VerifyOtpCubit' isn't defined - lib\app\di.dart:119:50 - undefined_function
+  error - The name 'ResendOtpDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:120:34 - non_type_as_type_argument
+  error - The function 'ResendOtpDataSourceImpl' isn't defined - lib\app\di.dart:120:61 - undefined_function
+  error - The name 'ResendOtpCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:121:28 - non_type_as_type_argument
+  error - The function 'ResendOtpCubit' isn't defined - lib\app\di.dart:121:50 - undefined_function
+  error - The name 'ChangePasswordDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:122:34 - non_type_as_type_argument
+  error - The function 'ChangePasswordDataSourceImpl' isn't defined - lib\app\di.dart:123:13 - undefined_function
+  error - The name 'ChangePasswordBloc' isn't a type, so it can't be used as a type argument - lib\app\di.dart:124:28 - non_type_as_type_argument
+  error - The function 'ChangePasswordBloc' isn't defined - lib\app\di.dart:124:54 - undefined_function
+  error - The name 'ResetPasswordDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:125:34 - non_type_as_type_argument
+  error - The function 'ResetPasswordDataSourceImpl' isn't defined - lib\app\di.dart:126:13 - undefined_function
+  error - The name 'ResetPasswordCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:127:28 - non_type_as_type_argument
+  error - The function 'ResetPasswordCubit' isn't defined - lib\app\di.dart:127:54 - undefined_function
+  error - The name 'SocialAuthDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:128:34 - non_type_as_type_argument
+  error - The function 'SocialAuthDataSourceImpl' isn't defined - lib\app\di.dart:128:62 - undefined_function
+  error - The name 'SocialAuthCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:129:28 - non_type_as_type_argument
+  error - The function 'SocialAuthCubit' isn't defined - lib\app\di.dart:129:51 - undefined_function
+  error - The name 'ForgetPasswordDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:130:34 - non_type_as_type_argument
+  error - The function 'ForgetPasswordDataSourceImpl' isn't defined - lib\app\di.dart:131:13 - undefined_function
+  error - The name 'ForgetPasswordCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:132:28 - non_type_as_type_argument
+  error - The function 'ForgetPasswordCubit' isn't defined - lib\app\di.dart:132:55 - undefined_function
+  error - The name 'LogoutDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:134:34 - non_type_as_type_argument
+  error - The function 'LogoutDataSourceImpl' isn't defined - lib\app\di.dart:134:58 - undefined_function
+  error - The name 'LogoutCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:135:28 - non_type_as_type_argument
+  error - The function 'LogoutCubit' isn't defined - lib\app\di.dart:135:47 - undefined_function
+  error - The name 'ProfileDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:137:34 - non_type_as_type_argument
+  error - The function 'ProfileDataSourceImpl' isn't defined - lib\app\di.dart:137:59 - undefined_function
+  error - The name 'ProfileCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:138:34 - non_type_as_type_argument
+  error - The function 'ProfileCubit' isn't defined - lib\app\di.dart:138:54 - undefined_function
+  error - The name 'FaqsDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:140:34 - non_type_as_type_argument
+  error - The function 'FaqsDataSourceImpl' isn't defined - lib\app\di.dart:140:56 - undefined_function
+  error - The name 'FaqsCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:141:28 - non_type_as_type_argument
+  error - The function 'FaqsCubit' isn't defined - lib\app\di.dart:141:45 - undefined_function
+  error - The name 'PrivacyPolicyCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:142:28 - non_type_as_type_argument
+  error - The function 'PrivacyPolicyCubit' isn't defined - lib\app\di.dart:142:54 - undefined_function
+  error - The name 'ContactUsDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:144:34 - non_type_as_type_argument
+  error - The function 'ContactUsDataSourceImpl' isn't defined - lib\app\di.dart:144:61 - undefined_function
+  error - The name 'ContactUsCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:145:28 - non_type_as_type_argument
+  error - The function 'ContactUsCubit' isn't defined - lib\app\di.dart:145:50 - undefined_function
+  error - The name 'NotificationsDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:147:34 - non_type_as_type_argument
+  error - The function 'NotificationsDataSourceImpl' isn't defined - lib\app\di.dart:148:13 - undefined_function
+  error - The name 'NotificationsCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:149:28 - non_type_as_type_argument
+  error - The function 'NotificationsCubit' isn't defined - lib\app\di.dart:149:54 - undefined_function
+  error - The name 'EvaluationDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:151:34 - non_type_as_type_argument
+  error - The function 'EvaluationDataSourceImpl' isn't defined - lib\app\di.dart:151:62 - undefined_function
+  error - The name 'EvaluationCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:152:28 - non_type_as_type_argument
+  error - The function 'EvaluationCubit' isn't defined - lib\app\di.dart:152:51 - undefined_function
+  error - The name 'EditProfileDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:156:30 - non_type_as_type_argument
+  error - The function 'EditProfileDataSourceImpl' isn't defined - lib\app\di.dart:156:59 - undefined_function
+  error - The name 'EditProfileCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:157:34 - non_type_as_type_argument
+  error - The function 'EditProfileCubit' isn't defined - lib\app\di.dart:157:58 - undefined_function
+  error - The name 'WalletBalanceDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:162:34 - non_type_as_type_argument
+  error - The function 'WalletBalanceDataSourceImpl' isn't defined - lib\app\di.dart:163:13 - undefined_function
+  error - The name 'WalletBalanceCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:164:28 - non_type_as_type_argument
+  error - The function 'WalletBalanceCubit' isn't defined - lib\app\di.dart:164:54 - undefined_function
+  error - The name 'DepositDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:167:34 - non_type_as_type_argument
+  error - The function 'DepositDataSourceImpl' isn't defined - lib\app\di.dart:167:59 - undefined_function
+  error - The name 'DepositCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:168:28 - non_type_as_type_argument
+  error - The function 'DepositCubit' isn't defined - lib\app\di.dart:168:48 - undefined_function
+  error - The name 'TransactionsDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:172:30 - non_type_as_type_argument
+  error - The function 'TransactionsDataSourceImpl' isn't defined - lib\app\di.dart:172:60 - undefined_function
+  error - The name 'TransactionsCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:173:28 - non_type_as_type_argument
+  error - The function 'TransactionsCubit' isn't defined - lib\app\di.dart:173:53 - undefined_function
+  error - The name 'UnpaidItemsDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:177:30 - non_type_as_type_argument
+  error - The function 'UnpaidItemsDataSourceImpl' isn't defined - lib\app\di.dart:177:59 - undefined_function
+  error - The name 'UnpaidItemsCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:178:28 - non_type_as_type_argument
+  error - The function 'UnpaidItemsCubit' isn't defined - lib\app\di.dart:178:52 - undefined_function
+  error - The name 'ShareAppDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:181:34 - non_type_as_type_argument
+  error - The function 'ShareAppDataSource' isn't defined - lib\app\di.dart:181:60 - undefined_function
+  error - The name 'ShareAppCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:182:28 - non_type_as_type_argument
+  error - The function 'ShareAppCubit' isn't defined - lib\app\di.dart:182:49 - undefined_function
+  error - The name 'FieldDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:186:34 - non_type_as_type_argument
+  error - The function 'FieldDataSourceImpl' isn't defined - lib\app\di.dart:186:57 - undefined_function
+  error - The name 'FieldCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:187:28 - non_type_as_type_argument
+  error - The function 'FieldCubit' isn't defined - lib\app\di.dart:187:46 - undefined_function
+  error - The name 'SpecialistsDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:190:30 - non_type_as_type_argument
+  error - The function 'SpecialistsDataSourceImpl' isn't defined - lib\app\di.dart:190:59 - undefined_function
+  error - The name 'SpecialistsCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:191:28 - non_type_as_type_argument
+  error - The function 'SpecialistsCubit' isn't defined - lib\app\di.dart:191:52 - undefined_function
+  error - The name 'CountriesDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:194:30 - non_type_as_type_argument
+  error - The function 'CountriesCitiesDataSourceImpl' isn't defined - lib\app\di.dart:194:57 - undefined_function
+  error - The name 'CountriesCitiesCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:195:28 - non_type_as_type_argument
+  error - The function 'CountriesCitiesCubit' isn't defined - lib\app\di.dart:195:56 - undefined_function
+  error - The name 'CitiesCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:197:28 - non_type_as_type_argument
+  error - The function 'CitiesCubit' isn't defined - lib\app\di.dart:197:47 - undefined_function
+  error - The name 'RegionsDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:199:34 - non_type_as_type_argument
+  error - The function 'RegionsDataSourceImpl' isn't defined - lib\app\di.dart:199:59 - undefined_function
+  error - The name 'RegionsCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:200:28 - non_type_as_type_argument
+  error - The function 'RegionsCubit' isn't defined - lib\app\di.dart:200:48 - undefined_function
+  error - The name 'SportsDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:202:34 - non_type_as_type_argument
+  error - The function 'SportsDataSourceImpl' isn't defined - lib\app\di.dart:202:58 - undefined_function
+  error - The name 'SportsCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:203:34 - non_type_as_type_argument
+  error - The function 'SportsCubit' isn't defined - lib\app\di.dart:203:53 - undefined_function
+  error - The name 'SliderDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:205:34 - non_type_as_type_argument
+  error - The function 'SliderDataSourceImpl' isn't defined - lib\app\di.dart:205:58 - undefined_function
+  error - The name 'SliderCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:206:28 - non_type_as_type_argument
+  error - The function 'SliderCubit' isn't defined - lib\app\di.dart:206:47 - undefined_function
+  error - The name 'CoachesForeverySportDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:208:34 - non_type_as_type_argument
+  error - The function 'CoachesForeverySportDataSourceImpl' isn't defined - lib\app\di.dart:209:13 - undefined_function
+  error - The name 'CoachesForeverySportCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:210:28 - non_type_as_type_argument
+  error - The function 'CoachesForeverySportCubit' isn't defined - lib\app\di.dart:210:61 - undefined_function
+  error - The name 'CoachDetailsDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:213:30 - non_type_as_type_argument
+  error - The function 'CoachDetailsDataSourceImpl' isn't defined - lib\app\di.dart:213:60 - undefined_function
+  error - The name 'CoachesDetailsCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:214:28 - non_type_as_type_argument
+  error - The function 'CoachesDetailsCubit' isn't defined - lib\app\di.dart:214:55 - undefined_function
+  error - The name 'TrainingCategorieDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:216:34 - non_type_as_type_argument
+  error - The function 'TrainingCategorieDataSourceImpl' isn't defined - lib\app\di.dart:217:13 - undefined_function
+  error - The name 'TrainingCategoriesCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:218:28 - non_type_as_type_argument
+  error - The function 'TrainingCategoriesCubit' isn't defined - lib\app\di.dart:218:59 - undefined_function
+  error - The name 'SponsorsDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:220:34 - non_type_as_type_argument
+  error - The function 'SponsorsDataSourceImpl' isn't defined - lib\app\di.dart:220:60 - undefined_function
+  error - The name 'SponsorsCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:221:28 - non_type_as_type_argument
+  error - The function 'SponsorsCubit' isn't defined - lib\app\di.dart:221:49 - undefined_function
+  error - The name 'AllCoachesDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:223:34 - non_type_as_type_argument
+  error - The function 'AllCoachesDataSourceImpl' isn't defined - lib\app\di.dart:223:62 - undefined_function
+  error - The name 'AllCoachesCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:224:28 - non_type_as_type_argument
+  error - The function 'AllCoachesCubit' isn't defined - lib\app\di.dart:224:51 - undefined_function
+  error - The name 'ReportDataSource' isn't a type, so it can't be used as a type argument - lib\app\di.dart:226:34 - non_type_as_type_argument
+  error - The function 'ReportDataSourceImpl' isn't defined - lib\app\di.dart:226:58 - undefined_function
+  error - The name 'ReportCubit' isn't a type, so it can't be used as a type argument - lib\app\di.dart:227:28 - non_type_as_type_argument

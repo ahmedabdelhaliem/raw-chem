@@ -1,0 +1,100 @@
+﻿Analyzing raw_chem...                                           
+
+   info - The imported package 'coachizer' isn't a dependency of the importing package - lib\app\app.dart:1:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:coachizer/app/app_prefs.dart' - lib\app\app.dart:1:8 - uri_does_not_exist
+   info - The imported package 'coachizer' isn't a dependency of the importing package - lib\app\app.dart:2:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:coachizer/common/resources/theme_manager.dart' - lib\app\app.dart:2:8 - uri_does_not_exist
+   info - The imported package 'coachizer' isn't a dependency of the importing package - lib\app\app.dart:3:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:coachizer/feature/auth/signup/cubit/parent_cubit/children_cubit.dart' - lib\app\app.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'AppPreferences' - lib\app\app.dart:24:9 - undefined_class
+  error - The name 'AppPreferences' isn't a type, so it can't be used as a type argument - lib\app\app.dart:24:51 - non_type_as_type_argument
+  error - The name 'ChildrenCubit' isn't a type, so it can't be used as a type argument - lib\app\app.dart:39:27 - non_type_as_type_argument
+  error - Undefined name 'ThemeManager' - lib\app\app.dart:53:22 - undefined_identifier
+  error - The method 'showToast' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:23:5 - undefined_method
+  error - The method 'getBoldStyle' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:25:18 - undefined_method
+  error - The getter 'sp' isn't defined for the type 'int' - lib\app\app_functions.dart:25:44 - undefined_getter
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:25:55 - undefined_identifier
+  error - Undefined name 'StyledToastAnimation' - lib\app\app_functions.dart:27:18 - undefined_identifier
+  error - Undefined name 'StyledToastAnimation' - lib\app\app_functions.dart:28:25 - undefined_identifier
+  error - Undefined name 'StyledToastPosition' - lib\app\app_functions.dart:29:17 - undefined_identifier
+  error - The method 'DateFormat' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:41:28 - undefined_method
+  error - The method 'DateFormat' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:49:28 - undefined_method
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:55:29 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:55:114 - undefined_identifier
+  error - The method 'PageTransition' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:55:146 - undefined_method
+  error - Undefined name 'PageTransitionType' - lib\app\app_functions.dart:57:13 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:65:22 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:65:119 - undefined_identifier
+  error - The method 'PageTransition' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:65:162 - undefined_method
+  error - Undefined name 'PageTransitionType' - lib\app\app_functions.dart:67:13 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:75:22 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:75:140 - undefined_identifier
+  error - The method 'PageTransition' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:75:186 - undefined_method
+  error - Undefined name 'PageTransitionType' - lib\app\app_functions.dart:77:13 - undefined_identifier
+  error - Undefined name 'navigatorKey' - lib\app\app_functions.dart:86:5 - undefined_identifier
+  error - The method 'PageTransition' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:86:37 - undefined_method
+  error - Undefined name 'PageTransitionType' - lib\app\app_functions.dart:88:13 - undefined_identifier
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:129:80 - undefined_getter
+  error - The getter 'h' isn't defined for the type 'int' - lib\app\app_functions.dart:130:61 - undefined_getter
+  error - The getter 'w' isn't defined for the type 'int' - lib\app\app_functions.dart:130:78 - undefined_getter
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:131:28 - undefined_identifier
+  error - The method 'getBoldStyle' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:133:31 - undefined_method
+  error - The getter 'sp' isn't defined for the type 'int' - lib\app\app_functions.dart:133:57 - undefined_getter
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:133:68 - undefined_identifier
+  error - The getter 'h' isn't defined for the type 'int' - lib\app\app_functions.dart:134:33 - undefined_getter
+  error - The method 'DefaultButtonWidget' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:138:26 - undefined_method
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:143:28 - undefined_identifier
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:144:32 - undefined_identifier
+  error - Undefined name 'AppStrings' - lib\app\app_functions.dart:145:27 - undefined_identifier
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:146:31 - undefined_getter
+  error - The getter 'w' isn't defined for the type 'int' - lib\app\app_functions.dart:149:36 - undefined_getter
+  error - The method 'DefaultButtonWidget' isn't defined for the type 'AppFunctions' - lib\app\app_functions.dart:151:26 - undefined_method
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:153:28 - undefined_identifier
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:154:32 - undefined_identifier
+  error - Undefined name 'AppStrings' - lib\app\app_functions.dart:155:27 - undefined_identifier
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:156:31 - undefined_getter
+  error - Undefined name 'AppStrings' - lib\app\app_functions.dart:171:55 - undefined_identifier
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:171:83 - undefined_identifier
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\app\app_functions.dart:171:110 - use_build_context_synchronously
+  error - The getter 'h' isn't defined for the type 'int' - lib\app\app_functions.dart:180:50 - undefined_getter
+  error - The getter 'w' isn't defined for the type 'int' - lib\app\app_functions.dart:180:67 - undefined_getter
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:182:18 - undefined_identifier
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:184:41 - undefined_getter
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:185:42 - undefined_getter
+  error - The getter 'w' isn't defined for the type 'int' - lib\app\app_functions.dart:192:23 - undefined_getter
+  error - The getter 'h' isn't defined for the type 'int' - lib\app\app_functions.dart:193:23 - undefined_getter
+  error - Undefined name 'ColorManager' - lib\app\app_functions.dart:195:22 - undefined_identifier
+  error - The getter 'r' isn't defined for the type 'int' - lib\app\app_functions.dart:196:54 - undefined_getter
+  error - The getter 'h' isn't defined for the type 'int' - lib\app\app_functions.dart:199:31 - undefined_getter
+   info - The imported package 'coachizer' isn't a dependency of the importing package - lib\app\app_prefs.dart:1:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:coachizer/common/resources/language_manager.dart' - lib\app\app_prefs.dart:1:8 - uri_does_not_exist
+   info - The imported package 'coachizer' isn't a dependency of the importing package - lib\app\app_prefs.dart:2:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:coachizer/common/resources/strings_manager.dart' - lib\app\app_prefs.dart:2:8 - uri_does_not_exist
+  error - Undefined name 'LanguageType' - lib\app\app_prefs.dart:33:14 - undefined_identifier
+  error - Undefined name 'LanguageType' - lib\app\app_prefs.dart:39:28 - undefined_identifier
+  error - Undefined name 'LanguageType' - lib\app\app_prefs.dart:40:45 - undefined_identifier
+  error - Undefined name 'LanguageType' - lib\app\app_prefs.dart:42:45 - undefined_identifier
+  error - Undefined name 'LanguageType' - lib\app\app_prefs.dart:48:28 - undefined_identifier
+  error - Undefined name 'ENGLISH_LOCALE' - lib\app\app_prefs.dart:49:14 - undefined_identifier
+  error - Undefined name 'ARABIC_LOCALE' - lib\app\app_prefs.dart:51:14 - undefined_identifier
+  error - Undefined name 'AppStrings' - lib\app\app_prefs.dart:84:66 - undefined_identifier
+   info - The imported package 'coachizer' isn't a dependency of the importing package - lib\app\current_user.dart:3:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:coachizer/app/imports.dart' - lib\app\current_user.dart:3:8 - uri_does_not_exist
+   info - The imported package 'coachizer' isn't a dependency of the importing package - lib\app\current_user.dart:4:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:coachizer/app/user_type.dart' - lib\app\current_user.dart:4:8 - uri_does_not_exist
+   info - The imported package 'coachizer' isn't a dependency of the importing package - lib\app\current_user.dart:5:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:coachizer/feature/auth/signup/models/auth_model.dart' - lib\app\current_user.dart:5:8 - uri_does_not_exist
+  error - Undefined class 'UserType' - lib\app\current_user.dart:13:3 - undefined_class
+  error - Undefined class 'CurrentSubscription' - lib\app\current_user.dart:14:3 - undefined_class
+  error - Undefined class 'UserType' - lib\app\current_user.dart:16:3 - undefined_class
+  error - Undefined class 'CurrentSubscription' - lib\app\current_user.dart:17:3 - undefined_class
+  error - Undefined name 'UserType' - lib\app\current_user.dart:19:37 - undefined_identifier
+  error - Undefined name 'UserType' - lib\app\current_user.dart:20:36 - undefined_identifier
+  error - Undefined name 'UserType' - lib\app\current_user.dart:21:37 - undefined_identifier
+  error - Undefined class 'UserType' - lib\app\current_user.dart:23:28 - undefined_class
+  error - Undefined class 'CurrentSubscription' - lib\app\current_user.dart:28:24 - undefined_class
+  error - Undefined name 'UserType' - lib\app\current_user.dart:35:19 - undefined_identifier
+  error - Undefined name 'UserType' - lib\app\current_user.dart:37:23 - undefined_identifier
+  error - The function 'instance' isn't defined - lib\app\current_user.dart:49:32 - undefined_function
+  error - The name 'CurrentUser' isn't a type, so it can't be used as a type argument - lib\app\di.dart:13:34 - non_type_as_type_argument
+  error - The function 'CurrentUser' isn't defined - lib\app\di.dart:14:11 - undefined_function

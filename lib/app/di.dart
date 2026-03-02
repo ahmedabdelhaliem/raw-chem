@@ -1,0 +1,66 @@
+part of 'imports.dart';
+
+final instance = GetIt.instance;
+
+Future<void> initAppModule() async {
+  instance.allowReassignment = true;
+
+  // 1. SharedPreferences (مرة واحدة بس)
+  final sharedPrefs = await SharedPreferences.getInstance();
+  instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
+
+  // 2. CurrentUser (مع تحميل النوع فورًا)
+  
+  // // internet connection checker
+  // instance.registerLazySingleton<InternetConnectionChecker>(
+  //     () => InternetConnectionChecker());
+
+  // app preferences
+  instance
+      .registerLazySingleton<AppPreferences>(() => AppPreferences(instance<SharedPreferences>()));
+
+  // dio
+  instance.registerLazySingleton<Dio>(() => Dio()
+    ..options = BaseOptions(
+      baseUrl: AppConstants.baseUrl,
+      receiveDataWhenStatusError: true,
+      // connectTimeout: const Duration(seconds: 60),
+      // receiveTimeout: const Duration(seconds: 60),
+      // sendTimeout: const Duration(seconds: 60),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    )
+    ..interceptors.addAll([
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          final token = instance<AppPreferences>().getToken();
+          if (token.isNotEmpty) {
+            options.headers["Authorization"] = "Bearer $token";
+          }
+          options.headers["Accept-Language"] = instance<AppPreferences>().getAppLanguage();
+          return handler.next(options);
+        },
+      ),
+  
+      if (!kReleaseMode)
+        PrettyDioLogger(
+            requestHeader: true,
+            requestBody: true,
+            responseHeader: true,
+            responseBody: true,
+            error: true,
+            compact: true,
+            maxWidth: 90,
+            enabled: true)
+    ]));
+
+  // api consumer
+  instance.registerLazySingleton<ApiConsumer>(() => BaseApiConsumer(dio: instance()));
+
+  // data source
+  instance.registerLazySingleton<GenericDataSource>(() => GenericDataSource(instance()));
+
+  
+}
