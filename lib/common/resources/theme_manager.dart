@@ -28,7 +28,7 @@ class ThemeManager {
         getRegularStyle(color: ColorManager.grey, fontSize: 12.sp),
         labelStyle:
         getMediumStyle(color: ColorManager.textColor, fontSize: 14.sp),
-        fillColor: ColorManager.white,
+        fillColor: ColorManager.white, 
         filled: true,
         contentPadding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 10.h),
         focusedBorder: OutlineInputBorder(
@@ -50,6 +50,9 @@ class ThemeManager {
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
           borderSide: const BorderSide(color: ColorManager.grey),
+
+
+
         ),
       ),
     );

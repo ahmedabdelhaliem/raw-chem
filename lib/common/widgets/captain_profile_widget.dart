@@ -102,7 +102,6 @@ class CaptainProfileWidget extends StatelessWidget {
           if (showChildSelection) childSelectionButton(onTap: onChildSelectionTap),
           if (showChildSelection) SizedBox(width: 8.w),
           notificationIcon(onTap: () {
-            context.push(AppRouters.inboxView);
           }),
         ],
       ),

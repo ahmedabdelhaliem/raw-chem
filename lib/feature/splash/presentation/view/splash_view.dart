@@ -22,7 +22,7 @@ class _SplashViewState extends State<SplashView> {
 
   _goNext() async {
     // ignore: use_build_context_synchronously
-    context.go(AppRouters.introView);
+    context.go(AppRouters.btmNav);
   }
 
   @override
@@ -35,7 +35,7 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset(ImageAssets.logo2, width: 250, height: 250)
+        child: Image.asset(ImageAssets.logo, width: 250, height: 250)
             .animate()
             // 1. Entrance: Blur to Clear + Scale + Slide Up
             .fadeIn(duration: 700.ms)

@@ -35,7 +35,7 @@ class ImageAssets {
   //====assets\images\parent.png
   static const String parent = "$imagesPath/perant.png";
 
-//===assets\images\player.png
+  //===assets\images\player.png
   static const String player = "$imagesPath/players.png";
   //===assets\images\trainer.png
   static const String trainer = "$imagesPath/coach.png";
@@ -123,7 +123,7 @@ class IconAssets {
   static const String instagram = '$iconsPath/instgram.svg';
   //==Solid
   static const String solid = '$iconsPath/profile_active.svg';
-//==reports-solid
+  //==reports-solid
   static const String reportsSolid = '$iconsPath/reports.svg';
   //--people
   static const String people = '$iconsPath/people.svg';
@@ -170,4 +170,5 @@ class IconAssets {
   static const String groupsActive = '$iconsPath/groups_active.svg';
   //==groups_inactive
   static const String groupsInactive = '$iconsPath/groups_inactive.svg';
+  static const String weightScale = '$iconsPath/hugeicons_weight-scale.svg';
 }

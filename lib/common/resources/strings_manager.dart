@@ -124,4 +124,30 @@ class AppStrings {
   static const String signupSuccessTitle = "signupSuccessTitle";
   static const String signupSuccessSubtitle = "signupSuccessSubtitle";
   static const String exploreApp = "exploreApp";
+  // Home
+  static const String home = "home";
+  static const String categories = "categories";
+  static const String priceTracker = "priceTracker";
+  static const String account = "account";
+  static const String suppliers = "suppliers";
+  static const String rawMaterials = "rawMaterials";
+  static const String recipes = "recipes";
+  static const String viewMore = "viewMore";
+  static const String casNumber = "casNumber";
+  static const String averagePrice = "averagePrice";
+  static const String supplier = "supplier";
+  static const String viewRecipeDetails = "viewRecipeDetails";
+  static const String bannerTitle = "bannerTitle";
+  static const String cosmetics = "cosmetics";
+  static const String paints = "paints";
+  static const String detergents = "detergents";
+  static const String others = "others";
+  static const String priceTrend = "priceTrend";
+  static const String currentPrice = "currentPrice";
+  static const String up = "up";
+  static const String down = "down";
+  static const String stable = "stable";
+  static const String surfactant = "surfactant";
+  static const String source = "source";
+  static const String egp = "egp";
 }
