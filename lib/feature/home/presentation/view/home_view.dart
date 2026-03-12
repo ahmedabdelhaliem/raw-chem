@@ -9,6 +9,9 @@ import 'package:raw_chem/common/widgets/default_banner_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
 import 'package:raw_chem/feature/raw_materials/presentation/view/raw_materials_view.dart';
+import 'package:raw_chem/feature/recipes/presentation/view/recipe_details_view.dart';
+import 'package:raw_chem/feature/recipes/presentation/view/recipes_view.dart';
+import 'widgets/supplier_card_widget.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -43,9 +46,14 @@ class HomeView extends StatelessWidget {
               SizedBox(height: 10.h),
               _buildRawMaterialsList(),
               SizedBox(height: 10.h),
-              _buildSectionHeader(context, AppStrings.recipes.tr(), () {}),
+              _buildSectionHeader(context, AppStrings.recipes.tr(), () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RecipesView()),
+                );
+              }),
               SizedBox(height: 10.h),
-              _buildRecipesList(),
+              _buildRecipesList(context),
               SizedBox(height: 20.h),
             ],
           ),
@@ -136,103 +144,12 @@ class HomeView extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         separatorBuilder: (context, index) => SizedBox(width: 10.w),
         itemBuilder: (context, index) {
-          return Container(
-            width: .53.sw,
-            padding: EdgeInsets.symmetric(horizontal: 4.w),
-            decoration: BoxDecoration(
-              color: ColorManager.primary.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(16.r),
-              border: Border.all(color: ColorManager.primary.withOpacity(0.1), width: 1),
-            ),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12.r),
-                  child: Image.network(
-                    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=200',
-                    width: .15.sw,
-                    height: .18.sw,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Image.asset(ImageAssets.logo2),
-                  ),
-                ),
-                SizedBox(width: 4.w),
-                // Info Section
-                Expanded(
-                  child: Column(
-                    // crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Name and Rating Row
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Name (on the right in RTL)
-                          Flexible(
-                            child: Text(
-                              'ايجيبت كيم الصناعية',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.bold,
-                                color: ColorManager.primary,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                          // Rating (on the left in RTL)
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                '4.9',
-                                style: TextStyle(
-                                  fontSize: 10.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorManager.blackText,
-                                ),
-                              ),
-                              SizedBox(width: 4.w),
-                              Icon(Icons.star, color: ColorManager.yellow, size: 16.sp),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 4.h),
-                      // Location Row
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            color: ColorManager.greyTextColor,
-                            size: 12.sp,
-                          ),
-                          SizedBox(width: 4.w),
-                          Text(
-                            'مدينة السادات',
-                            style: TextStyle(fontSize: 10.sp, color: ColorManager.greyTextColor),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
-                      ),
-                      // Products Text
-                      Text(
-                        'الزيوليت، كبريتات الصوديوم، الإنزيمات، STPP',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: ColorManager.primary.withOpacity(0.8),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          return const SupplierCardWidget(
+            name: 'ايجيبت كيم الصناعية',
+            rating: '4.9',
+            location: 'مدينة السادات',
+            products: 'الزيوليت، كبريتات الصوديوم، الإنزيمات، STPP',
+            imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=200',
           );
         },
       ),
@@ -240,48 +157,83 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildRawMaterialsList() {
-    return SizedBox(
-      height: .50.sh,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: 4,
-        physics: const BouncingScrollPhysics(),
-        separatorBuilder: (context, index) => SizedBox(width: 15.w),
-        itemBuilder: (context, index) {
-          return RawMaterialCardWidget(
-            imageUrl: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300',
-            title: 'حمض ألكيل بنزين السلفونيك الخطي (LABSA)',
-            category: 'مادة فعالة سطحياً',
-            description:
-                'يوفر تغلغل سطح الأميل الممتلئ بشكل قوي، وهو المكون الأساسي لمنظفات الغسيل.',
-            casNumber: '25155-30-0',
-            averagePrice: '1200 جنية - 1100 جنية',
-            supplier: 'دلتا للحلول الكيميائية',
-            width: .58.sw,
-            heroTag: 'raw_material_home_$index',
-          );
-        },
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: IntrinsicHeight(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.h),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: List.generate(4, (index) {
+              return Padding(
+                padding: EdgeInsetsDirectional.only(end: 15.w),
+                child: SizedBox(
+                  width: .58.sw,
+                  child: RawMaterialCardWidget(
+                    imageUrl:
+                        'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300',
+                    title: 'حمض ألكيل بنزين السلفونيك الخطي (LABSA)',
+                    category: 'مادة فعالة سطحياً',
+                    description:
+                        'يوفر تغلغل سطح الأميل الممتلئ بشكل قوي، وهو المكون الأساسي لمنظفات الغسيل.',
+                    casNumber: '25155-30-0',
+                    averagePrice: '1200 جنية - 1100 جنية',
+                    supplier: 'دلتا للحلول الكيميائية',
+                    heroTag: 'raw_material_home_$index',
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
       ),
     ).animate().fadeIn(delay: 400.ms, duration: 500.ms);
   }
 
-  Widget _buildRecipesList() {
-    return SizedBox(
-      height: .48.sh,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: 4,
-        physics: const BouncingScrollPhysics(),
-        separatorBuilder: (context, index) => SizedBox(width: 15.w),
-        itemBuilder: (context, index) {
-          return RecipeCardWidget(
-            imageUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=300',
-            title: 'مسحوق الغسيل الاقتصادي',
-            category: 'منظفات الغسيل',
-            description: 'منظف فعال وبأسعار مناسبة مصمم للاستخدام اليومي وبكميات كبيرة.',
-            heroTag: 'recipe_home_$index',
-          );
-        },
+  Widget _buildRecipesList(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: IntrinsicHeight(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.h),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: List.generate(4, (index) {
+              return Padding(
+                padding: EdgeInsetsDirectional.only(end: 15.w),
+                child: SizedBox(
+                  width: .6.sw,
+                  child: RecipeCardWidget(
+                    imageUrl:
+                        'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=300',
+                    title: 'مسحوق الغسيل الاقتصادي',
+                    category: 'منظفات الغسيل',
+                    description: 'منظف فعال وبأسعار مناسبة مصمم للاستخدام اليومي وبكميات كبيرة.',
+                    heroTag: 'recipe_home_$index',
+                    onButtonTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecipeDetailsView(heroTag: 'recipe_home_$index'),
+                        ),
+                      );
+                    },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecipeDetailsView(heroTag: 'recipe_home_$index'),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
       ),
     ).animate().fadeIn(delay: 500.ms, duration: 500.ms);
   }

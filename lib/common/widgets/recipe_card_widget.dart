@@ -34,7 +34,6 @@ class RecipeCardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: .65.sw,
         decoration: BoxDecoration(
           color: ColorManager.white,
           borderRadius: BorderRadius.circular(20.r),
@@ -47,82 +46,70 @@ class RecipeCardWidget extends StatelessWidget {
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          // mainAxisSize: MainAxisSize.min,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image Section with Background
-            Container(
-              height: 100.h,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF0F7FF), // Soft blue for recipes
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(12.w),
-                  child: heroTag != null
-                      ? Hero(tag: heroTag!, child: _buildImage())
-                      : _buildImage(),
-                ),
-              ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
+              child: _buildImage(),
             ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(12.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                        color: ColorManager.primary,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.right,
+            Padding(
+              padding: EdgeInsets.all(12.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
+                      color: ColorManager.primary,
                     ),
-                    SizedBox(height: 4.h),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      decoration: BoxDecoration(
-                        color: const Color(0xffD2E8B1).withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      child: Text(
-                        category,
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: ColorManager.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.right,
+                  ),
+                  SizedBox(height: 4.h),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffD2E8B1).withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(6.r),
                     ),
-                    SizedBox(height: 6.h),
-                    Text(
-                      description,
+                    child: Text(
+                      category,
                       style: TextStyle(
                         fontSize: 10.sp,
-                        color: ColorManager.greyTextColor,
-                        height: 1.4,
+                        color: ColorManager.primary,
+                        fontWeight: FontWeight.w600,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.right,
                     ),
-                    const Spacer(),
-                    DefaultButtonWidget(
-                      text: buttonText ?? AppStrings.viewRecipeDetails.tr(),
-                      onPressed: onButtonTap,
-                      color: ColorManager.primary,
-                      textColor: ColorManager.white,
-                      radius: 10.r,
-                      fontSize: 12.sp,
-                      height: 36.h,
+                  ),
+                  SizedBox(height: 6.h),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: 10.sp,
+                      color: ColorManager.greyTextColor,
+                      height: 1.4,
                     ),
-                  ],
-                ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.right,
+                  ),
+                  SizedBox(height: 12.h),
+                  DefaultButtonWidget(
+                    text: buttonText ?? AppStrings.viewRecipeDetails.tr(),
+                    onPressed: onButtonTap,
+                    color: ColorManager.primary,
+                    textColor: ColorManager.white,
+                    radius: 10.r,
+                    fontSize: 12.sp,
+                    // height: 36.h,
+                  ),
+                ],
               ),
             ),
           ],
@@ -132,24 +119,31 @@ class RecipeCardWidget extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12.r),
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        fit: BoxFit.cover,
-        height: 80.h,
-        width: 100.w,
-        placeholder: (context, url) => Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: Container(color: Colors.white),
-        ),
-        errorWidget: (context, url, error) => Icon(
-          Icons.image_not_supported_outlined,
-          size: 30.sp,
-          color: ColorManager.greyTextColor.withOpacity(0.3),
-        ),
+    Widget image = CachedNetworkImage(
+      imageUrl: imageUrl,
+      fit: BoxFit.cover,
+      height: 80.h,
+
+      width: double.infinity,
+      placeholder: (context, url) => Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(color: Colors.white),
+      ),
+      errorWidget: (context, url, error) => Icon(
+        Icons.image_not_supported_outlined,
+        size: 30.sp,
+        color: ColorManager.greyTextColor.withOpacity(0.3),
       ),
     );
+
+    if (heroTag != null) {
+      return Hero(
+        tag: heroTag!,
+        child: ClipRRect(borderRadius: BorderRadius.circular(12.r), child: image),
+      );
+    }
+
+    return ClipRRect(borderRadius: BorderRadius.circular(12.r), child: image);
   }
 }

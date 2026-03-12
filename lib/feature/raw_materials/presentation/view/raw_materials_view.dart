@@ -129,7 +129,7 @@ class RawMaterialsView extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 15.w,
         mainAxisSpacing: 15.h,
-        childAspectRatio: 0.68,
+        childAspectRatio: 0.60,
       ),
       itemCount: 8,
       itemBuilder: (context, index) {
