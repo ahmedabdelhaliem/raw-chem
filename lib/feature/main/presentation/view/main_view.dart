@@ -6,6 +6,7 @@ import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/feature/categories/presentation/view/categories_view.dart';
 import 'package:raw_chem/feature/home/presentation/view/home_view.dart';
 import 'package:raw_chem/feature/price_tracker/presentation/view/price_tracker_view.dart';
+import 'package:raw_chem/feature/profile/presentation/view/profile_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -16,12 +17,11 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   int _currentIndex = 0;
-
-  final List<Widget> _pages = [
+  List<Widget> get _pages => [
     const HomeView(),
     const CategoriesView(),
     const PriceTrackerView(),
-    Center(child: Text(AppStrings.account.tr())),
+    const ProfileView(), // Replaced placeholder with actual ProfileView
   ];
 
   @override

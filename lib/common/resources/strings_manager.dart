@@ -150,4 +150,47 @@ class AppStrings {
   static const String surfactant = "surfactant";
   static const String source = "source";
   static const String egp = "egp";
+
+  // Profile Section
+  static const String myPersonalData = "myPersonalData";
+  static const String ordersHistory = "ordersHistory";
+  static const String language = "language";
+  static const String notifications = "notifications";
+  static const String help = "help";
+  static const String termsAndConditions = "termsAndConditions";
+
+  // Personal Data
+  static const String fullName = "fullName";
+  static const String dateOfBirth = "dateOfBirth";
+  static const String save = "save";
+  
+  // Orders
+  static const String currentOrders = "currentOrders";
+  static const String previousOrders = "previousOrders";
+  static const String orderNumber = "orderNumber";
+  static const String orderDate = "orderDate";
+  static const String orderDetails = "orderDetails";
+  static const String total = "total";
+  static const String status = "status";
+  static const String shippingFee = "shippingFee";
+  static const String paymentMethod = "paymentMethod";
+  static const String location = "location";
+  static const String items = "items";
+
+  // Helps
+  static const String howToOrder = "howToOrder";
+  static const String howToOrderAnswer = "howToOrderAnswer";
+  static const String deliveryTime = "deliveryTime";
+  static const String deliveryTimeAnswer = "deliveryTimeAnswer";
+  static const String modifyOrder = "modifyOrder";
+  static const String modifyOrderAnswer = "modifyOrderAnswer";
+  static const String contactUs = "contactUs";
+  static const String callUsAt = "callUsAt";
+
+  // General Settings
+  static const String arabic = "arabic";
+  static const String english = "english";
+  static const String sound = "sound";
+  static const String generalNotifications = "generalNotifications";
+  static const String appUpdates = "appUpdates";
 }

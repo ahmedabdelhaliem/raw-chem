@@ -11,6 +11,7 @@ import 'package:raw_chem/feature/auth/presentation/view/verify_otp_view.dart';
 import 'package:raw_chem/feature/home/presentation/view/home_view.dart';
 import 'package:raw_chem/feature/main/presentation/view/main_view.dart';
 import 'package:raw_chem/feature/onboarding/presentation/view/onboarding_view.dart';
+import 'package:raw_chem/feature/profile/presentation/view/profile_view.dart';
 import 'package:raw_chem/feature/splash/presentation/view/splash_view.dart';
 
 abstract class AppRouters {
@@ -37,6 +38,7 @@ abstract class AppRouters {
   static const String drivingLicense = '/drivingLicense';
 
   static const String homeView = '/Homeview';
+  static const String profileView = '/profile';
   
 
   static final GoRouter router = GoRouter(
@@ -63,6 +65,7 @@ abstract class AppRouters {
       ),
       GoRoute(path: AppRouters.btmNav, builder: (context, state) => const MainView()),
       GoRoute(path: AppRouters.homeView, builder: (context, state) => const HomeView()),
+      GoRoute(path: AppRouters.profileView, builder: (context, state) => const ProfileView()),
     ],
   );
 
@@ -72,4 +75,5 @@ abstract class AppRouters {
       child: child,
     );
   }
+
 }
