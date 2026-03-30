@@ -2,14 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
 import 'package:raw_chem/common/widgets/filter_bottom_sheet_widget.dart';
-import 'package:raw_chem/feature/cart/presentation/view/cart_view.dart';
-
-import 'recipe_details_view.dart';
 
 class RecipesView extends StatelessWidget {
   const RecipesView({super.key});
@@ -26,10 +25,7 @@ class RecipesView extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CartView()),
-              );
+              context.push(AppRouters.cartView);
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 10.w),
@@ -75,7 +71,7 @@ class RecipesView extends StatelessWidget {
           if (context.locale.languageCode == 'ar')
             IconButton(
               icon: const Icon(Icons.arrow_forward_ios_rounded, color: ColorManager.black),
-              onPressed: () => Navigator.maybePop(context),
+              onPressed: () => context.pop(),
             ),
         ],
       ),
@@ -174,20 +170,10 @@ class RecipesView extends StatelessWidget {
           description: 'منظف مسحوق فعال وبأسعار معقولة للغسيل العام، مصمم للاستخدام بكميات كبيرة.',
           heroTag: 'recipe_grid_$index',
           onButtonTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RecipeDetailsView(heroTag: 'recipe_grid_$index'),
-              ),
-            );
+            context.push(AppRouters.recipeDetailsView, extra: 'recipe_grid_$index');
           },
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RecipeDetailsView(heroTag: 'recipe_grid_$index'),
-              ),
-            );
+            context.push(AppRouters.recipeDetailsView, extra: 'recipe_grid_$index');
           },
         ).animate().fadeIn(delay: (100 * index).ms).scale(delay: (100 * index).ms);
       },

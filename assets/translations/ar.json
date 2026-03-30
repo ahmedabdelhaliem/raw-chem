@@ -139,5 +139,7 @@
   "generalNotifications": "إشعارات عامة",
   "appUpdates": "تحديثات التطبيق",
   "chooseLanguage": "اختر لغتك المفضلة",
-  "logout": "تسجيل الخروج"
+  "logout": "تسجيل الخروج",
+  "addToCart": "أضف للسلة",
+  "contactSupplier": "اتصل بالمورد"
 }

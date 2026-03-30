@@ -139,5 +139,10 @@
   "generalNotifications": "General Notifications",
   "appUpdates": "App Updates",
   "chooseLanguage": "Choose your preferred language",
-  "logout": "Logout"
+  "logout": "Logout",
+  "contactSupplier": "Contact Supplier",
+  "contactSupplierMessage": "Contact Supplier",
+  "contactSupplierTitle": "Contact Supplier",
+  "addToCart":"Add to Cart"
+  
 }

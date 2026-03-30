@@ -2,18 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_banner_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
-import 'package:raw_chem/feature/cart/presentation/view/cart_view.dart';
-import 'package:raw_chem/feature/raw_materials/presentation/view/raw_materials_view.dart';
-import 'package:raw_chem/feature/recipes/presentation/view/recipe_details_view.dart';
-import 'package:raw_chem/feature/recipes/presentation/view/recipes_view.dart';
-
-import 'widgets/supplier_card_widget.dart';
+import 'package:raw_chem/feature/home/presentation/view/widgets/supplier_card_widget.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -40,19 +37,13 @@ class HomeView extends StatelessWidget {
               _buildSuppliersList(),
               SizedBox(height: 10.h),
               _buildSectionHeader(context, AppStrings.rawMaterials.tr(), () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RawMaterialsView()),
-                );
+                context.push(AppRouters.rawMaterialsView);
               }),
               SizedBox(height: 10.h),
               _buildRawMaterialsList(),
               SizedBox(height: 10.h),
               _buildSectionHeader(context, AppStrings.recipes.tr(), () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RecipesView()),
-                );
+                context.push(AppRouters.recipesView);
               }),
               SizedBox(height: 10.h),
               _buildRecipesList(context),
@@ -76,10 +67,7 @@ class HomeView extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CartView()),
-            );
+            context.push(AppRouters.cartView);
           },
           child: Container(
             padding: EdgeInsets.all(10.w),
@@ -262,20 +250,10 @@ class HomeView extends StatelessWidget {
                     description: 'منظف فعال وبأسعار مناسبة مصمم للاستخدام اليومي وبكميات كبيرة.',
                     heroTag: 'recipe_home_$index',
                     onButtonTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RecipeDetailsView(heroTag: 'recipe_home_$index'),
-                        ),
-                      );
+                      context.push(AppRouters.recipeDetailsView, extra: 'recipe_home_$index');
                     },
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RecipeDetailsView(heroTag: 'recipe_home_$index'),
-                        ),
-                      );
+                      context.push(AppRouters.recipeDetailsView, extra: 'recipe_home_$index');
                     },
                   ),
                 ),

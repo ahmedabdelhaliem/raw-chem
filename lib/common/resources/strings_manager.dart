@@ -195,4 +195,6 @@ class AppStrings {
   static const String generalNotifications = "generalNotifications";
   static const String appUpdates = "appUpdates";
   static const String chooseLanguage = "chooseLanguage";
+  static const String addToCart = "addToCart";
+  static const String contactSupplier = "contactSupplier";
 }
