@@ -107,7 +107,7 @@
   "egp": "ج.م",
   "myPersonalData": "بياناتي الشخصية",
   "ordersHistory": "سجل الطلبات",
-  "language": "اللسان",
+  "language": "اللغة",
   "notifications": "الإشعارات",
   "help": "المساعدة",
   "termsAndConditions": "الشروط والأحكام",
@@ -137,5 +137,7 @@
   "english": "الإنجليزية",
   "sound": "الصوت",
   "generalNotifications": "إشعارات عامة",
-  "appUpdates": "تحديثات التطبيق"
+  "appUpdates": "تحديثات التطبيق",
+  "chooseLanguage": "اختر لغتك المفضلة",
+  "logout": "تسجيل الخروج"
 }

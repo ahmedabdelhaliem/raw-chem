@@ -11,7 +11,13 @@ import 'package:raw_chem/feature/auth/presentation/view/verify_otp_view.dart';
 import 'package:raw_chem/feature/home/presentation/view/home_view.dart';
 import 'package:raw_chem/feature/main/presentation/view/main_view.dart';
 import 'package:raw_chem/feature/onboarding/presentation/view/onboarding_view.dart';
+import 'package:raw_chem/feature/profile/presentation/view/help_support_view.dart';
+import 'package:raw_chem/feature/profile/presentation/view/language_view.dart';
+import 'package:raw_chem/feature/profile/presentation/view/notifications_settings_view.dart';
+import 'package:raw_chem/feature/profile/presentation/view/orders_history_view.dart';
+import 'package:raw_chem/feature/profile/presentation/view/personal_data_view.dart';
 import 'package:raw_chem/feature/profile/presentation/view/profile_view.dart';
+import 'package:raw_chem/feature/profile/presentation/view/terms_conditions_view.dart';
 import 'package:raw_chem/feature/splash/presentation/view/splash_view.dart';
 
 abstract class AppRouters {
@@ -39,6 +45,12 @@ abstract class AppRouters {
 
   static const String homeView = '/Homeview';
   static const String profileView = '/profile';
+  static const String languageView = '/language';
+  static const String personalDataView = '/personalData';
+  static const String ordersHistoryView = '/ordersHistory';
+  static const String notificationsSettingsView = '/notificationsSettings';
+  static const String helpSupportView = '/helpSupport';
+  static const String termsConditionsView = '/termsConditions';
   
 
   static final GoRouter router = GoRouter(
@@ -66,6 +78,12 @@ abstract class AppRouters {
       GoRoute(path: AppRouters.btmNav, builder: (context, state) => const MainView()),
       GoRoute(path: AppRouters.homeView, builder: (context, state) => const HomeView()),
       GoRoute(path: AppRouters.profileView, builder: (context, state) => const ProfileView()),
+      GoRoute(path: AppRouters.languageView, builder: (context, state) => const LanguageView()),
+      GoRoute(path: AppRouters.personalDataView, builder: (context, state) => const PersonalDataView()),
+      GoRoute(path: AppRouters.ordersHistoryView, builder: (context, state) => const OrdersHistoryView()),
+      GoRoute(path: AppRouters.notificationsSettingsView, builder: (context, state) => const NotificationsSettingsView()),
+      GoRoute(path: AppRouters.helpSupportView, builder: (context, state) => const HelpSupportView()),
+      GoRoute(path: AppRouters.termsConditionsView, builder: (context, state) => const TermsConditionsView()),
     ],
   );
 

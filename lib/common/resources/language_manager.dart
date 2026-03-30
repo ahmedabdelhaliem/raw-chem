@@ -8,8 +8,8 @@ String language = '';
 const String ARABIC = "ar";
 const String ENGLISH = "en";
 const String ASSET_PASS_LANGUAGE = "assets/translations";
-const Locale ARABIC_LOCALE = Locale("ar","SA");
-const Locale ENGLISH_LOCALE = Locale("en","US");
+const Locale ARABIC_LOCALE = Locale("ar");
+const Locale ENGLISH_LOCALE = Locale("en");
 
 extension LanguageTypeExtension on LanguageType{
   String getValue(){

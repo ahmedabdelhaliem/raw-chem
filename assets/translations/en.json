@@ -137,5 +137,7 @@
   "english": "English",
   "sound": "Sound",
   "generalNotifications": "General Notifications",
-  "appUpdates": "App Updates"
+  "appUpdates": "App Updates",
+  "chooseLanguage": "Choose your preferred language",
+  "logout": "Logout"
 }

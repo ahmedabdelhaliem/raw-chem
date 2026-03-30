@@ -8,9 +8,11 @@ import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_banner_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
+import 'package:raw_chem/feature/cart/presentation/view/cart_view.dart';
 import 'package:raw_chem/feature/raw_materials/presentation/view/raw_materials_view.dart';
 import 'package:raw_chem/feature/recipes/presentation/view/recipe_details_view.dart';
 import 'package:raw_chem/feature/recipes/presentation/view/recipes_view.dart';
+
 import 'widgets/supplier_card_widget.dart';
 
 class HomeView extends StatelessWidget {
@@ -27,7 +29,7 @@ class HomeView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 10.h),
-              _buildHeader(),
+              _buildHeader(context),
               SizedBox(height: 10.h),
               _buildSearchBar(context),
               SizedBox(height: 10.h),
@@ -62,7 +64,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -70,6 +72,53 @@ class HomeView extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(maxHeight: 80.h),
             child: Image.asset(ImageAssets.logoBlack, fit: BoxFit.contain),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartView()),
+            );
+          },
+          child: Container(
+            padding: EdgeInsets.all(10.w),
+            decoration: BoxDecoration(
+              color: ColorManager.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: ColorManager.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(Icons.shopping_cart_outlined, color: ColorManager.black, size: 24.sp),
+                Positioned(
+                  top: -2.h,
+                  right: -2.w,
+                  child: Container(
+                    padding: EdgeInsets.all(4.w),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF006B3E),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '2',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 8.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -127,7 +176,7 @@ class HomeView extends StatelessWidget {
         TextButton(
           onPressed: onMoreTap,
           child: Text(
-            'المزيد',
+            AppStrings.viewMore.tr(),
             style: TextStyle(fontSize: 14.sp, color: ColorManager.primary),
           ),
         ),

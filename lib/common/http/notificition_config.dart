@@ -28,7 +28,11 @@ class MessagingConfig {
     await createNotificationChannel();
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
-    messaging.subscribeToTopic('notifications');
+    try {
+      await messaging.subscribeToTopic('notifications');
+    } catch (e) {
+      log('Error subscribing to topic: $e');
+    }
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
       announcement: false,
@@ -40,7 +44,7 @@ class MessagingConfig {
     );
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('ic_launcher');
 
     const DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
@@ -71,10 +75,8 @@ class MessagingConfig {
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
       log('User granted provisional permission');
-    } else {
-      log('User declined or has not accepted permission');
     }
-    FirebaseMessaging.instance.subscribeToTopic('notifications');
+    // Removed redundant subscribeToTopic call
     FirebaseMessaging.instance.onTokenRefresh.listen((newFCM) async {});
 
     FirebaseMessaging.instance.getToken().then((token) async {
@@ -99,7 +101,7 @@ class MessagingConfig {
               'High Importance Notifications',
               channelDescription:
                   'This channel is used for important notifications.',
-              icon: '@mipmap/ic_launcher',
+              icon: 'ic_launcher',
             ),
             iOS: DarwinNotificationDetails(
               presentAlert: true,

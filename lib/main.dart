@@ -35,6 +35,8 @@ Future<void> main() async {
     EasyLocalization(
       supportedLocales: const [ENGLISH_LOCALE, ARABIC_LOCALE],
       path: ASSET_PASS_LANGUAGE,
+      fallbackLocale: ARABIC_LOCALE,
+      useOnlyLangCode: true, // Simplified for all regions (e.g., ar_EG -> ar.json)
       child: MyApp(),
     ),
   );

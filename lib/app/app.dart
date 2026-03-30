@@ -1,11 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:raw_chem/app/app_prefs.dart';
 import 'package:raw_chem/common/resources/theme_manager.dart';
-
-import '../common/resources/app_router.dart';
-import 'imports.dart';
+import 'package:raw_chem/common/resources/app_router.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp._internal();
@@ -19,13 +16,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final AppPreferences _appPreferences = instance<AppPreferences>();
 
   @override
   void didChangeDependencies() {
-    _appPreferences.getLocale().then((locale) {
-      if (mounted) context.setLocale(locale);
-    });
     super.didChangeDependencies();
   }
 

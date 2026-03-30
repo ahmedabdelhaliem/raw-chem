@@ -10,6 +10,7 @@ class SupplierCardWidget extends StatelessWidget {
   final String products;
   final String imageUrl;
   final VoidCallback? onTap;
+  final double? width;
 
   const SupplierCardWidget({
     super.key,
@@ -19,6 +20,7 @@ class SupplierCardWidget extends StatelessWidget {
     required this.products,
     required this.imageUrl,
     this.onTap,
+    this.width,
   });
 
   @override
@@ -26,7 +28,7 @@ class SupplierCardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: .53.sw,
+        width: width ?? .53.sw,
         padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
         decoration: BoxDecoration(
           color: ColorManager.primary.withOpacity(0.08),
@@ -42,7 +44,12 @@ class SupplierCardWidget extends StatelessWidget {
                 width: .15.sw,
                 height: .18.sw,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Image.asset(ImageAssets.logo2),
+                errorBuilder: (context, error, stackTrace) => Image.asset(
+                  ImageAssets.logo2,
+                  width: .15.sw,
+                  height: .18.sw,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             SizedBox(width: 8.w),
@@ -98,10 +105,14 @@ class SupplierCardWidget extends StatelessWidget {
                         size: 12.sp,
                       ),
                       SizedBox(width: 4.w),
-                      Text(
-                        location,
-                        style: TextStyle(fontSize: 10.sp, color: ColorManager.greyTextColor),
-                        textAlign: TextAlign.right,
+                      Expanded(
+                        child: Text(
+                          location,
+                          style: TextStyle(fontSize: 10.sp, color: ColorManager.greyTextColor),
+                          textAlign: TextAlign.right,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),

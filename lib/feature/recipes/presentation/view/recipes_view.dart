@@ -6,6 +6,8 @@ import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
+import 'package:raw_chem/common/widgets/filter_bottom_sheet_widget.dart';
+import 'package:raw_chem/feature/cart/presentation/view/cart_view.dart';
 
 import 'recipe_details_view.dart';
 
@@ -21,14 +23,61 @@ class RecipesView extends StatelessWidget {
         backgroundColor: ColorManager.bg,
         titleColor: ColorManager.black,
         withLeading: context.locale.languageCode != 'ar',
-        actions: context.locale.languageCode == 'ar'
-            ? [
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios_rounded, color: ColorManager.black),
-                  onPressed: () => Navigator.maybePop(context),
-                ),
-              ]
-            : null,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartView()),
+              );
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 10.w),
+              padding: EdgeInsets.all(8.w),
+              decoration: BoxDecoration(
+                color: ColorManager.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorManager.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Icon(Icons.shopping_cart_outlined, color: ColorManager.black, size: 20.sp),
+                  Positioned(
+                    top: -2.h,
+                    right: -2.w,
+                    child: Container(
+                      padding: EdgeInsets.all(3.w),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF006B3E),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        '2',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 6.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (context.locale.languageCode == 'ar')
+            IconButton(
+              icon: const Icon(Icons.arrow_forward_ios_rounded, color: ColorManager.black),
+              onPressed: () => Navigator.maybePop(context),
+            ),
+        ],
       ),
       body: Column(
         children: [
@@ -45,20 +94,28 @@ class RecipesView extends StatelessWidget {
       child: Row(
         children: [
           // Filter Icon
-          Container(
-            padding: EdgeInsets.all(12.w),
-            decoration: BoxDecoration(
-              color: ColorManager.white,
-              borderRadius: BorderRadius.circular(12.r),
-              boxShadow: [
-                BoxShadow(
-                  color: ColorManager.black.withOpacity(0.03),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+          GestureDetector(
+            onTap: () async {
+              final result = await FilterBottomSheetWidget.show(context);
+              if (result != null) {
+                // TODO: Apply filter based on selected index
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.all(12.w),
+              decoration: BoxDecoration(
+                color: ColorManager.white,
+                borderRadius: BorderRadius.circular(12.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorManager.black.withOpacity(0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Icon(Icons.tune_rounded, color: ColorManager.black, size: 24.sp),
             ),
-            child: Icon(Icons.tune_rounded, color: ColorManager.black, size: 24.sp),
           ),
           SizedBox(width: 10.w),
           // Search Bar
@@ -104,9 +161,9 @@ class RecipesView extends StatelessWidget {
       padding: EdgeInsets.all(20.w),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 15.w,
-        mainAxisSpacing: 15.h,
-        childAspectRatio: 0.63,
+        crossAxisSpacing: 12.w,
+        mainAxisSpacing: 16.h,
+        childAspectRatio: 0.62,
       ),
       itemCount: 6,
       itemBuilder: (context, index) {

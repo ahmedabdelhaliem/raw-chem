@@ -158,6 +158,7 @@ class AppStrings {
   static const String notifications = "notifications";
   static const String help = "help";
   static const String termsAndConditions = "termsAndConditions";
+  static const String logout = "logout";
 
   // Personal Data
   static const String fullName = "fullName";
@@ -193,4 +194,5 @@ class AppStrings {
   static const String sound = "sound";
   static const String generalNotifications = "generalNotifications";
   static const String appUpdates = "appUpdates";
+  static const String chooseLanguage = "chooseLanguage";
 }

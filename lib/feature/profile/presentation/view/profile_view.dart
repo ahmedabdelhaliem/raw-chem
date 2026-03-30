@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:go_router/go_router.dart';
+import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/profile_menu_item_widget.dart';
@@ -80,55 +82,37 @@ class ProfileView extends StatelessWidget {
                   ProfileMenuItemWidget(
                     title: AppStrings.myPersonalData.tr(),
                     iconData: Iconsax.user,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const PersonalDataView()),
-                    ),
+                    onTap: () => context.push(AppRouters.personalDataView),
                   ),
                   Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
                   ProfileMenuItemWidget(
                     title: AppStrings.ordersHistory.tr(),
                     iconData: Iconsax.document,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const OrdersHistoryView()),
-                    ),
+                    onTap: () => context.push(AppRouters.ordersHistoryView),
                   ),
                   Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
                   ProfileMenuItemWidget(
                     title: AppStrings.language.tr(),
                     iconData: Iconsax.language_square,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const LanguageView()),
-                    ),
+                    onTap: () => context.push(AppRouters.languageView),
                   ),
                   Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
                   ProfileMenuItemWidget(
                     title: AppStrings.notifications.tr(),
                     iconData: Iconsax.notification,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const NotificationsSettingsView()),
-                    ),
+                    onTap: () => context.push(AppRouters.notificationsSettingsView),
                   ),
                   Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
                   ProfileMenuItemWidget(
                     title: AppStrings.help.tr(),
                     iconData: Iconsax.info_circle,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const HelpSupportView()),
-                    ),
+                    onTap: () => context.push(AppRouters.helpSupportView),
                   ),
                   Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
                   ProfileMenuItemWidget(
                     title: AppStrings.termsAndConditions.tr(),
                     iconData: Iconsax.shield_tick,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const TermsConditionsView()),
-                    ),
+                    onTap: () => context.push(AppRouters.termsConditionsView),
                   ),
                 ],
               ),
@@ -142,7 +126,7 @@ class ProfileView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: ProfileMenuItemWidget(
-                title: 'تسجيل الخروج', // Logout text
+                title: AppStrings.logout.tr(), // Logout text
                 iconData: Iconsax.logout,
                 color: ColorManager.red,
                 onTap: () {
