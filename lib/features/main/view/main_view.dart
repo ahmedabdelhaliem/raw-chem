@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
-import 'package:raw_chem/feature/categories/presentation/view/categories_view.dart';
-import 'package:raw_chem/feature/home/presentation/view/home_view.dart';
-import 'package:raw_chem/feature/price_tracker/presentation/view/price_tracker_view.dart';
-import 'package:raw_chem/feature/profile/presentation/view/profile_view.dart';
+import 'package:raw_chem/features/categories/view/categories_view.dart';
+import 'package:raw_chem/features/home/view/home_view.dart';
+import 'package:raw_chem/features/price_tracker/view/price_tracker_view.dart';
+import 'package:raw_chem/features/profile/view/profile_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});

@@ -1,5 +1,5 @@
 // import 'package:raw_chem/common/resources/color_manager.dart';
-// import 'package:raw_chem/feature/home_coach/model/coach_schedule_model.dart';
+// import 'package:raw_chem/features/home_coach/model/coach_schedule_model.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 

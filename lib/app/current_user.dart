@@ -2,7 +2,7 @@
 
 // import 'package:raw_chem/app/imports.dart';
 // import 'package:raw_chem/app/user_type.dart';
-// import 'package:raw_chem/feature/auth/signup/models/auth_model.dart';
+// import 'package:raw_chem/features/auth/signup/models/auth_model.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 // class CurrentUser {

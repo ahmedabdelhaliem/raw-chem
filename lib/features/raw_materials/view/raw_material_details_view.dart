@@ -6,7 +6,7 @@ import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
-import 'package:raw_chem/feature/raw_materials/presentation/view/widgets/packages_bottom_sheet.dart';
+import 'package:raw_chem/features/raw_materials/view/widgets/packages_bottom_sheet.dart';
 import 'package:shimmer/shimmer.dart';
 
 class RawMaterialDetailsView extends StatelessWidget {

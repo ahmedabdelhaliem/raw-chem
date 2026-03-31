@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
-import 'package:raw_chem/feature/main/presentation/view/main_view.dart';
+import 'package:raw_chem/features/main/view/main_view.dart';
 
 class OrderSuccessView extends StatefulWidget {
   const OrderSuccessView({super.key});

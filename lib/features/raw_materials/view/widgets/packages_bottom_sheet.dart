@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
-import 'package:raw_chem/feature/raw_materials/presentation/view/connect_supplier_view.dart';
+import 'package:raw_chem/features/raw_materials/view/connect_supplier_view.dart';
 
 class PackagesBottomSheet extends StatelessWidget {
   const PackagesBottomSheet({super.key});

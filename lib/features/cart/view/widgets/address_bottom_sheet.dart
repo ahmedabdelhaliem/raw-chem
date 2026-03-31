@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
-import 'package:raw_chem/feature/cart/presentation/view/order_success_view.dart';
+import 'package:raw_chem/features/cart/view/order_success_view.dart';
 
 class AddressBottomSheet extends StatelessWidget {
   const AddressBottomSheet({super.key});

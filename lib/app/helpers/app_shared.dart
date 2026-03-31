@@ -1,4 +1,4 @@
-// import 'package:raw_chem/feature/profile/models/share_app_model.dart';
+// import 'package:raw_chem/features/profile/models/share_app_model.dart';
 // import 'package:share_plus/share_plus.dart' as share_plus;
 
 // class AppShareHelper {

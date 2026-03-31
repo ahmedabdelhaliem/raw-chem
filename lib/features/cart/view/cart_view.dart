@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
-import 'package:raw_chem/feature/cart/presentation/view/widgets/cart_item_widget.dart';
-import 'package:raw_chem/feature/cart/presentation/view/widgets/checkout_bottom_sheet.dart';
+import 'package:raw_chem/features/cart/view/widgets/cart_item_widget.dart';
+import 'package:raw_chem/features/cart/view/widgets/checkout_bottom_sheet.dart';
 
 class CartView extends StatefulWidget {
   const CartView({super.key});

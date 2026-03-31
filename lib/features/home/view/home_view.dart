@@ -10,7 +10,7 @@ import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_banner_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
-import 'package:raw_chem/feature/home/presentation/view/widgets/supplier_card_widget.dart';
+import 'package:raw_chem/features/home/view/widgets/supplier_card_widget.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
