@@ -56,7 +56,10 @@ class _SignupViewState extends State<SignupView> {
       child: BlocConsumer<SignupCubit, BaseState<RegisterResponse>>(
         listener: (context, state) {
           if (state.isSuccess) {
-            context.pushReplacement(AppRouters.signupSuccessView);
+            context.pushReplacement(
+              AppRouters.verifyOtpView,
+              extra: _phoneController.text,
+            );
           } else if (state.isError) {
             context.showErrorMessage(state.errorMessage ?? "Unknown error occurred");
           }
@@ -93,28 +96,27 @@ class _SignupViewState extends State<SignupView> {
                       ),
                       SizedBox(height: 30.h),
                       // Signup Button
-                      state.isLoading
-                          ? const Center(child: CircularProgressIndicator())
-                          : DefaultButtonWidget(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  context.read<SignupCubit>().signup(
-                                        RegisterRequest(
-                                          name: _nameController.text,
-                                          email: _emailController.text,
-                                          phone: _phoneController.text,
-                                          birthDate: _birthDateController.text,
-                                          password: _passwordController.text,
-                                          passwordConfirmation: _confirmPasswordController.text,
-                                        ),
-                                      );
-                                }
-                              },
-                              text: AppStrings.signup.tr(),
-                              color: ColorManager.primary,
-                              textColor: ColorManager.white,
-                              radius: 12.r,
-                            ),
+                      DefaultButtonWidget(
+                        isLoading: state.isLoading,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<SignupCubit>().signup(
+                                  RegisterRequest(
+                                    name: _nameController.text,
+                                    email: _emailController.text,
+                                    phone: _phoneController.text,
+                                    birthDate: _birthDateController.text,
+                                    password: _passwordController.text,
+                                    passwordConfirmation: _confirmPasswordController.text,
+                                  ),
+                                );
+                          }
+                        },
+                        text: AppStrings.signup.tr(),
+                        color: ColorManager.primary,
+                        textColor: ColorManager.white,
+                        radius: 12.r,
+                      ),
                       SizedBox(height: 20.h),
                       const SignupFooterWidget(),
                       SizedBox(height: 20.h),

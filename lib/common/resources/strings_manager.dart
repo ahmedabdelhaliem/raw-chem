@@ -107,8 +107,9 @@ class AppStrings {
   static const String newPassword = "newPassword";
   static const String resetPasswordSubtitle = "resetPasswordSubtitle";
   static const String confirmPassword = "confirmPassword";
-  static const String passwordRequirements = "passwordRequirements";
   static const String reset = "reset";
+  static const String passwordMismatch = "passwordMismatch";
+  static const String passwordRequirements = "passwordRequirements";
   static const String passwordChangedTitle = "passwordChangedTitle";
   static const String passwordChangedSubtitle = "passwordChangedSubtitle";
   static const String backToLogin = "backToLogin";
@@ -157,6 +158,7 @@ class AppStrings {
   static const String language = "language";
   static const String notifications = "notifications";
   static const String help = "help";
+  static const String aboutUs = "aboutUs";
   static const String termsAndConditions = "termsAndConditions";
   static const String logout = "logout";
 
@@ -197,4 +199,5 @@ class AppStrings {
   static const String chooseLanguage = "chooseLanguage";
   static const String addToCart = "addToCart";
   static const String contactSupplier = "contactSupplier";
+  static const String profileUpdatedSuccessfully = "profileUpdatedSuccessfully";
 }

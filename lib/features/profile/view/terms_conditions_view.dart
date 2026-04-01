@@ -1,11 +1,27 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
+import 'package:raw_chem/core/state/base_state.dart';
+import 'package:raw_chem/features/profile/cubit/static_pages_cubit.dart';
+import 'package:raw_chem/features/profile/model/static_page/static_page_model.dart';
+import 'package:raw_chem/core/ui/skeleton/skeleton_widget.dart';
 
-class TermsConditionsView extends StatelessWidget {
+class TermsConditionsView extends StatefulWidget {
   const TermsConditionsView({super.key});
+
+  @override
+  State<TermsConditionsView> createState() => _TermsConditionsViewState();
+}
+
+class _TermsConditionsViewState extends State<TermsConditionsView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<StaticPagesCubit>().getTerms();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,55 +41,96 @@ class TermsConditionsView extends StatelessWidget {
         elevation: 0,
         iconTheme: const IconThemeData(color: ColorManager.blackText),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
-        child: Container(
-          decoration: BoxDecoration(
-            color: ColorManager.white,
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'الشروط والأحكام',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: ColorManager.primary,
-                ),
+      body: BlocBuilder<StaticPagesCubit, BaseState<StaticPageData>>(
+        builder: (context, state) {
+          final data = state.data;
+          
+          if (state.isError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                   Text(state.errorMessage ?? "An error occurred"),
+                   TextButton(
+                     onPressed: () => context.read<StaticPagesCubit>().getTerms(),
+                     child: const Text("Retry"),
+                   )
+                ],
               ),
-              SizedBox(height: 12.h),
-              Text(
-                'يُرجى قراءة هذه الشروط والأحكام بعناية قبل استخدام التطبيق. من خلال الوصول إلى هذا التطبيق أو استخدامه، فإنك توافق على الالتزام بهذه الشروط. إذا كنت لا توافق على أي جزء من الشروط، فلا يحق لك استخدام التطبيق. نحن نحتفظ بالحق في تعديل أو استبدال هذه الشروط في أي وقت.',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: ColorManager.greyTextColor,
-                  height: 1.5,
-                ),
+            );
+          }
+
+          return SkeletonWidget(
+            isLoading: state.isLoading,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+              child: Column(
+                children: [
+                  if (data?.banner != null) ...[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16.r),
+                      child: Image.network(
+                        data!.banner!,
+                        width: double.infinity,
+                        height: 150.h,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          height: 150.h,
+                          color: ColorManager.lightGrey,
+                          child: const Icon(Icons.image_not_supported),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 24.h),
+                  ],
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: ColorManager.white,
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    padding: EdgeInsets.all(20.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data?.title ?? 'الشروط والأحكام',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: ColorManager.primary,
+                          ),
+                        ),
+                        SizedBox(height: 12.h),
+                        Text(
+                          data?.description ?? '',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: ColorManager.greyTextColor,
+                            height: 1.5,
+                          ),
+                        ),
+                        if (data?.updatedAt != null) ...[
+                          SizedBox(height: 24.h),
+                          Divider(color: ColorManager.lightGrey2.withOpacity(0.5)),
+                          SizedBox(height: 12.h),
+                          Text(
+                            "${"Last updated"}: ${data!.updatedAt}",
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: ColorManager.greyTextColor,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 24.h),
-              Text(
-                'سياسة الخصوصية',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: ColorManager.primary,
-                ),
-              ),
-              SizedBox(height: 12.h),
-              Text(
-                'نحن نقوم بجمع واستخدام وحماية معلوماتك الشخصية كما هو موضح في سياسة الخصوصية الخاصة بنا. نحرص على عدم مشاركة بياناتك الشخصية مع أطراف ثالثة دون موافقتك الصريحة.',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: ColorManager.greyTextColor,
-                  height: 1.5,
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

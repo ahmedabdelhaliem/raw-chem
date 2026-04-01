@@ -429,7 +429,11 @@ final class BaseApiConsumer implements ApiConsumer {
               return VerifyOTPFailure(message: 'خطأ في التحقق من الكود');
             }
             if (error.response?.statusCode == 415) {
-              return ActiveAccountFailure(message: error.response?.data['message']);
+              final phone = error.response?.data['data']?['phone'];
+              return ActiveAccountFailure(
+                message: error.response?.data['message'],
+                phone: phone != null ? phone.toString() : null,
+              );
             }
             if (decoded.containsKey('message')) {
               String message = decoded['message'];

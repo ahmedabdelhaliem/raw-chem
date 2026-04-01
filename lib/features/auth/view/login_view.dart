@@ -9,6 +9,12 @@ import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/resources/styles_manager.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 import 'package:raw_chem/common/widgets/default_form_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/core/state/base_state.dart';
+import 'package:raw_chem/common/extensions/context_extension.dart';
+import 'package:raw_chem/features/auth/model/login/login_request.dart';
+import 'package:raw_chem/features/auth/model/login/login_response.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -31,98 +37,124 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorManager.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Logo
-                Image.asset(ImageAssets.logo, height: 120.h),
-                SizedBox(height: 30.h),
-                // Heading
-                Text(
-                  AppStrings.loginTitle.tr(),
-                  style: getBoldStyle(color: ColorManager.textColor, fontSize: 24.sp),
-                ),
-                SizedBox(height: 10.h),
-                // Subtitle
-                Text(
-                  AppStrings.loginSubtitle.tr(),
-                  textAlign: TextAlign.center,
-                  style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
-                ),
-                SizedBox(height: 40.h),
-                // Phone Field
-                DefaultFormField(
-                  controller: _phoneController,
-                  hintText: AppStrings.phoneNumber.tr(),
-                  keyboardType: TextInputType.phone,
-                  prefixWidget: const Icon(Icons.phone_outlined, color: ColorManager.greyTextColor),
-                ),
-                SizedBox(height: 20.h),
-                // Password Field
-                DefaultFormField(
-                  controller: _passwordController,
-                  hintText: AppStrings.password.tr(),
-                  obscureText: true,
-                  prefixWidget: const Icon(Icons.lock_outline, color: ColorManager.greyTextColor),
-                ),
-                SizedBox(height: 10.h),
-                // Forgot Password link
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {
-                      context.push(AppRouters.forgotPasswordView);
-                    },
-                    child: Text(
-                      AppStrings.forgotPassword.tr(),
-                      style: getMediumStyle(color: ColorManager.primary, fontSize: 13.sp),
-                    ),
+    return BlocProvider(
+      create: (context) => instance<LoginCubit>(),
+      child: BlocConsumer<LoginCubit, BaseState<LoginResponse>>(
+        listener: (context, state) {
+          if (state.isSuccess) {
+            context.pushReplacement(AppRouters.btmNav);
+          } else if (state.isUnverifiedAccount) {
+            context.push(AppRouters.verifyOtpView, extra: {
+              'phone': _phoneController.text,
+              'isForgotPassword': false,
+              'autoResend': true,
+            });
+          } else if (state.isError) {
+            context.showErrorMessage(state.errorMessage ?? "Login failed");
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: ColorManager.white,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Logo
+                      Image.asset(ImageAssets.logo, height: 120.h),
+                      SizedBox(height: 30.h),
+                      // Heading
+                      Text(
+                        AppStrings.loginTitle.tr(),
+                        style: getBoldStyle(color: ColorManager.textColor, fontSize: 24.sp),
+                      ),
+                      SizedBox(height: 10.h),
+                      // Subtitle
+                      Text(
+                        AppStrings.loginSubtitle.tr(),
+                        textAlign: TextAlign.center,
+                        style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
+                      ),
+                      SizedBox(height: 40.h),
+                      // Phone Field
+                      DefaultFormField(
+                        controller: _phoneController,
+                        hintText: AppStrings.phoneNumber.tr(),
+                        keyboardType: TextInputType.phone,
+                        prefixWidget: const Icon(Icons.phone_outlined, color: ColorManager.greyTextColor),
+                      ),
+                      SizedBox(height: 20.h),
+                      // Password Field
+                      DefaultFormField(
+                        controller: _passwordController,
+                        hintText: AppStrings.password.tr(),
+                        obscureText: true,
+                        prefixWidget: const Icon(Icons.lock_outline, color: ColorManager.greyTextColor),
+                      ),
+                      SizedBox(height: 10.h),
+                      // Forgot Password link
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () {
+                            context.push(AppRouters.forgotPasswordView);
+                          },
+                          child: Text(
+                            AppStrings.forgotPassword.tr(),
+                            style: getMediumStyle(color: ColorManager.primary, fontSize: 13.sp),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 30.h),
+                      // Login Button
+                      DefaultButtonWidget(
+                        isLoading: state.isLoading,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<LoginCubit>().login(
+                                  LoginRequest(
+                                    phone: _phoneController.text,
+                                    password: _passwordController.text,
+                                  ),
+                                );
+                          }
+                        },
+                        text: AppStrings.login.tr(),
+                        color: ColorManager.primary,
+                        textColor: ColorManager.white,
+                        radius: 12.r,
+                      ),
+                      SizedBox(height: 20.h),
+                      // Sign up link
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppStrings.dontHaveAccount.tr(),
+                            style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.push(AppRouters.signupView);
+                            },
+                            child: Text(
+                              AppStrings.signup.tr(),
+                              style: getBoldStyle(color: ColorManager.primary, fontSize: 14.sp),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 30.h),
-                // Login Button
-                DefaultButtonWidget(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Perform login
-                    }
-                  },
-                  text: AppStrings.login.tr(),
-                  color: ColorManager.primary,
-                  textColor: ColorManager.white,
-                  radius: 12.r,
-                ),
-                SizedBox(height: 20.h),
-                // Sign up link
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      AppStrings.dontHaveAccount.tr(),
-                      style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        context.push(AppRouters.signupView);
-                      },
-                      child: Text(
-                        AppStrings.signup.tr(),
-                        style: getBoldStyle(color: ColorManager.primary, fontSize: 14.sp),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

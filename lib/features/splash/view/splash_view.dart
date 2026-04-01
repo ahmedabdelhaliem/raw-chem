@@ -5,6 +5,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/assets_manager.dart';
+import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/app/app_prefs.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -21,8 +23,12 @@ class _SplashViewState extends State<SplashView> {
   }
 
   _goNext() async {
-    // ignore: use_build_context_synchronously
-    context.go(AppRouters.loginView);
+    final token = instance<AppPreferences>().getToken();
+    if (token.isNotEmpty) {
+      context.go(AppRouters.btmNav);
+    } else {
+      context.go(AppRouters.loginView);
+    }
   }
 
   @override

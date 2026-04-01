@@ -1,12 +1,29 @@
+import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
+import 'package:raw_chem/core/state/base_state.dart';
+import 'package:raw_chem/core/ui/skeleton/skeleton_bar.dart';
+import 'package:raw_chem/core/ui/skeleton/skeleton_widget.dart';
+import 'package:raw_chem/features/profile/cubit/faq_cubit.dart';
+import 'package:raw_chem/features/profile/model/faq/faq_model.dart';
 
-class HelpSupportView extends StatelessWidget {
+class HelpSupportView extends StatefulWidget {
   const HelpSupportView({super.key});
+
+  @override
+  State<HelpSupportView> createState() => _HelpSupportViewState();
+}
+
+class _HelpSupportViewState extends State<HelpSupportView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<FaqCubit>().getFaqs();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,152 +43,133 @@ class HelpSupportView extends StatelessWidget {
         elevation: 0,
         iconTheme: const IconThemeData(color: ColorManager.blackText),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // FAQ Section
-            Text(
-              'الأسئلة الشائعة',
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: ColorManager.blackText,
-              ),
-            ),
-            SizedBox(height: 12.h),
-            Container(
-              decoration: BoxDecoration(
-                color: ColorManager.white,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
+      body: BlocBuilder<FaqCubit, BaseState<List<FaqModel>>>(
+        builder: (context, state) {
+          final faqs = state.data ?? [];
+
+          if (state.isError) {
+            return Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildFaqItem(
-                    question: 'كيف أقدر أطلب منتجات؟',
-                    answer:
-                        'يمكنك التصفح عبر الأقسام المختلفة لإضافة أي منتج ثم الضغط "إتمام الطلب" وتتبع خطوات الدفع والاستلام.',
-                  ),
-                  Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
-                  _buildFaqItem(
-                    question: 'إمتى هيوصل طلبي؟',
-                    answer:
-                        'يتم توصيل الطلبات في نفس اليوم أو خلال ساعات حسب المنطقة، وسيظهر لك مدة التوصيل المتوقعة عند إتمام الطلب.',
-                  ),
-                  Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
-                  _buildFaqItem(
-                    question: 'هل أقدر أغير أو أكنسل الطلب؟',
-                    answer:
-                        'نعم، تقدر تلغي الطلب أو تعدل عليه طالما أنه في مرحلة قيد المعالجة ولم يتم خروجه للتوصيل للعميل.',
+                  Text(state.errorMessage ?? "An error occurred"),
+                  TextButton(
+                    onPressed: () => context.read<FaqCubit>().getFaqs(),
+                    child: const Text("Retry"),
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: 32.h),
+            );
+          }
 
-            // Contact Us
-            Text(
-              'تواصل معنا',
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: ColorManager.blackText,
-              ),
-            ),
-            SizedBox(height: 12.h),
-            Container(
-              decoration: BoxDecoration(
-                color: ColorManager.white,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              padding: EdgeInsets.all(20.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'لو عندك أي مشكلة أو استفسار تاني، تقدر تتواصل معانا عن طريق الأرقام دي:',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: ColorManager.greyTextColor,
-                      height: 1.5,
-                    ),
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // FAQ Section
+                Text(
+                  'الأسئلة الشائعة',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: ColorManager.blackText,
                   ),
-                  SizedBox(height: 16.h),
-                  Row(
-                    children: [
-                      Icon(Iconsax.call, color: ColorManager.primary, size: 24.sp),
-                      SizedBox(width: 12.w),
-                      Text(
-                        'اتصل بنا: 19000',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: ColorManager.blackText,
-                          fontWeight: FontWeight.w600,
+                ),
+                SizedBox(height: 12.h),
+                Container(
+                  decoration: BoxDecoration(
+                    color: ColorManager.white,
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: state.isLoading && faqs.isEmpty
+                      ? _buildSkeletonList()
+                      : faqs.isEmpty
+                      ? Padding(
+                          padding: EdgeInsets.all(20.w),
+                          child: const Center(child: Text("No questions available")),
+                        )
+                      : Column(
+                          children: List.generate(
+                            faqs.length,
+                            (index) => Column(
+                              children: [
+                                _buildFaqItem(
+                                  question: faqs[index].question,
+                                  answer: faqs[index].answer,
+                                ),
+                                if (index != faqs.length - 1)
+                                  Divider(
+                                    height: 1,
+                                    color: ColorManager.lightGrey2.withOpacity(0.5),
+                                  ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12.h),
-                  Row(
-                    children: [
-                      Icon(Iconsax.sms, color: ColorManager.primary, size: 24.sp),
-                      SizedBox(width: 12.w),
-                      Text(
-                        'support@rawchem.com',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: ColorManager.blackText,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
+          );
+        },
+      ),
+    );
+  }
 
-            SizedBox(height: 48.h),
-            Center(
-              child: Text(
-                'تم التصميم وتطوير بواسطة برمجة تك',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: ColorManager.primary,
-                  fontWeight: FontWeight.w600,
+  Widget _buildSkeletonList() {
+    return SkeletonWidget(
+      isLoading: true,
+      child: Column(
+        children: List.generate(
+          5,
+          (index) => Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SkeletonBar(width: 200.w, height: 14.h),
+                    const Icon(Icons.keyboard_arrow_down, color: Colors.white),
+                  ],
                 ),
               ),
-            ),
-          ],
+              if (index != 4) Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildFaqItem({required String question, required String answer}) {
-    return ExpansionTile(
-      title: Text(
-        question,
-        style: TextStyle(
-          fontSize: 14.sp,
-          fontWeight: FontWeight.bold,
-          color: ColorManager.blackText,
-        ),
-      ),
-      iconColor: ColorManager.primary,
-      collapsedIconColor: ColorManager.greyTextColor,
-      childrenPadding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 16.h),
-      children: [
-        Text(
-          answer,
+    return Directionality(
+      textDirection: ui.TextDirection.rtl,
+      child: ExpansionTile(
+        title: Text(
+          question,
+          textAlign: TextAlign.right,
           style: TextStyle(
-            fontSize: 13.sp,
-            color: ColorManager.greyTextColor,
-            height: 1.6,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.bold,
+            color: ColorManager.blackText,
           ),
-          textAlign: TextAlign.start,
         ),
-      ],
+        iconColor: ColorManager.primary,
+        collapsedIconColor: ColorManager.greyTextColor,
+        expandedAlignment: Alignment.centerRight,
+        childrenPadding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 16.h),
+        children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              answer,
+              style: TextStyle(fontSize: 13.sp, color: ColorManager.greyTextColor, height: 1.6),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

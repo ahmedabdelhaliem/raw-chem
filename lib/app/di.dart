@@ -36,7 +36,10 @@ Future<void> initAppModule() async {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           final token = instance<AppPreferences>().getToken();
-          if (token.isNotEmpty) {
+          final isAuthPath = options.path.contains(EndPoints.login) || 
+                             options.path.contains(EndPoints.register);
+
+          if (token.isNotEmpty && !isAuthPath) {
             options.headers["Authorization"] = "Bearer $token";
           }
           options.headers["Accept-Language"] = instance<AppPreferences>().getAppLanguage();
@@ -62,9 +65,15 @@ Future<void> initAppModule() async {
   // data source
   instance.registerLazySingleton<GenericDataSource>(() => GenericDataSource(instance()));
 
-  // repository
+  // Register AuthRepo
   instance.registerLazySingleton<AuthRepo>(() => AuthRepo(instance()));
 
-  // cubit
+  // Register Cubits
   instance.registerFactory<SignupCubit>(() => SignupCubit(instance()));
+  instance.registerFactory<VerifyOtpCubit>(() => VerifyOtpCubit(instance(), instance()));
+  instance.registerFactory<ForgotPwdCubit>(() => ForgotPwdCubit(instance()));
+  instance.registerFactory<LoginCubit>(() => LoginCubit(instance(), instance()));
+  instance.registerLazySingleton<ProfileCubit>(() => ProfileCubit(instance(), instance()));
+  instance.registerFactory<StaticPagesCubit>(() => StaticPagesCubit(instance()));
+  instance.registerFactory<FaqCubit>(() => FaqCubit(instance()));
 }

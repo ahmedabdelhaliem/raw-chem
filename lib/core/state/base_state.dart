@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum Status { initial, loading, success, error }
+enum Status { initial, loading, success, error, unverifiedAccount }
 
 class BaseState<T> extends Equatable {
   final Status status;
@@ -17,6 +17,7 @@ class BaseState<T> extends Equatable {
   bool get isLoading => status == Status.loading;
   bool get isSuccess => status == Status.success;
   bool get isError => status == Status.error;
+  bool get isUnverifiedAccount => status == Status.unverifiedAccount;
 
   BaseState<T> copyWith({
     Status? status,

@@ -67,5 +67,6 @@ class BanFailure extends Failure {
 }
 
 class ActiveAccountFailure extends Failure {
-  ActiveAccountFailure({required String message}) : super(message);
+  final String? phone;
+  ActiveAccountFailure({required String message, this.phone}) : super(message);
 }

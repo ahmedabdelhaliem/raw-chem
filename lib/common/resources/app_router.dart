@@ -7,10 +7,15 @@ import 'package:raw_chem/features/auth/view/signup_success_view.dart';
 import 'package:raw_chem/features/auth/view/signup_view.dart';
 import 'package:raw_chem/features/auth/view/success_view.dart';
 import 'package:raw_chem/features/auth/view/verify_otp_view.dart';
+import 'package:raw_chem/features/auth/cubit/verify_otp_cubit.dart';
+import 'package:raw_chem/features/auth/cubit/forgot_pwd_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/features/cart/view/cart_view.dart';
 import 'package:raw_chem/features/cart/view/order_success_view.dart';
 import 'package:raw_chem/features/home/view/home_view.dart';
 import 'package:raw_chem/features/main/view/main_view.dart';
+import 'package:raw_chem/features/profile/view/about_us_view.dart';
 import 'package:raw_chem/features/profile/view/help_support_view.dart';
 import 'package:raw_chem/features/profile/view/language_view.dart';
 import 'package:raw_chem/features/profile/view/notifications_settings_view.dart';
@@ -46,6 +51,7 @@ abstract class AppRouters {
   static const String ordersHistoryView = '/ordersHistory';
   static const String notificationsSettingsView = '/notificationsSettings';
   static const String helpSupportView = '/helpSupport';
+  static const String aboutUsView = '/aboutUs';
   static const String termsConditionsView = '/termsConditions';
   static const String cartView = '/cart';
   static const String orderSuccessView = '/orderSuccess';
@@ -68,10 +74,43 @@ abstract class AppRouters {
         path: AppRouters.forgotPasswordView,
         builder: (context, state) => const ForgotPasswordView(),
       ),
-      GoRoute(path: AppRouters.verifyOtpView, builder: (context, state) => const VerifyOtpView()),
+      GoRoute(
+        path: AppRouters.verifyOtpView,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final phone = extra?['phone'] as String? ?? '';
+          final isForgotPassword = extra?['isForgotPassword'] as bool? ?? false;
+          final autoResend = extra?['autoResend'] as bool? ?? false;
+          
+          if (isForgotPassword) {
+            return BlocProvider(
+              create: (context) => instance<ForgotPwdCubit>(),
+              child: VerifyOtpView(
+                phone: phone,
+                isForgotPassword: true,
+                autoResend: autoResend,
+              ),
+            );
+          }
+          
+          return BlocProvider(
+            create: (context) => instance<VerifyOtpCubit>(),
+            child: VerifyOtpView(
+              phone: phone,
+              isForgotPassword: false,
+              autoResend: autoResend,
+            ),
+          );
+        },
+      ),
       GoRoute(
         path: AppRouters.resetPasswordView,
-        builder: (context, state) => const ResetPasswordView(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final phone = extra?['phone'] as String? ?? '';
+          final token = extra?['token'] as String? ?? '';
+          return ResetPasswordView(phone: phone, token: token);
+        },
       ),
       GoRoute(path: AppRouters.successView, builder: (context, state) => const SuccessView()),
       GoRoute(path: AppRouters.signupView, builder: (context, state) => const SignupView()),
@@ -79,15 +118,48 @@ abstract class AppRouters {
         path: AppRouters.signupSuccessView,
         builder: (context, state) => const SignupSuccessView(),
       ),
-      GoRoute(path: AppRouters.btmNav, builder: (context, state) => const MainView()),
+      GoRoute(
+        path: AppRouters.btmNav,
+        builder: (context, state) => BlocProvider.value(
+          value: instance<ProfileCubit>(),
+          child: const MainView(),
+        ),
+      ),
+
       GoRoute(path: AppRouters.homeView, builder: (context, state) => const HomeView()),
       GoRoute(path: AppRouters.profileView, builder: (context, state) => const ProfileView()),
       GoRoute(path: AppRouters.languageView, builder: (context, state) => const LanguageView()),
-      GoRoute(path: AppRouters.personalDataView, builder: (context, state) => const PersonalDataView()),
+      GoRoute(
+        path: AppRouters.personalDataView,
+        builder: (context, state) => BlocProvider.value(
+          value: instance<ProfileCubit>(),
+          child: const PersonalDataView(),
+        ),
+      ),
+
       GoRoute(path: AppRouters.ordersHistoryView, builder: (context, state) => const OrdersHistoryView()),
       GoRoute(path: AppRouters.notificationsSettingsView, builder: (context, state) => const NotificationsSettingsView()),
-      GoRoute(path: AppRouters.helpSupportView, builder: (context, state) => const HelpSupportView()),
-      GoRoute(path: AppRouters.termsConditionsView, builder: (context, state) => const TermsConditionsView()),
+      GoRoute(
+        path: AppRouters.helpSupportView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => instance<FaqCubit>(),
+          child: const HelpSupportView(),
+        ),
+      ),
+      GoRoute(
+        path: AppRouters.aboutUsView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => instance<StaticPagesCubit>(),
+          child: const AboutUsView(),
+        ),
+      ),
+      GoRoute(
+        path: AppRouters.termsConditionsView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => instance<StaticPagesCubit>(),
+          child: const TermsConditionsView(),
+        ),
+      ),
       GoRoute(path: AppRouters.cartView, builder: (context, state) => const CartView()),
       GoRoute(path: AppRouters.orderSuccessView, builder: (context, state) => const OrderSuccessView()),
       GoRoute(path: AppRouters.rawMaterialsView, builder: (context, state) => const RawMaterialsView()),

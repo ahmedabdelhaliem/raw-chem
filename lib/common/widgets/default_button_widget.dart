@@ -144,53 +144,60 @@ class DefaultButtonWidget extends StatelessWidget {
                     ? ColorManager.primary.withOpacity(.1)
                     : ColorManager.white.withOpacity(.3)),
           ),
-          backgroundColor: WidgetStateProperty.all(
-              isLoading ? ColorManager.greyBorder : color ?? Colors.transparent),
+          backgroundColor: WidgetStateProperty.all(color ?? Colors.transparent),
           shadowColor: WidgetStateProperty.all(Colors.grey.shade100),
           side: withBorder
               ? WidgetStatePropertyAll(BorderSide(color: borderColor ?? ColorManager.green))
               : null,
           elevation: WidgetStatePropertyAll(isLoading ? 0 : elevation ?? 3),
         ),
-        child: isLoading
-            ? SizedBox(
-                height: 20.w,
-                width: 20.w,
-                child: Center(
-                  child: CircularProgressIndicator(color: loadingColor ?? Colors.white),
-                ),
-              )
-            : child ??
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (verticalWidget != null) verticalWidget!,
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (isIcon && !textFirst) _svgIcon(),
-                        if (isIcon && isText) SizedBox(width: 10.w),
-                        if (isText)
-                          Flexible(
-                            fit: isExpanded ? FlexFit.tight : FlexFit.loose,
-                            child: Text(
-                              text,
-                              textAlign: isTextCenter ? TextAlign.center : null,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: textStyle ??
-                                  getBoldStyle(
-                                      fontSize: fontSize ?? 14.sp,
-                                      color: textColor ?? ColorManager.primary,
-                                      height: textHeight),
-                            ),
-                          ),
-                        if (isIcon && textFirst) SizedBox(width: 10.w),
-                        if (isIcon && textFirst) _svgIcon(),
-                      ],
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: isLoading
+              ? SizedBox(
+                  key: const ValueKey('loading'),
+                  height: 20.w,
+                  width: 20.w,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: loadingColor ?? textColor ?? ColorManager.white,
+                      strokeWidth: 2.0,
                     ),
-                  ],
-                ),
+                  ),
+                )
+              : child ??
+                  Column(
+                    key: const ValueKey('content'),
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (verticalWidget != null) verticalWidget!,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (isIcon && !textFirst) _svgIcon(),
+                          if (isIcon && isText) SizedBox(width: 10.w),
+                          if (isText)
+                            Flexible(
+                              fit: isExpanded ? FlexFit.tight : FlexFit.loose,
+                              child: Text(
+                                text,
+                                textAlign: isTextCenter ? TextAlign.center : null,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: textStyle ??
+                                    getBoldStyle(
+                                        fontSize: fontSize ?? 14.sp,
+                                        color: textColor ?? ColorManager.primary,
+                                        height: textHeight),
+                              ),
+                            ),
+                          if (isIcon && textFirst) SizedBox(width: 10.w),
+                          if (isIcon && textFirst) _svgIcon(),
+                        ],
+                      ),
+                    ],
+                  ),
+        ),
       ),
     );
   }
