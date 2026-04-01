@@ -22,7 +22,7 @@ class _SplashViewState extends State<SplashView> {
 
   _goNext() async {
     // ignore: use_build_context_synchronously
-    context.go(AppRouters.btmNav);
+    context.go(AppRouters.loginView);
   }
 
   @override

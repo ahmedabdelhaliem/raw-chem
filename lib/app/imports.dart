@@ -7,6 +7,9 @@ import 'package:raw_chem/common/data_source/generic_data_source.dart';
 import 'package:raw_chem/common/http/api_consumer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:raw_chem/features/auth/cubit/signup_cubit.dart';
+import 'package:raw_chem/features/auth/repo/auth_repo.dart';
+
 import 'app_constants.dart';
 
 part "di.dart";

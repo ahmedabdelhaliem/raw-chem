@@ -62,5 +62,9 @@ Future<void> initAppModule() async {
   // data source
   instance.registerLazySingleton<GenericDataSource>(() => GenericDataSource(instance()));
 
-  
+  // repository
+  instance.registerLazySingleton<AuthRepo>(() => AuthRepo(instance()));
+
+  // cubit
+  instance.registerFactory<SignupCubit>(() => SignupCubit(instance()));
 }
