@@ -70,6 +70,8 @@ Future<void> initAppModule() async {
   instance.registerLazySingleton<CategoriesRepo>(() => CategoriesRepo(instance()));
   instance.registerLazySingleton<RecipesRepo>(() => RecipesRepo(instance()));
   instance.registerLazySingleton<RawMaterialsRepo>(() => RawMaterialsRepo(instance()));
+  instance.registerLazySingleton<HomeRepo>(() => HomeRepo(instance()));
+  instance.registerLazySingleton<OnboardingRepo>(() => OnboardingRepo(instance()));
 
   // Register Cubits
   instance.registerFactory<SignupCubit>(() => SignupCubit(instance()));
@@ -84,4 +86,6 @@ Future<void> initAppModule() async {
   instance.registerFactory<RecipeDetailsCubit>(() => RecipeDetailsCubit(instance()));
   instance.registerFactory<RawMaterialsCubit>(() => RawMaterialsCubit(instance()));
   instance.registerFactory<RawMaterialDetailsCubit>(() => RawMaterialDetailsCubit(instance()));
+  instance.registerFactory<BannersCubit>(() => BannersCubit(instance()));
+  instance.registerFactory<OnboardingCubit>(() => OnboardingCubit(instance()));
 }

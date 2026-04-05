@@ -212,13 +212,14 @@ ProfileUser _$ProfileUserFromJson(Map<String, dynamic> json) {
 mixin _$ProfileUser {
   int? get id => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
+  String? get image => throw _privateConstructorUsedError;
   @JsonKey(name: 'company_name')
   String? get companyName => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
   CategoryModel? get category => throw _privateConstructorUsedError;
   @JsonKey(name: 'category_id')
-  int? get categoryId => throw _privateConstructorUsedError;
+  dynamic get categoryId => throw _privateConstructorUsedError;
   @JsonKey(name: 'fcm_token')
   String? get fcmToken => throw _privateConstructorUsedError;
   int? get status => throw _privateConstructorUsedError;
@@ -244,11 +245,12 @@ abstract class $ProfileUserCopyWith<$Res> {
   $Res call(
       {int? id,
       String? name,
+      String? image,
       @JsonKey(name: 'company_name') String? companyName,
       String? email,
       String? phone,
       CategoryModel? category,
-      @JsonKey(name: 'category_id') int? categoryId,
+      @JsonKey(name: 'category_id') dynamic categoryId,
       @JsonKey(name: 'fcm_token') String? fcmToken,
       int? status,
       @JsonKey(name: 'email_verified_at') String? emailVerifiedAt,
@@ -273,6 +275,7 @@ class _$ProfileUserCopyWithImpl<$Res, $Val extends ProfileUser>
   $Res call({
     Object? id = freezed,
     Object? name = freezed,
+    Object? image = freezed,
     Object? companyName = freezed,
     Object? email = freezed,
     Object? phone = freezed,
@@ -293,6 +296,10 @@ class _$ProfileUserCopyWithImpl<$Res, $Val extends ProfileUser>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
+      image: freezed == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as String?,
       companyName: freezed == companyName
           ? _value.companyName
           : companyName // ignore: cast_nullable_to_non_nullable
@@ -312,7 +319,7 @@ class _$ProfileUserCopyWithImpl<$Res, $Val extends ProfileUser>
       categoryId: freezed == categoryId
           ? _value.categoryId
           : categoryId // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as dynamic,
       fcmToken: freezed == fcmToken
           ? _value.fcmToken
           : fcmToken // ignore: cast_nullable_to_non_nullable
@@ -360,11 +367,12 @@ abstract class _$$ProfileUserImplCopyWith<$Res>
   $Res call(
       {int? id,
       String? name,
+      String? image,
       @JsonKey(name: 'company_name') String? companyName,
       String? email,
       String? phone,
       CategoryModel? category,
-      @JsonKey(name: 'category_id') int? categoryId,
+      @JsonKey(name: 'category_id') dynamic categoryId,
       @JsonKey(name: 'fcm_token') String? fcmToken,
       int? status,
       @JsonKey(name: 'email_verified_at') String? emailVerifiedAt,
@@ -388,6 +396,7 @@ class __$$ProfileUserImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? name = freezed,
+    Object? image = freezed,
     Object? companyName = freezed,
     Object? email = freezed,
     Object? phone = freezed,
@@ -408,6 +417,10 @@ class __$$ProfileUserImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
+      image: freezed == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as String?,
       companyName: freezed == companyName
           ? _value.companyName
           : companyName // ignore: cast_nullable_to_non_nullable
@@ -427,7 +440,7 @@ class __$$ProfileUserImplCopyWithImpl<$Res>
       categoryId: freezed == categoryId
           ? _value.categoryId
           : categoryId // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as dynamic,
       fcmToken: freezed == fcmToken
           ? _value.fcmToken
           : fcmToken // ignore: cast_nullable_to_non_nullable
@@ -458,6 +471,7 @@ class _$ProfileUserImpl implements _ProfileUser {
   const _$ProfileUserImpl(
       {this.id,
       this.name,
+      this.image,
       @JsonKey(name: 'company_name') this.companyName,
       this.email,
       this.phone,
@@ -477,6 +491,8 @@ class _$ProfileUserImpl implements _ProfileUser {
   @override
   final String? name;
   @override
+  final String? image;
+  @override
   @JsonKey(name: 'company_name')
   final String? companyName;
   @override
@@ -487,7 +503,7 @@ class _$ProfileUserImpl implements _ProfileUser {
   final CategoryModel? category;
   @override
   @JsonKey(name: 'category_id')
-  final int? categoryId;
+  final dynamic categoryId;
   @override
   @JsonKey(name: 'fcm_token')
   final String? fcmToken;
@@ -505,7 +521,7 @@ class _$ProfileUserImpl implements _ProfileUser {
 
   @override
   String toString() {
-    return 'ProfileUser(id: $id, name: $name, companyName: $companyName, email: $email, phone: $phone, category: $category, categoryId: $categoryId, fcmToken: $fcmToken, status: $status, emailVerifiedAt: $emailVerifiedAt, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ProfileUser(id: $id, name: $name, image: $image, companyName: $companyName, email: $email, phone: $phone, category: $category, categoryId: $categoryId, fcmToken: $fcmToken, status: $status, emailVerifiedAt: $emailVerifiedAt, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -515,14 +531,15 @@ class _$ProfileUserImpl implements _ProfileUser {
             other is _$ProfileUserImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.image, image) || other.image == image) &&
             (identical(other.companyName, companyName) ||
                 other.companyName == companyName) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.category, category) ||
                 other.category == category) &&
-            (identical(other.categoryId, categoryId) ||
-                other.categoryId == categoryId) &&
+            const DeepCollectionEquality()
+                .equals(other.categoryId, categoryId) &&
             (identical(other.fcmToken, fcmToken) ||
                 other.fcmToken == fcmToken) &&
             (identical(other.status, status) || other.status == status) &&
@@ -540,11 +557,12 @@ class _$ProfileUserImpl implements _ProfileUser {
       runtimeType,
       id,
       name,
+      image,
       companyName,
       email,
       phone,
       category,
-      categoryId,
+      const DeepCollectionEquality().hash(categoryId),
       fcmToken,
       status,
       emailVerifiedAt,
@@ -569,11 +587,12 @@ abstract class _ProfileUser implements ProfileUser {
   const factory _ProfileUser(
           {final int? id,
           final String? name,
+          final String? image,
           @JsonKey(name: 'company_name') final String? companyName,
           final String? email,
           final String? phone,
           final CategoryModel? category,
-          @JsonKey(name: 'category_id') final int? categoryId,
+          @JsonKey(name: 'category_id') final dynamic categoryId,
           @JsonKey(name: 'fcm_token') final String? fcmToken,
           final int? status,
           @JsonKey(name: 'email_verified_at') final String? emailVerifiedAt,
@@ -589,6 +608,8 @@ abstract class _ProfileUser implements ProfileUser {
   @override
   String? get name;
   @override
+  String? get image;
+  @override
   @JsonKey(name: 'company_name')
   String? get companyName;
   @override
@@ -599,7 +620,7 @@ abstract class _ProfileUser implements ProfileUser {
   CategoryModel? get category;
   @override
   @JsonKey(name: 'category_id')
-  int? get categoryId;
+  dynamic get categoryId;
   @override
   @JsonKey(name: 'fcm_token')
   String? get fcmToken;

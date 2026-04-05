@@ -161,6 +161,7 @@ class AppStrings {
   static const String aboutUs = "aboutUs";
   static const String termsAndConditions = "termsAndConditions";
   static const String logout = "logout";
+  static const String settings = "settings";
 
   // Personal Data
   static const String fullName = "fullName";

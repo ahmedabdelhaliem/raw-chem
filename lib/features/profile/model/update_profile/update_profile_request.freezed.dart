@@ -27,6 +27,8 @@ mixin _$UpdateProfileRequest {
   String get companyName => throw _privateConstructorUsedError;
   @JsonKey(name: 'category_id')
   int get categoryId => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  XFile? get image => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +47,8 @@ abstract class $UpdateProfileRequestCopyWith<$Res> {
       String email,
       String phone,
       @JsonKey(name: 'company_name') String companyName,
-      @JsonKey(name: 'category_id') int categoryId});
+      @JsonKey(name: 'category_id') int categoryId,
+      @JsonKey(includeFromJson: false, includeToJson: false) XFile? image});
 }
 
 /// @nodoc
@@ -67,6 +70,7 @@ class _$UpdateProfileRequestCopyWithImpl<$Res,
     Object? phone = null,
     Object? companyName = null,
     Object? categoryId = null,
+    Object? image = freezed,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -89,6 +93,10 @@ class _$UpdateProfileRequestCopyWithImpl<$Res,
           ? _value.categoryId
           : categoryId // ignore: cast_nullable_to_non_nullable
               as int,
+      image: freezed == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as XFile?,
     ) as $Val);
   }
 }
@@ -106,7 +114,8 @@ abstract class _$$UpdateProfileRequestImplCopyWith<$Res>
       String email,
       String phone,
       @JsonKey(name: 'company_name') String companyName,
-      @JsonKey(name: 'category_id') int categoryId});
+      @JsonKey(name: 'category_id') int categoryId,
+      @JsonKey(includeFromJson: false, includeToJson: false) XFile? image});
 }
 
 /// @nodoc
@@ -125,6 +134,7 @@ class __$$UpdateProfileRequestImplCopyWithImpl<$Res>
     Object? phone = null,
     Object? companyName = null,
     Object? categoryId = null,
+    Object? image = freezed,
   }) {
     return _then(_$UpdateProfileRequestImpl(
       name: null == name
@@ -147,6 +157,10 @@ class __$$UpdateProfileRequestImplCopyWithImpl<$Res>
           ? _value.categoryId
           : categoryId // ignore: cast_nullable_to_non_nullable
               as int,
+      image: freezed == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as XFile?,
     ));
   }
 }
@@ -159,7 +173,8 @@ class _$UpdateProfileRequestImpl extends _UpdateProfileRequest {
       required this.email,
       required this.phone,
       @JsonKey(name: 'company_name') required this.companyName,
-      @JsonKey(name: 'category_id') required this.categoryId})
+      @JsonKey(name: 'category_id') required this.categoryId,
+      @JsonKey(includeFromJson: false, includeToJson: false) this.image})
       : super._();
 
   factory _$UpdateProfileRequestImpl.fromJson(Map<String, dynamic> json) =>
@@ -177,10 +192,13 @@ class _$UpdateProfileRequestImpl extends _UpdateProfileRequest {
   @override
   @JsonKey(name: 'category_id')
   final int categoryId;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final XFile? image;
 
   @override
   String toString() {
-    return 'UpdateProfileRequest(name: $name, email: $email, phone: $phone, companyName: $companyName, categoryId: $categoryId)';
+    return 'UpdateProfileRequest(name: $name, email: $email, phone: $phone, companyName: $companyName, categoryId: $categoryId, image: $image)';
   }
 
   @override
@@ -194,13 +212,14 @@ class _$UpdateProfileRequestImpl extends _UpdateProfileRequest {
             (identical(other.companyName, companyName) ||
                 other.companyName == companyName) &&
             (identical(other.categoryId, categoryId) ||
-                other.categoryId == categoryId));
+                other.categoryId == categoryId) &&
+            (identical(other.image, image) || other.image == image));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, name, email, phone, companyName, categoryId);
+  int get hashCode => Object.hash(
+      runtimeType, name, email, phone, companyName, categoryId, image);
 
   @JsonKey(ignore: true)
   @override
@@ -220,12 +239,13 @@ class _$UpdateProfileRequestImpl extends _UpdateProfileRequest {
 
 abstract class _UpdateProfileRequest extends UpdateProfileRequest {
   const factory _UpdateProfileRequest(
-          {required final String name,
-          required final String email,
-          required final String phone,
-          @JsonKey(name: 'company_name') required final String companyName,
-          @JsonKey(name: 'category_id') required final int categoryId}) =
-      _$UpdateProfileRequestImpl;
+      {required final String name,
+      required final String email,
+      required final String phone,
+      @JsonKey(name: 'company_name') required final String companyName,
+      @JsonKey(name: 'category_id') required final int categoryId,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      final XFile? image}) = _$UpdateProfileRequestImpl;
   const _UpdateProfileRequest._() : super._();
 
   factory _UpdateProfileRequest.fromJson(Map<String, dynamic> json) =
@@ -243,6 +263,9 @@ abstract class _UpdateProfileRequest extends UpdateProfileRequest {
   @override
   @JsonKey(name: 'category_id')
   int get categoryId;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  XFile? get image;
   @override
   @JsonKey(ignore: true)
   _$$UpdateProfileRequestImplCopyWith<_$UpdateProfileRequestImpl>

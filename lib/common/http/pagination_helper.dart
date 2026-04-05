@@ -26,7 +26,9 @@ class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
 
   Future<void> loadFirstPage(PaginatedFunc<T> fetchFunction,
       {Map<String, dynamic>? params}) async {
-    bloc.emit(bloc.state.copyWith(status: Status.loading));
+    if (!bloc.isClosed) {
+      bloc.emit(bloc.state.copyWith(status: Status.loading));
+    }
     items.clear();
     currentPage = 1;
     isLoadingMore = false;
@@ -35,10 +37,12 @@ class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
     final result = await fetchFunction(currentPage, pageSize, params);
     await result.fold((failure) async {
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-      bloc.emit(bloc.state.copyWith(
-          status: Status.error,
-          failure: failure,
-          errorMessage: failure.message));
+      if (!bloc.isClosed) {
+        bloc.emit(bloc.state.copyWith(
+            status: Status.error,
+            failure: failure,
+            errorMessage: failure.message));
+      }
     }, (response) async {
       items.addAll(response.data);
       currentPage = (response.pagination.currentPage ?? 1) + 1;
@@ -47,8 +51,10 @@ class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
           (response.pagination.lastPage ?? 1);
 
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-      bloc.emit(bloc.state
-          .copyWith(status: Status.success, items: List<T>.from(items)));
+      if (!bloc.isClosed) {
+        bloc.emit(bloc.state
+            .copyWith(status: Status.success, items: List<T>.from(items)));
+      }
     });
   }
 
@@ -61,7 +67,9 @@ class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
 
     isLoadingMore = true;
     // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-    bloc.emit(bloc.state.copyWith(status: Status.isPaginationLoading));
+    if (!bloc.isClosed) {
+      bloc.emit(bloc.state.copyWith(status: Status.isPaginationLoading));
+    }
 
     final result = await fetchFunction(currentPage, pageSize,
         params?..removeWhere((key, value) => value == null || value == ''));
@@ -70,10 +78,12 @@ class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
       (failure) async {
         isLoadingMore = false;
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-        bloc.emit(bloc.state.copyWith(
-            status: Status.isPaginationFailure,
-            failure: failure,
-            errorMessage: failure.message));
+        if (!bloc.isClosed) {
+          bloc.emit(bloc.state.copyWith(
+              status: Status.isPaginationFailure,
+              failure: failure,
+              errorMessage: failure.message));
+        }
       },
       (response) async {
         items.addAll(response.data);
@@ -84,8 +94,10 @@ class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
 
         isLoadingMore = false;
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-        bloc.emit(bloc.state
-            .copyWith(status: Status.success, items: List<T>.from(items)));
+        if (!bloc.isClosed) {
+          bloc.emit(bloc.state
+              .copyWith(status: Status.success, items: List<T>.from(items)));
+        }
       },
     );
   }

@@ -145,5 +145,7 @@
   "contactSupplierMessage": "Contact Supplier",
   "contactSupplierTitle": "Contact Supplier",
   "addToCart": "Add to Cart",
-  "productDetails": "Product Details"
+  "productDetails": "Product Details",
+  "settings": "Settings",
+  "profileUpdatedSuccessfully": "Profile updated successfully"
 }

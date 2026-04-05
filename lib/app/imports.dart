@@ -24,6 +24,10 @@ import 'package:raw_chem/features/recipes/repo/recipes_repo.dart';
 import 'package:raw_chem/features/raw_materials/repo/raw_materials_repo.dart';
 import 'package:raw_chem/features/raw_materials/cubit/raw_materials_cubit.dart';
 import 'package:raw_chem/features/raw_materials/cubit/raw_material_details_cubit.dart';
+import 'package:raw_chem/features/home/repo/home_repo.dart';
+import 'package:raw_chem/features/home/cubit/banners_cubit.dart';
+import 'package:raw_chem/features/onboarding/repo/onboarding_repo.dart';
+import 'package:raw_chem/features/onboarding/cubit/onboarding_cubit.dart';
 
 export 'package:get_it/get_it.dart';
 export 'package:dio/dio.dart';
@@ -59,6 +63,12 @@ export '../common/model/pagination_model.dart';
 export '../common/model/paginated_response.dart';
 export '../common/widgets/paginated_list_wrapper.dart';
 export '../common/http/pagination_helper.dart';
+export '../features/home/repo/home_repo.dart';
+export '../features/home/cubit/banners_cubit.dart';
+export '../features/home/model/banner_model.dart';
+export '../features/onboarding/repo/onboarding_repo.dart';
+export '../features/onboarding/cubit/onboarding_cubit.dart';
+export '../features/onboarding/model/welcome_screen_model.dart';
 
 import 'app_constants.dart';
 

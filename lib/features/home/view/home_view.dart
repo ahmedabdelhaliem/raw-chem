@@ -23,6 +23,7 @@ class HomeView extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => instance<RecipesCubit>()..fetchRecipes()),
         BlocProvider(create: (context) => instance<RawMaterialsCubit>()..fetchMaterials()),
+        BlocProvider(create: (context) => instance<BannersCubit>()..fetchBanners()),
       ],
       child: Scaffold(
         backgroundColor: ColorManager.bg,
@@ -160,13 +161,30 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildBanner() {
-    return DefaultBannerWidget<String>(
-      images: const ['https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=600'],
-      imageUrl: (image) => image,
-      title: (image) => AppStrings.bannerTitle.tr(),
-      isSpecialOffer: (image) => true,
-      aspectRatio: 16 / 7,
-    ).animate().scale(delay: 200.ms, duration: 500.ms);
+    return BlocBuilder<BannersCubit, BaseState<BannerModel>>(
+      builder: (context, state) {
+        if (state.isLoading) {
+          return DefaultBannerWidget<BannerModel>(
+            images: const [],
+            imageUrl: (image) => '',
+            isLoading: true,
+            aspectRatio: 16 / 7,
+          );
+        }
+        if (state.isSuccess) {
+          final banners = state.items;
+          if (banners.isEmpty) return const SizedBox.shrink();
+          return DefaultBannerWidget<BannerModel>(
+            images: banners,
+            imageUrl: (image) => image.banner ?? '',
+            title: (image) => AppStrings.bannerTitle.tr(),
+            isSpecialOffer: (image) => true,
+            aspectRatio: 16 / 7,
+          ).animate().scale(delay: 200.ms, duration: 500.ms);
+        }
+        return const SizedBox.shrink();
+      },
+    );
   }
 
   Widget _buildSectionHeader(BuildContext context, String title, VoidCallback onMoreTap) {

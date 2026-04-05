@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'update_profile_request.freezed.dart';
 part 'update_profile_request.g.dart';
@@ -14,6 +15,7 @@ class UpdateProfileRequest with _$UpdateProfileRequest {
     required String phone,
     @JsonKey(name: 'company_name') required String companyName,
     @JsonKey(name: 'category_id') required int categoryId,
+    @JsonKey(includeFromJson: false, includeToJson: false) XFile? image,
   }) = _UpdateProfileRequest;
 
   factory UpdateProfileRequest.fromJson(Map<String, dynamic> json) =>
@@ -26,6 +28,11 @@ class UpdateProfileRequest with _$UpdateProfileRequest {
       'phone': phone,
       'company_name': companyName,
       'category_id': categoryId,
+      if (image != null)
+        'image': await MultipartFile.fromFile(
+          image!.path,
+          filename: image!.path.split('/').last,
+        ),
     });
   }
 }

@@ -143,5 +143,7 @@
   "logout": "تسجيل الخروج",
   "addToCart": "أضف للسلة",
   "contactSupplier": "اتصل بالمورد",
-  "productDetails": "تفاصيل المنتج"
+  "productDetails": "تفاصيل المنتج",
+  "settings": "الإعدادات",
+  "profileUpdatedSuccessfully": "تم تحديث الملف الشخصي بنجاح"
 }

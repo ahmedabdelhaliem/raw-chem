@@ -21,11 +21,12 @@ class ProfileUser with _$ProfileUser {
   const factory ProfileUser({
     int? id,
     String? name,
+    String? image,
     @JsonKey(name: 'company_name') String? companyName,
     String? email,
     String? phone,
     CategoryModel? category,
-    @JsonKey(name: 'category_id') int? categoryId,
+    @JsonKey(name: 'category_id') dynamic categoryId,
     @JsonKey(name: 'fcm_token') String? fcmToken,
     int? status,
     @JsonKey(name: 'email_verified_at') String? emailVerifiedAt,
