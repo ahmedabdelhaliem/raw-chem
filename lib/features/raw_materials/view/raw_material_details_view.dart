@@ -14,10 +14,7 @@ import 'package:shimmer/shimmer.dart';
 class RawMaterialDetailsView extends StatelessWidget {
   final RawMaterialModel material;
 
-  const RawMaterialDetailsView({
-    super.key,
-    required this.material,
-  });
+  const RawMaterialDetailsView({super.key, required this.material});
 
   @override
   Widget build(BuildContext context) {
@@ -26,21 +23,20 @@ class RawMaterialDetailsView extends StatelessWidget {
         final currentMaterial = state.isSuccess ? state.data! : material;
         final bool isLoading = state.isLoading;
 
-        final String imageUrl = currentMaterial.image ??
+        final String imageUrl =
+            currentMaterial.image ??
             'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300';
         final String title = currentMaterial.name ?? '';
         final String category = currentMaterial.family?.name ?? 'Category';
         final String description = currentMaterial.description ?? '';
         final String casNumber = currentMaterial.casNumber ?? '';
-        
+
         // Placeholder for missing API fields
-        final String averagePrice = '1200 جنية - 1100 جنية';
-        final String supplier = 'دلتا للحلول الكيميائية';
 
         return Scaffold(
           backgroundColor: ColorManager.bg,
           appBar: DefaultAppBar(
-            text: 'تفاصيل المنتج',
+            text: AppStrings.productDetails.tr(),
             backgroundColor: ColorManager.bg,
             titleColor: ColorManager.black,
             withLeading: true,
@@ -60,12 +56,12 @@ class RawMaterialDetailsView extends StatelessWidget {
                       color: const Color(0xFFF3FAF0),
                       child: CachedNetworkImage(
                         imageUrl: imageUrl,
-                        height: 250.h,
-                        fit: BoxFit.contain,
+                        height: .25.sh,
+                        fit: BoxFit.cover,
                         placeholder: (context, url) => Shimmer.fromColors(
                           baseColor: Colors.grey[300]!,
                           highlightColor: Colors.grey[100]!,
-                          child: Container(color: Colors.white, height: 250.h),
+                          child: Container(color: Colors.white, height: .25.sh),
                         ),
                       ),
                     ),
@@ -106,15 +102,11 @@ class RawMaterialDetailsView extends StatelessWidget {
                 SizedBox(height: 15.h),
 
                 // Average Price
-                _buildInfoRow('متوسط السعر : ', averagePrice, isLoading: isLoading),
-                SizedBox(height: 15.h),
 
                 // Meta Data
                 _buildInfoSection('التفاصيل الفنية', '', isTitle: true, isLoading: false),
                 SizedBox(height: 8.h),
                 _buildInfoRow('CAS Number: ', casNumber, isLoading: isLoading),
-                SizedBox(height: 8.h),
-                _buildInfoRow('المورد : ', supplier, isLoading: isLoading),
 
                 SizedBox(height: 40.h),
 
@@ -151,8 +143,12 @@ class RawMaterialDetailsView extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoSection(String title, String content,
-      {bool isTitle = false, required bool isLoading}) {
+  Widget _buildInfoSection(
+    String title,
+    String content, {
+    bool isTitle = false,
+    required bool isLoading,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -175,14 +171,10 @@ class RawMaterialDetailsView extends StatelessWidget {
           else
             Text(
               content,
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: const Color(0xFF1B3D2F),
-                height: 1.5,
-              ),
+              style: TextStyle(fontSize: 12.sp, color: const Color(0xFF1B3D2F), height: 1.5),
               textAlign: TextAlign.right,
             ),
-        ]
+        ],
       ],
     );
   }
@@ -207,10 +199,7 @@ class RawMaterialDetailsView extends StatelessWidget {
           ),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 13.sp,
-            color: const Color(0xFFB4B4CC),
-          ),
+          style: TextStyle(fontSize: 13.sp, color: const Color(0xFFB4B4CC)),
         ),
       ],
     );

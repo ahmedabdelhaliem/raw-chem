@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app.dart';
 import '../../common/resources/theme_manager.dart';
 import '../stateless/gaps.dart';
-import '../stateless/label.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 
 
@@ -46,71 +46,121 @@ extension ContextExtensions on BuildContext {
       navigatorKey.currentState?.popUntil((route) => route.isFirst || (predicate != null && predicate(route)));
 
   void showErrorMessage(String message) {
-    scaffoldMessengerKey.currentState?.clearSnackBars();
-    scaffoldMessengerKey.currentState?.showSnackBar(
-      SnackBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        content: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                message,
-                style: ThemeManager.getTheme().textTheme.bodyMedium?.copyWith(color: Colors.black),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(width: 10),
-            const Icon(
-              Icons.error,
-              color: Colors.red,
+    showToastWidget(
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(40),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFFE53935).withOpacity(0.15),
+              blurRadius: 20,
+              spreadRadius: 2,
+              offset: const Offset(0, 8),
             ),
           ],
         ),
-        backgroundColor: Colors.white,
-        behavior: SnackBarBehavior.floating,
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        margin: const EdgeInsets.only(bottom: 25, right: 20, left: 20),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE53935).withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.error_outline, color: Color(0xFFE53935), size: 24),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(
+                  color: Color(0xFF2D2D2D),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  height: 1.4,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
+      context: this,
+      animation: StyledToastAnimation.slideFromTopFade,
+      reverseAnimation: StyledToastAnimation.slideToTopFade,
+      position: StyledToastPosition.top,
+      animDuration: const Duration(milliseconds: 600),
+      duration: const Duration(seconds: 4),
+      curve: Curves.easeOutBack, // Very smooth modern bounce
+      reverseCurve: Curves.easeInCirc,
+      isIgnoring: false,
     );
   }
 
   void showSuccessMessage(
       String message, {
-        Color color = Colors.green,
-        IconData icon = Icons.check_circle,
+        Color color = const Color(0xFF006B3E), // Primary green
+        IconData icon = Icons.check_circle_outline,
       }) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scaffoldMessengerKey.currentState?.showSnackBar(
-        SnackBar(
-          duration: const Duration(seconds: 2),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          content: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: LocalizedLabel(
-                  text: message,
-                  style:
-                  ThemeManager.getTheme().textTheme.bodyMedium?.copyWith(color: Colors.black),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Icon(icon, color: color),
-            ],
-          ),
-          backgroundColor: Colors.white,
-          behavior: SnackBarBehavior.floating,
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          margin: const EdgeInsets.only(bottom: 25, right: 20, left: 20),
+    showToastWidget(
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white, 
+          borderRadius: BorderRadius.circular(40),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.15),
+              blurRadius: 20,
+              spreadRadius: 2,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
-      );
-    });
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 24),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(
+                  color: Color(0xFF1B3D2F), // Deep primary blackish-green
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  height: 1.4,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+      context: this,
+      animation: StyledToastAnimation.slideFromTopFade,
+      reverseAnimation: StyledToastAnimation.slideToTopFade,
+      position: StyledToastPosition.top,
+      animDuration: const Duration(milliseconds: 600),
+      duration: const Duration(seconds: 4),
+      curve: Curves.easeOutBack,
+      reverseCurve: Curves.easeInCirc,
+      isIgnoring: false,
+    );
   }
 
 

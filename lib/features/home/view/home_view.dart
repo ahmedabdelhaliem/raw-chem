@@ -19,8 +19,11 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => instance<RecipesCubit>()..fetchRecipes(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => instance<RecipesCubit>()..fetchRecipes()),
+        BlocProvider(create: (context) => instance<RawMaterialsCubit>()..fetchMaterials()),
+      ],
       child: Scaffold(
         backgroundColor: ColorManager.bg,
         appBar: AppBar(backgroundColor: ColorManager.bg, elevation: 0, toolbarHeight: 00.h),
@@ -56,7 +59,7 @@ class HomeView extends StatelessWidget {
                   context.push(AppRouters.rawMaterialsView);
                 }),
               ),
-              _buildRawMaterialsList(),
+              _buildRawMaterialsList(context),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: _buildSectionHeader(context, AppStrings.recipes.tr(), () {
@@ -211,39 +214,73 @@ class HomeView extends StatelessWidget {
     ).animate().fadeIn(delay: 300.ms, duration: 500.ms);
   }
 
-  Widget _buildRawMaterialsList() {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
-      scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
-      child: IntrinsicHeight(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.h),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: List.generate(4, (index) {
-              return Padding(
-                padding: EdgeInsetsDirectional.only(end: 15.w),
-                child: SizedBox(
-                  width: .58.sw,
-                  child: RawMaterialCardWidget(
-                    imageUrl:
-                        'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300',
-                    title: 'حمض ألكيل بنزين السلفونيك الخطي (LABSA)',
-                    category: 'مادة فعالة سطحياً',
-                    description:
-                        'يوفر تغلغل سطح الأميل الممتلئ بشكل قوي، وهو المكون الأساسي لمنظفات الغسيل.',
-                    casNumber: '25155-30-0',
-                    averagePrice: '1200 جنية - 1100 جنية',
-                    supplier: 'دلتا للحلول الكيميائية',
-                    heroTag: 'raw_material_home_$index',
-                  ),
+  Widget _buildRawMaterialsList(BuildContext context) {
+    return BlocBuilder<RawMaterialsCubit, BaseState<RawMaterialModel>>(
+      builder: (context, state) {
+        if (state.isLoading) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: List.generate(3, (index) {
+                    return Padding(
+                      padding: EdgeInsetsDirectional.only(end: 15.w),
+                      child: SizedBox(width: .58.sw, child: const SkeletonCard(radius: 12)),
+                    );
+                  }),
                 ),
-              );
-            }),
-          ),
-        ),
-      ),
+              ),
+            ),
+          );
+        }
+        if (state.isSuccess) {
+          final materials = state.items;
+          if (materials.isEmpty) return const SizedBox.shrink();
+
+          final itemCount = materials.length > 5 ? 5 : materials.length;
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: List.generate(itemCount, (index) {
+                    final material = materials[index];
+                    return Padding(
+                      padding: EdgeInsetsDirectional.only(end: 15.w),
+                      child: SizedBox(
+                        width: .58.sw,
+                        child: RawMaterialCardWidget(
+                          imageUrl: material.image ??
+                              'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300',
+                          title: material.name ?? '',
+                          category: material.family?.name ?? '',
+                          description: material.description ?? '',
+                          casNumber: material.casNumber ?? '',
+                          heroTag: 'raw_material_home_${material.id}',
+                          onTap: () {
+                            context.push(AppRouters.rawMaterialDetailsView, extra: material);
+                          },
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ),
+          );
+        }
+        return const SizedBox.shrink();
+      },
     ).animate().fadeIn(delay: 400.ms, duration: 500.ms);
   }
 
@@ -293,7 +330,8 @@ class HomeView extends StatelessWidget {
                       child: SizedBox(
                         width: .6.sw,
                         child: RecipeCardWidget(
-                          imageUrl: recipe.image ??
+                          imageUrl:
+                              recipe.image ??
                               'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=300',
                           title: recipe.name ?? '',
                           category: 'Default',

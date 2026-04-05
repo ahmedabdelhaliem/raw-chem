@@ -138,7 +138,7 @@ class AuthRepo {
   }
 
   Future<Either<Failure, ProfileResponse>> updateProfile(UpdateProfileRequest request) async {
-    final response = await _apiConsumer.put(
+    final response = await _apiConsumer.post(
       EndPoints.updateProfile,
       data: request.toJson(),
     );

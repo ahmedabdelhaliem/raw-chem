@@ -25,6 +25,7 @@ class ProfileUser with _$ProfileUser {
     String? email,
     String? phone,
     CategoryModel? category,
+    @JsonKey(name: 'category_id') int? categoryId,
     @JsonKey(name: 'fcm_token') String? fcmToken,
     int? status,
     @JsonKey(name: 'email_verified_at') String? emailVerifiedAt,

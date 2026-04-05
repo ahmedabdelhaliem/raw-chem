@@ -12,8 +12,7 @@ class RawMaterialCardWidget extends StatelessWidget {
   final String category;
   final String description;
   final String casNumber;
-  final String averagePrice;
-  final String supplier;
+
   final VoidCallback? onAddTap;
   final VoidCallback? onTap;
   final double? width;
@@ -26,8 +25,6 @@ class RawMaterialCardWidget extends StatelessWidget {
     required this.category,
     required this.description,
     required this.casNumber,
-    required this.averagePrice,
-    required this.supplier,
     this.onAddTap,
     this.onTap,
     this.width,
@@ -132,46 +129,7 @@ class RawMaterialCardWidget extends StatelessWidget {
                     // Bottom block: meta + add button
                     SizedBox(height: 4.h),
                     _buildMeta(AppStrings.casNumber.tr(), casNumber),
-                    SizedBox(height: 4.h),
-                    _buildMeta(AppStrings.averagePrice.tr(), averagePrice),
-                    SizedBox(height: 4.h),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: onAddTap,
-                          child: Container(
-                            padding: EdgeInsets.all(7.w),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.r),
-                              color: const Color(0xFF006B3E),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0xFF006B3E).withOpacity(0.2),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Icon(Icons.add_rounded, color: Colors.white, size: 18.sp),
-                          ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Expanded(
-                          child: Text(
-                            supplier,
-                            style: TextStyle(
-                              fontSize: 9.sp,
-                              color: const Color(0xFF4A7D2C),
-                              fontWeight: FontWeight.w600,
-                            ),
-                            textAlign: TextAlign.right,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
+                    SizedBox(height: 8.h),
                   ],
                 ),
               ),

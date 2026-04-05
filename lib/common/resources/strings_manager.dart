@@ -202,4 +202,5 @@ class AppStrings {
   static const String profileUpdatedSuccessfully = "profileUpdatedSuccessfully";
   static const String retry = "Retry";
   static const String noData = "No Data";
+  static const String productDetails = "productDetails";
 }

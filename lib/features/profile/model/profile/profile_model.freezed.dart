@@ -217,6 +217,8 @@ mixin _$ProfileUser {
   String? get email => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
   CategoryModel? get category => throw _privateConstructorUsedError;
+  @JsonKey(name: 'category_id')
+  int? get categoryId => throw _privateConstructorUsedError;
   @JsonKey(name: 'fcm_token')
   String? get fcmToken => throw _privateConstructorUsedError;
   int? get status => throw _privateConstructorUsedError;
@@ -246,6 +248,7 @@ abstract class $ProfileUserCopyWith<$Res> {
       String? email,
       String? phone,
       CategoryModel? category,
+      @JsonKey(name: 'category_id') int? categoryId,
       @JsonKey(name: 'fcm_token') String? fcmToken,
       int? status,
       @JsonKey(name: 'email_verified_at') String? emailVerifiedAt,
@@ -274,6 +277,7 @@ class _$ProfileUserCopyWithImpl<$Res, $Val extends ProfileUser>
     Object? email = freezed,
     Object? phone = freezed,
     Object? category = freezed,
+    Object? categoryId = freezed,
     Object? fcmToken = freezed,
     Object? status = freezed,
     Object? emailVerifiedAt = freezed,
@@ -305,6 +309,10 @@ class _$ProfileUserCopyWithImpl<$Res, $Val extends ProfileUser>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as CategoryModel?,
+      categoryId: freezed == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int?,
       fcmToken: freezed == fcmToken
           ? _value.fcmToken
           : fcmToken // ignore: cast_nullable_to_non_nullable
@@ -356,6 +364,7 @@ abstract class _$$ProfileUserImplCopyWith<$Res>
       String? email,
       String? phone,
       CategoryModel? category,
+      @JsonKey(name: 'category_id') int? categoryId,
       @JsonKey(name: 'fcm_token') String? fcmToken,
       int? status,
       @JsonKey(name: 'email_verified_at') String? emailVerifiedAt,
@@ -383,6 +392,7 @@ class __$$ProfileUserImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? phone = freezed,
     Object? category = freezed,
+    Object? categoryId = freezed,
     Object? fcmToken = freezed,
     Object? status = freezed,
     Object? emailVerifiedAt = freezed,
@@ -414,6 +424,10 @@ class __$$ProfileUserImplCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as CategoryModel?,
+      categoryId: freezed == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int?,
       fcmToken: freezed == fcmToken
           ? _value.fcmToken
           : fcmToken // ignore: cast_nullable_to_non_nullable
@@ -448,6 +462,7 @@ class _$ProfileUserImpl implements _ProfileUser {
       this.email,
       this.phone,
       this.category,
+      @JsonKey(name: 'category_id') this.categoryId,
       @JsonKey(name: 'fcm_token') this.fcmToken,
       this.status,
       @JsonKey(name: 'email_verified_at') this.emailVerifiedAt,
@@ -471,6 +486,9 @@ class _$ProfileUserImpl implements _ProfileUser {
   @override
   final CategoryModel? category;
   @override
+  @JsonKey(name: 'category_id')
+  final int? categoryId;
+  @override
   @JsonKey(name: 'fcm_token')
   final String? fcmToken;
   @override
@@ -487,7 +505,7 @@ class _$ProfileUserImpl implements _ProfileUser {
 
   @override
   String toString() {
-    return 'ProfileUser(id: $id, name: $name, companyName: $companyName, email: $email, phone: $phone, category: $category, fcmToken: $fcmToken, status: $status, emailVerifiedAt: $emailVerifiedAt, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ProfileUser(id: $id, name: $name, companyName: $companyName, email: $email, phone: $phone, category: $category, categoryId: $categoryId, fcmToken: $fcmToken, status: $status, emailVerifiedAt: $emailVerifiedAt, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -503,6 +521,8 @@ class _$ProfileUserImpl implements _ProfileUser {
             (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.category, category) ||
                 other.category == category) &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
             (identical(other.fcmToken, fcmToken) ||
                 other.fcmToken == fcmToken) &&
             (identical(other.status, status) || other.status == status) &&
@@ -516,8 +536,20 @@ class _$ProfileUserImpl implements _ProfileUser {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, companyName, email,
-      phone, category, fcmToken, status, emailVerifiedAt, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      name,
+      companyName,
+      email,
+      phone,
+      category,
+      categoryId,
+      fcmToken,
+      status,
+      emailVerifiedAt,
+      createdAt,
+      updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -541,6 +573,7 @@ abstract class _ProfileUser implements ProfileUser {
           final String? email,
           final String? phone,
           final CategoryModel? category,
+          @JsonKey(name: 'category_id') final int? categoryId,
           @JsonKey(name: 'fcm_token') final String? fcmToken,
           final int? status,
           @JsonKey(name: 'email_verified_at') final String? emailVerifiedAt,
@@ -564,6 +597,9 @@ abstract class _ProfileUser implements ProfileUser {
   String? get phone;
   @override
   CategoryModel? get category;
+  @override
+  @JsonKey(name: 'category_id')
+  int? get categoryId;
   @override
   @JsonKey(name: 'fcm_token')
   String? get fcmToken;

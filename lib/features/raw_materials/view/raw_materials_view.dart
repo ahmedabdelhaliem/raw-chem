@@ -247,8 +247,7 @@ class _RawMaterialsViewState extends State<RawMaterialsView> {
       category: material.family?.name ?? '',
       description: material.description ?? '',
       casNumber: material.casNumber ?? '',
-      averagePrice: '1200 جنية - 1100 جنية',
-      supplier: 'دلتا للحلول الكيميائية',
+    
       heroTag: 'raw_material_grid_${material.id}',
       onTap: () {
         context.push(AppRouters.rawMaterialDetailsView, extra: material);

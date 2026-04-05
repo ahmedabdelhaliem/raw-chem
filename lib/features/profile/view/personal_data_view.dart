@@ -41,7 +41,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       _emailController = TextEditingController(text: user.email ?? '');
       _phoneController = TextEditingController(text: user.phone ?? '');
       _companyController = TextEditingController(text: user.companyName ?? '');
-      _selectedCategoryId = user.category?.id;
+      _selectedCategoryId = user.categoryId ?? user.category?.id;
       _hasInitializedFields = true;
     } else {
       _nameController = TextEditingController();
@@ -76,7 +76,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
           _emailController.text = state.data?.email ?? '';
           _phoneController.text = state.data?.phone ?? '';
           _companyController.text = state.data?.companyName ?? '';
-          _selectedCategoryId = state.data?.category?.id;
+          _selectedCategoryId = state.data?.categoryId ?? state.data?.category?.id;
           _hasInitializedFields = true;
         } 
         // 2. Profile update operation success (only if we were already initialized)
@@ -163,7 +163,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 ),
                 SizedBox(height: 16.h),
                 _buildTextField(
-                  label: "اسم الشركة", // Company Name
+                  label: AppStrings.companyName.tr(), 
                   controller: _companyController,
                   icon: Iconsax.building,
                 ),
@@ -261,12 +261,30 @@ class _PersonalDataViewState extends State<PersonalDataView> {
         SizedBox(height: 8.h),
         BlocBuilder<CategoriesCubit, CategoriesState>(
           builder: (context, state) {
+            if (state is CategoriesLoading) {
+              return SkeletonWidget(
+                isLoading: true,
+                child: Container(
+                  height: 56.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: ColorManager.lightGrey2),
+                  ),
+                ),
+              );
+            }
+
             List<CategoryModel> categories = [];
             if (state is CategoriesSuccess) {
               categories = state.categories;
             }
+            
+            // Secure value check to avoid dropdown errors when loading/initial
+            final hasValidValue = _selectedCategoryId != null && categories.any((cat) => cat.id == _selectedCategoryId);
+
             return DropdownButtonFormField<int>(
-              value: _selectedCategoryId,
+              value: hasValidValue ? _selectedCategoryId : null,
               dropdownColor: ColorManager.white,
               decoration: InputDecoration(
                 prefixIcon: Icon(Iconsax.grid_5, color: ColorManager.primary, size: 20.sp),
