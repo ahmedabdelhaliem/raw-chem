@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
@@ -17,35 +19,50 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorManager.bg,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+    return BlocProvider(
+      create: (context) => instance<RecipesCubit>()..fetchRecipes(),
+      child: Scaffold(
+        backgroundColor: ColorManager.bg,
+        appBar: AppBar(backgroundColor: ColorManager.bg, elevation: 0, toolbarHeight: 00.h),
+        body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 10.h),
-              _buildHeader(context),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: _buildHeader(context),
+              ),
               SizedBox(height: 10.h),
-              _buildSearchBar(context),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: _buildSearchBar(context),
+              ),
               SizedBox(height: 10.h),
-              _buildBanner(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: _buildBanner(),
+              ),
               SizedBox(height: 10.h),
-              _buildSectionHeader(context, AppStrings.suppliers.tr(), () {}),
-              SizedBox(height: 4.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: _buildSectionHeader(context, AppStrings.suppliers.tr(), () {}),
+              ),
               _buildSuppliersList(),
               SizedBox(height: 10.h),
-              _buildSectionHeader(context, AppStrings.rawMaterials.tr(), () {
-                context.push(AppRouters.rawMaterialsView);
-              }),
-              SizedBox(height: 10.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: _buildSectionHeader(context, AppStrings.rawMaterials.tr(), () {
+                  context.push(AppRouters.rawMaterialsView);
+                }),
+              ),
               _buildRawMaterialsList(),
-              SizedBox(height: 10.h),
-              _buildSectionHeader(context, AppStrings.recipes.tr(), () {
-                context.push(AppRouters.recipesView);
-              }),
-              SizedBox(height: 10.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: _buildSectionHeader(context, AppStrings.recipes.tr(), () {
+                  context.push(AppRouters.recipesView);
+                }),
+              ),
               _buildRecipesList(context),
               SizedBox(height: 20.h),
             ],
@@ -176,6 +193,7 @@ class HomeView extends StatelessWidget {
     return SizedBox(
       height: .105.sh,
       child: ListView.separated(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         scrollDirection: Axis.horizontal,
         itemCount: 5,
         physics: const BouncingScrollPhysics(),
@@ -195,6 +213,7 @@ class HomeView extends StatelessWidget {
 
   Widget _buildRawMaterialsList() {
     return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
       child: IntrinsicHeight(
@@ -229,39 +248,74 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildRecipesList(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
-      child: IntrinsicHeight(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.h),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: List.generate(4, (index) {
-              return Padding(
-                padding: EdgeInsetsDirectional.only(end: 15.w),
-                child: SizedBox(
-                  width: .6.sw,
-                  child: RecipeCardWidget(
-                    imageUrl:
-                        'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=300',
-                    title: 'مسحوق الغسيل الاقتصادي',
-                    category: 'منظفات الغسيل',
-                    description: 'منظف فعال وبأسعار مناسبة مصمم للاستخدام اليومي وبكميات كبيرة.',
-                    heroTag: 'recipe_home_$index',
-                    onButtonTap: () {
-                      context.push(AppRouters.recipeDetailsView, extra: 'recipe_home_$index');
-                    },
-                    onTap: () {
-                      context.push(AppRouters.recipeDetailsView, extra: 'recipe_home_$index');
-                    },
-                  ),
+    return BlocBuilder<RecipesCubit, BaseState<RecipeModel>>(
+      builder: (context, state) {
+        if (state.isLoading) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: List.generate(3, (index) {
+                    return Padding(
+                      padding: EdgeInsetsDirectional.only(end: 15.w),
+                      child: SizedBox(width: .6.sw, child: const SkeletonCard(radius: 12)),
+                    );
+                  }),
                 ),
-              );
-            }),
-          ),
-        ),
-      ),
+              ),
+            ),
+          );
+        }
+        if (state.isSuccess) {
+          final recipes = state.items;
+          if (recipes.isEmpty) return const SizedBox.shrink();
+
+          final itemCount = recipes.length > 5 ? 5 : recipes.length;
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: List.generate(itemCount, (index) {
+                    final recipe = recipes[index];
+                    return Padding(
+                      padding: EdgeInsetsDirectional.only(end: 15.w),
+                      child: SizedBox(
+                        width: .6.sw,
+                        child: RecipeCardWidget(
+                          imageUrl: recipe.image ??
+                              'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=300',
+                          title: recipe.name ?? '',
+                          category: 'Default',
+                          description: recipe.description ?? '',
+                          heroTag: 'recipe_home_${recipe.id}',
+                          onButtonTap: () {
+                            context.push(AppRouters.recipeDetailsView, extra: recipe);
+                          },
+                          onTap: () {
+                            context.push(AppRouters.recipeDetailsView, extra: recipe);
+                          },
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ),
+          );
+        }
+        return const SizedBox.shrink();
+      },
     ).animate().fadeIn(delay: 500.ms, duration: 500.ms);
   }
 }

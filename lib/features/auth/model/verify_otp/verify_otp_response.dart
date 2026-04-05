@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:raw_chem/features/categories/model/category_model.dart';
 
 part 'verify_otp_response.freezed.dart';
 part 'verify_otp_response.g.dart';
@@ -34,7 +35,7 @@ class VerifyOtpUser with _$VerifyOtpUser {
     @JsonKey(name: 'company_name') String? companyName,
     String? email,
     String? phone,
-    String? category,
+    CategoryModel? category,
     int? status,
   }) = _VerifyOtpUser;
 

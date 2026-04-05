@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
@@ -10,76 +12,135 @@ import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
 import 'package:raw_chem/common/widgets/filter_bottom_sheet_widget.dart';
 
-class RecipesView extends StatelessWidget {
+class RecipesView extends StatefulWidget {
   const RecipesView({super.key});
 
   @override
+  State<RecipesView> createState() => _RecipesViewState();
+}
+
+class _RecipesViewState extends State<RecipesView> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorManager.bg,
-      appBar: DefaultAppBar(
-        text: AppStrings.recipes.tr(),
+    return BlocProvider(
+      create: (context) => instance<RecipesCubit>()..fetchRecipes(),
+      child: Scaffold(
         backgroundColor: ColorManager.bg,
-        titleColor: ColorManager.black,
-        withLeading: context.locale.languageCode != 'ar',
-        actions: [
-          GestureDetector(
-            onTap: () {
-              context.push(AppRouters.cartView);
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10.w),
-              padding: EdgeInsets.all(8.w),
-              decoration: BoxDecoration(
-                color: ColorManager.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: ColorManager.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Icon(Icons.shopping_cart_outlined, color: ColorManager.black, size: 20.sp),
-                  Positioned(
-                    top: -2.h,
-                    right: -2.w,
-                    child: Container(
-                      padding: EdgeInsets.all(3.w),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF006B3E),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '2',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 6.sp,
-                          fontWeight: FontWeight.bold,
+        appBar: DefaultAppBar(
+          text: AppStrings.recipes.tr(),
+          backgroundColor: ColorManager.bg,
+          titleColor: ColorManager.black,
+          withLeading: context.locale.languageCode != 'ar',
+          actions: [
+            GestureDetector(
+              onTap: () {
+                context.push(AppRouters.cartView);
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 10.w),
+                padding: EdgeInsets.all(8.w),
+                decoration: BoxDecoration(
+                  color: ColorManager.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: ColorManager.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Icon(Icons.shopping_cart_outlined, color: ColorManager.black, size: 20.sp),
+                    Positioned(
+                      top: -2.h,
+                      right: -2.w,
+                      child: Container(
+                        padding: EdgeInsets.all(3.w),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF006B3E),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '2',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 6.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          if (context.locale.languageCode == 'ar')
-            IconButton(
-              icon: const Icon(Icons.arrow_forward_ios_rounded, color: ColorManager.black),
-              onPressed: () => context.pop(),
+            if (context.locale.languageCode == 'ar')
+              IconButton(
+                icon: const Icon(Icons.arrow_forward_ios_rounded, color: ColorManager.black),
+                onPressed: () => context.pop(),
+              ),
+          ],
+        ),
+        body: Column(
+          children: [
+            _buildSearchSection(context),
+            Expanded(
+              child: BlocBuilder<RecipesCubit, BaseState<RecipeModel>>(
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return const _RecipesSkeleton();
+                  } else if (state.isSuccess || state.isPaginationLoading || state.isPaginationFailure) {
+                    return PaginatedListWrapper(
+                      scrollController: _scrollController,
+                      paginationHandler: context.read<RecipesCubit>().paginationHandler,
+                      fetchFunction: (page, limit, [params]) => instance<RecipesRepo>().getRecipes(page: page),
+                      loadingWidget: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+                        child: IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const Expanded(child: SkeletonCard(radius: 12)),
+                              SizedBox(width: 12.w),
+                              const Expanded(child: SkeletonCard(radius: 12)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      child: _buildRecipesGrid(context, state.items),
+                    );
+                  } else if (state.isFailure) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(state.errorMessage ?? AppStrings.unknownError.tr()),
+                          SizedBox(height: 10.h),
+                          ElevatedButton(
+                            onPressed: () => context.read<RecipesCubit>().fetchRecipes(),
+                            child: Text(AppStrings.retry.tr()),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
             ),
-        ],
-      ),
-      body: Column(
-        children: [
-          _buildSearchSection(context),
-          Expanded(child: _buildRecipesGrid(context)),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -149,34 +210,82 @@ class RecipesView extends StatelessWidget {
     ).animate().fadeIn(duration: 500.ms).slideY(begin: -0.2);
   }
 
-  Widget _buildRecipesGrid(BuildContext context) {
-    // The image used is a powder sample, like in the previous design.
-    const String dummyImage =
-        'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300';
-    return GridView.builder(
+  Widget _buildRecipesGrid(BuildContext context, List<RecipeModel> recipes) {
+    if (recipes.isEmpty) {
+      return Center(child: Text(AppStrings.noData.tr()));
+    }
+    
+    return ListView.builder(
+      controller: _scrollController,
       padding: EdgeInsets.all(20.w),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12.w,
-        mainAxisSpacing: 16.h,
-        childAspectRatio: 0.62,
-      ),
-      itemCount: 6,
+      itemCount: (recipes.length / 2).ceil(),
       itemBuilder: (context, index) {
-        return RecipeCardWidget(
-          imageUrl: dummyImage,
-          title: 'مسحوق الغسيل الاقتصادي',
-          category: 'منظفات الغسيل',
-          description: 'منظف مسحوق فعال وبأسعار معقولة للغسيل العام، مصمم للاستخدام بكميات كبيرة.',
-          heroTag: 'recipe_grid_$index',
-          onButtonTap: () {
-            context.push(AppRouters.recipeDetailsView, extra: 'recipe_grid_$index');
-          },
-          onTap: () {
-            context.push(AppRouters.recipeDetailsView, extra: 'recipe_grid_$index');
-          },
-        ).animate().fadeIn(delay: (100 * index).ms).scale(delay: (100 * index).ms);
+        final startIndex = index * 2;
+        final hasSecondItem = startIndex + 1 < recipes.length;
+
+        return Padding(
+          padding: EdgeInsets.only(bottom: 16.h),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: _buildRecipeCard(context, recipes[startIndex], startIndex)),
+                SizedBox(width: 12.w),
+                if (hasSecondItem)
+                  Expanded(child: _buildRecipeCard(context, recipes[startIndex + 1], startIndex + 1))
+                else
+                  const Expanded(child: SizedBox.shrink()),
+              ],
+            ),
+          ),
+        );
       },
+    );
+  }
+
+  Widget _buildRecipeCard(BuildContext context, RecipeModel recipe, int index) {
+    return RecipeCardWidget(
+      imageUrl: recipe.image ??
+          'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300',
+      title: recipe.name ?? '',
+      category: 'Default', // API doesn't provide category name directly in this list
+      description: recipe.description ?? '',
+      heroTag: 'recipe_grid_${recipe.id}',
+      onButtonTap: () {
+        context.push(AppRouters.recipeDetailsView, extra: recipe);
+      },
+      onTap: () {
+        context.push(AppRouters.recipeDetailsView, extra: recipe);
+      },
+    ).animate().fadeIn(delay: (100 * index).ms).scale(delay: (100 * index).ms);
+  }
+}
+
+class _RecipesSkeleton extends StatelessWidget {
+  const _RecipesSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return SkeletonWidget(
+      isLoading: true,
+      child: ListView.builder(
+        padding: EdgeInsets.all(20.w),
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 4, // 4 rows * 2 = 8 skeleton items
+        itemBuilder: (context, index) => Padding(
+          padding: EdgeInsets.only(bottom: 16.h),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Expanded(child: SkeletonCard(radius: 12)),
+                SizedBox(width: 12.w),
+                const Expanded(child: SkeletonCard(radius: 12)),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

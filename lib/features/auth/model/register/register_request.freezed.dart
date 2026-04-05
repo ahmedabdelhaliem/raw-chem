@@ -22,6 +22,7 @@ mixin _$RegisterRequest {
   String get birthDate => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
   String get passwordConfirmation => throw _privateConstructorUsedError;
+  int get categoryId => throw _privateConstructorUsedError;
   MultipartFile? get image => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -42,6 +43,7 @@ abstract class $RegisterRequestCopyWith<$Res> {
       String birthDate,
       String password,
       String passwordConfirmation,
+      int categoryId,
       MultipartFile? image});
 }
 
@@ -64,6 +66,7 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
     Object? birthDate = null,
     Object? password = null,
     Object? passwordConfirmation = null,
+    Object? categoryId = null,
     Object? image = freezed,
   }) {
     return _then(_value.copyWith(
@@ -91,6 +94,10 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
           ? _value.passwordConfirmation
           : passwordConfirmation // ignore: cast_nullable_to_non_nullable
               as String,
+      categoryId: null == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -114,6 +121,7 @@ abstract class _$$RegisterRequestImplCopyWith<$Res>
       String birthDate,
       String password,
       String passwordConfirmation,
+      int categoryId,
       MultipartFile? image});
 }
 
@@ -134,6 +142,7 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
     Object? birthDate = null,
     Object? password = null,
     Object? passwordConfirmation = null,
+    Object? categoryId = null,
     Object? image = freezed,
   }) {
     return _then(_$RegisterRequestImpl(
@@ -161,6 +170,10 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
           ? _value.passwordConfirmation
           : passwordConfirmation // ignore: cast_nullable_to_non_nullable
               as String,
+      categoryId: null == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -179,6 +192,7 @@ class _$RegisterRequestImpl extends _RegisterRequest {
       required this.birthDate,
       required this.password,
       required this.passwordConfirmation,
+      required this.categoryId,
       this.image})
       : super._();
 
@@ -195,11 +209,13 @@ class _$RegisterRequestImpl extends _RegisterRequest {
   @override
   final String passwordConfirmation;
   @override
+  final int categoryId;
+  @override
   final MultipartFile? image;
 
   @override
   String toString() {
-    return 'RegisterRequest(name: $name, email: $email, phone: $phone, birthDate: $birthDate, password: $password, passwordConfirmation: $passwordConfirmation, image: $image)';
+    return 'RegisterRequest(name: $name, email: $email, phone: $phone, birthDate: $birthDate, password: $password, passwordConfirmation: $passwordConfirmation, categoryId: $categoryId, image: $image)';
   }
 
   @override
@@ -216,12 +232,14 @@ class _$RegisterRequestImpl extends _RegisterRequest {
                 other.password == password) &&
             (identical(other.passwordConfirmation, passwordConfirmation) ||
                 other.passwordConfirmation == passwordConfirmation) &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
             (identical(other.image, image) || other.image == image));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, name, email, phone, birthDate,
-      password, passwordConfirmation, image);
+      password, passwordConfirmation, categoryId, image);
 
   @JsonKey(ignore: true)
   @override
@@ -239,6 +257,7 @@ abstract class _RegisterRequest extends RegisterRequest {
       required final String birthDate,
       required final String password,
       required final String passwordConfirmation,
+      required final int categoryId,
       final MultipartFile? image}) = _$RegisterRequestImpl;
   const _RegisterRequest._() : super._();
 
@@ -254,6 +273,8 @@ abstract class _RegisterRequest extends RegisterRequest {
   String get password;
   @override
   String get passwordConfirmation;
+  @override
+  int get categoryId;
   @override
   MultipartFile? get image;
   @override

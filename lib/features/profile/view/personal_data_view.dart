@@ -14,8 +14,6 @@ import 'package:raw_chem/features/profile/model/update_profile/update_profile_re
 import 'package:raw_chem/features/profile/cubit/profile_cubit.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 import 'package:raw_chem/core/ui/skeleton/skeleton_widget.dart';
-import 'package:raw_chem/core/ui/skeleton/skeleton_card.dart';
-import 'package:raw_chem/core/ui/skeleton/skeleton_list.dart';
 import 'widgets/personal_data_skeleton.dart';
 
 class PersonalDataView extends StatefulWidget {
@@ -31,6 +29,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   late TextEditingController _phoneController;
   late TextEditingController _companyController;
   bool _hasInitializedFields = false;
+  int? _selectedCategoryId;
 
 
   @override
@@ -42,6 +41,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       _emailController = TextEditingController(text: user.email ?? '');
       _phoneController = TextEditingController(text: user.phone ?? '');
       _companyController = TextEditingController(text: user.companyName ?? '');
+      _selectedCategoryId = user.category?.id;
       _hasInitializedFields = true;
     } else {
       _nameController = TextEditingController();
@@ -64,7 +64,11 @@ class _PersonalDataViewState extends State<PersonalDataView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileCubit, BaseState<ProfileUser>>(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => instance<CategoriesCubit>()..fetchCategories()),
+      ],
+      child: BlocConsumer<ProfileCubit, BaseState<ProfileUser>>(
       listener: (context, state) {
         // 1. Initial data loading (if it wasn't available in initState)
         if (state.isSuccess && !_hasInitializedFields && state.data != null) {
@@ -72,6 +76,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
           _emailController.text = state.data?.email ?? '';
           _phoneController.text = state.data?.phone ?? '';
           _companyController.text = state.data?.companyName ?? '';
+          _selectedCategoryId = state.data?.category?.id;
           _hasInitializedFields = true;
         } 
         // 2. Profile update operation success (only if we were already initialized)
@@ -162,6 +167,9 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                   controller: _companyController,
                   icon: Iconsax.building,
                 ),
+                SizedBox(height: 16.h),
+                // Category Dropdown
+                _buildCategoryDropdown(),
                 SizedBox(height: 48.h),
 
                 DefaultButtonWidget(
@@ -172,7 +180,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                       email: _emailController.text,
                       phone: _phoneController.text,
                       companyName: _companyController.text,
-                      categoryId: 1, // Placeholder for now, as state.data?.id was the User's ID, not Category ID
+                      categoryId: _selectedCategoryId ?? 1,
                     );
                     context.read<ProfileCubit>().updateProfile(request);
                   },
@@ -181,14 +189,14 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                   textColor: ColorManager.white,
                   radius: 12.r,
                   height: 50.h,
-                  fontSize: 16.sp,
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      );
-    },
+          );
+        },
+      ),
     );
   }
 
@@ -233,6 +241,60 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               borderSide: const BorderSide(color: ColorManager.primary),
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryDropdown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppStrings.field.tr(),
+          style: TextStyle(
+            fontSize: 14.sp,
+            color: ColorManager.greyTextColor,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        SizedBox(height: 8.h),
+        BlocBuilder<CategoriesCubit, CategoriesState>(
+          builder: (context, state) {
+            List<CategoryModel> categories = [];
+            if (state is CategoriesSuccess) {
+              categories = state.categories;
+            }
+            return DropdownButtonFormField<int>(
+              value: _selectedCategoryId,
+              dropdownColor: ColorManager.white,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Iconsax.grid_5, color: ColorManager.primary, size: 20.sp),
+                filled: true,
+                fillColor: ColorManager.white,
+                contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: const BorderSide(color: ColorManager.lightGrey2),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: const BorderSide(color: ColorManager.lightGrey2),
+                ),
+              ),
+              items: categories.map((cat) {
+                return DropdownMenuItem<int>(
+                  value: cat.id,
+                  child: Text(cat.name ?? ''),
+                );
+              }).toList(),
+              onChanged: (id) {
+                setState(() {
+                  _selectedCategoryId = id;
+                });
+              },
+            );
+          },
         ),
       ],
     );

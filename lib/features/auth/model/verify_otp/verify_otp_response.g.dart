@@ -45,7 +45,9 @@ _$VerifyOtpUserImpl _$$VerifyOtpUserImplFromJson(Map<String, dynamic> json) =>
       companyName: json['company_name'] as String?,
       email: json['email'] as String?,
       phone: json['phone'] as String?,
-      category: json['category'] as String?,
+      category: json['category'] == null
+          ? null
+          : CategoryModel.fromJson(json['category'] as Map<String, dynamic>),
       status: (json['status'] as num?)?.toInt(),
     );
 

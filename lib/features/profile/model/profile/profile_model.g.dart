@@ -55,15 +55,3 @@ Map<String, dynamic> _$$ProfileUserImplToJson(_$ProfileUserImpl instance) =>
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };
-
-_$CategoryModelImpl _$$CategoryModelImplFromJson(Map<String, dynamic> json) =>
-    _$CategoryModelImpl(
-      id: (json['id'] as num?)?.toInt(),
-      name: json['name'] as String?,
-    );
-
-Map<String, dynamic> _$$CategoryModelImplToJson(_$CategoryModelImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-    };

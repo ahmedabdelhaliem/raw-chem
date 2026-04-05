@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:raw_chem/features/categories/model/category_model.dart';
 
 part 'profile_model.freezed.dart';
 part 'profile_model.g.dart';
@@ -33,15 +34,4 @@ class ProfileUser with _$ProfileUser {
 
   factory ProfileUser.fromJson(Map<String, dynamic> json) =>
       _$ProfileUserFromJson(json);
-}
-
-@freezed
-class CategoryModel with _$CategoryModel {
-  const factory CategoryModel({
-    int? id,
-    String? name,
-  }) = _CategoryModel;
-
-  factory CategoryModel.fromJson(Map<String, dynamic> json) =>
-      _$CategoryModelFromJson(json);
 }

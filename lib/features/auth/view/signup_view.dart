@@ -28,19 +28,18 @@ class SignupView extends StatefulWidget {
 class _SignupViewState extends State<SignupView> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _companyController = TextEditingController();
-  final TextEditingController _fieldController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _birthDateController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  int? _selectedCategoryId;
 
   @override
   void dispose() {
     _nameController.dispose();
     _companyController.dispose();
-    _fieldController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
     _birthDateController.dispose();
@@ -51,14 +50,17 @@ class _SignupViewState extends State<SignupView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => instance<SignupCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => instance<SignupCubit>()),
+        BlocProvider(create: (context) => instance<CategoriesCubit>()..fetchCategories()),
+      ],
       child: BlocConsumer<SignupCubit, BaseState<RegisterResponse>>(
         listener: (context, state) {
           if (state.isSuccess) {
             context.pushReplacement(
               AppRouters.verifyOtpView,
-              extra: _phoneController.text,
+              extra: {'phone': _phoneController.text},
             );
           } else if (state.isError) {
             context.showErrorMessage(state.errorMessage ?? "Unknown error occurred");
@@ -87,12 +89,17 @@ class _SignupViewState extends State<SignupView> {
                       SignupFormWidget(
                         nameController: _nameController,
                         companyController: _companyController,
-                        fieldController: _fieldController,
                         phoneController: _phoneController,
                         emailController: _emailController,
                         birthDateController: _birthDateController,
                         passwordController: _passwordController,
                         confirmPasswordController: _confirmPasswordController,
+                        selectedCategoryId: _selectedCategoryId,
+                        onCategoryChanged: (id) {
+                          setState(() {
+                            _selectedCategoryId = id;
+                          });
+                        },
                       ),
                       SizedBox(height: 30.h),
                       // Signup Button
@@ -108,6 +115,7 @@ class _SignupViewState extends State<SignupView> {
                                     birthDate: _birthDateController.text,
                                     password: _passwordController.text,
                                     passwordConfirmation: _confirmPasswordController.text,
+                                    categoryId: _selectedCategoryId ?? 1,
                                   ),
                                 );
                           }

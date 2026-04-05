@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:raw_chem/app/imports.dart';
 import '../../../../common/resources/color_manager.dart';
 import '../../../../common/resources/strings_manager.dart';
 import '../../../../common/widgets/default_form_field.dart';
@@ -8,23 +10,25 @@ import '../../../../common/widgets/default_form_field.dart';
 class SignupFormWidget extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController companyController;
-  final TextEditingController fieldController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
   final TextEditingController birthDateController;
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
+  final int? selectedCategoryId;
+  final void Function(int?) onCategoryChanged;
 
   const SignupFormWidget({
     super.key,
     required this.nameController,
     required this.companyController,
-    required this.fieldController,
     required this.phoneController,
     required this.emailController,
     required this.birthDateController,
     required this.passwordController,
     required this.confirmPasswordController,
+    required this.selectedCategoryId,
+    required this.onCategoryChanged,
   });
 
   @override
@@ -46,15 +50,41 @@ class SignupFormWidget extends StatelessWidget {
           prefixWidget: const Icon(Icons.business_outlined, color: ColorManager.greyTextColor),
         ),
         SizedBox(height: 15.h),
-        // Field/Domain commented manually by user but available
-        // DefaultFormField(
-        //   controller: fieldController,
-        //   hintText: AppStrings.field.tr(),
-        //   readOnly: true,
-        //   withValidate: false,
-        //   prefixWidget: const Icon(Icons.grid_view_outlined, color: ColorManager.greyTextColor),
-        //   suffixIcon: const Icon(Icons.keyboard_arrow_down, color: ColorManager.greyTextColor),
-        // ),
+        // Category Dropdown
+        BlocBuilder<CategoriesCubit, CategoriesState>(
+          builder: (context, state) {
+            List<CategoryModel> categories = [];
+            if (state is CategoriesSuccess) {
+              categories = state.categories;
+            }
+            return DropdownButtonFormField<int>(
+              value: selectedCategoryId,
+              hint: Text(AppStrings.field.tr(), style: const TextStyle(color: ColorManager.greyTextColor)),
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.grid_view_outlined, color: ColorManager.greyTextColor),
+                filled: true,
+                fillColor: ColorManager.white,
+                contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: const BorderSide(color: ColorManager.lightGrey),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: const BorderSide(color: ColorManager.lightGrey),
+                ),
+              ),
+              items: categories.map((cat) {
+                return DropdownMenuItem<int>(
+                  value: cat.id,
+                  child: Text(cat.name ?? ''),
+                );
+              }).toList(),
+              onChanged: onCategoryChanged,
+              validator: (value) => value == null ? 'Please select a category' : null,
+            );
+          },
+        ),
         SizedBox(height: 15.h),
         // Birth Date Field
         DefaultFormField(

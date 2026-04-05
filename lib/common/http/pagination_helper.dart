@@ -1,14 +1,18 @@
 import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../base/base_state.dart';
+import 'package:raw_chem/core/state/base_state.dart';
 import '../http/either.dart';
 import '../http/failure.dart';
+import '../model/paginated_response.dart';
+
+typedef PaginatedFunc<T> = Future<Either<Failure, PaginatedResponse<T>>>
+    Function(int page, int limit, [Map<String, dynamic>? params]);
 
 class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
+  int lastPage = 1;
   final int pageSize;
   List<T> items = [];
   final B bloc;
@@ -19,10 +23,9 @@ class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
     this.cacheKey,
     this.pageSize = 15,
   });
-  // final _cache = getIt<IPaginatedCache<T>>();
-  Future<void> loadFirstPage(PaginateFunc<T> fetchFunction,
-      {Map<String, dynamic>? params, String? cacheKey}) async
-  {
+
+  Future<void> loadFirstPage(PaginatedFunc<T> fetchFunction,
+      {Map<String, dynamic>? params}) async {
     bloc.emit(bloc.state.copyWith(status: Status.loading));
     items.clear();
     currentPage = 1;
@@ -31,71 +34,59 @@ class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
 
     final result = await fetchFunction(currentPage, pageSize, params);
     await result.fold((failure) async {
-      bloc.emit(bloc.state
-          .copyWith(status: Status.failure, errorMessage: failure.message));
-      return Left(failure);
-      // On failure, load from cache
-      // final cached = await _cache.getCachedPage(cacheKey: cacheKey!);
-      // if (cached.isNotEmpty) {
-      //   items = cached;
-      //   bloc.emit(bloc.state
-      //       .copyWith(status: Status.success, items: List<T>.from(items)));
-      // } else {
+      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+      bloc.emit(bloc.state.copyWith(
+          status: Status.error,
+          failure: failure,
+          errorMessage: failure.message));
+    }, (response) async {
+      items.addAll(response.data);
+      currentPage = (response.pagination.currentPage ?? 1) + 1;
+      lastPage = response.pagination.lastPage ?? 1;
+      hasMoreData = (response.pagination.currentPage ?? 1) <
+          (response.pagination.lastPage ?? 1);
 
-      // }
-    }, (data) async {
-      items.addAll(data);
-      //cache the first page
-      // if (cacheKey != null) {
-      //   await _cache.cachePage(items,
-      //       cacheKey: cacheKey!); // Cache the first page
-      // }
-      if (data.length >= pageSize) {
-        currentPage++;
-      } else {
-        hasMoreData = false;
-      }
-      bloc.emit(
-          bloc.state.copyWith(status: Status.success, items: List<T>.from(items)));
+      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+      bloc.emit(bloc.state
+          .copyWith(status: Status.success, items: List<T>.from(items)));
     });
   }
 
-  Future<void> fetchData(PaginateFunc<T> fetchFunction,
+  Future<void> fetchData(PaginatedFunc<T> fetchFunction,
       {Map<String, dynamic>? params}) async {
     if (!hasMoreData || isLoadingMore) {
-      print("state.isSuccess =====> ${!hasMoreData} === ${isLoadingMore}");
+      log("Pagination: No more data or already loading... hasMoreData: $hasMoreData, isLoadingMore: $isLoadingMore");
       return;
     }
 
     isLoadingMore = true;
-    if (currentPage > 1) {
-      bloc.emit(bloc.state.copyWith(status: Status.isLoadingMore));
-    }
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    bloc.emit(bloc.state.copyWith(status: Status.isPaginationLoading));
 
     final result = await fetchFunction(currentPage, pageSize,
         params?..removeWhere((key, value) => value == null || value == ''));
+
     await result.fold(
-          (failure) async {
+      (failure) async {
         isLoadingMore = false;
-        bloc.emit(bloc.state
-            .copyWith(status: Status.failure, errorMessage: failure.message));
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+        bloc.emit(bloc.state.copyWith(
+            status: Status.isPaginationFailure,
+            failure: failure,
+            errorMessage: failure.message));
       },
-          (data) async {
-        items.addAll(data);
-        if (data.length >= pageSize) {
-          currentPage++;
-          log('Loaded more data, currentPage: $currentPage');
-        } else {
-          hasMoreData = false;
-          log('No more data to load');
-        }
+      (response) async {
+        items.addAll(response.data);
+        currentPage = (response.pagination.currentPage ?? currentPage) + 1;
+        lastPage = response.pagination.lastPage ?? lastPage;
+        hasMoreData = (response.pagination.currentPage ?? 1) <
+            (response.pagination.lastPage ?? 1);
+
         isLoadingMore = false;
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         bloc.emit(bloc.state
             .copyWith(status: Status.success, items: List<T>.from(items)));
       },
     );
   }
 }
-
-typedef PaginateFunc<T> = Future<Either<Failure, List<T>>>
-Function(int page, int limit, [Map<String, dynamic>? params]);

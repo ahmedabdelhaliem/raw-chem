@@ -8,11 +8,46 @@ import '../http/api_consumer.dart';
 import '../http/either.dart';
 import '../http/failure.dart';
 import '../http/params.dart';
+import '../model/pagination_model.dart';
+import '../model/paginated_response.dart';
 
 class GenericDataSource {
   final ApiConsumer _apiConsumer;
 
   GenericDataSource(this._apiConsumer);
+
+  Future<Either<Failure, PaginatedResponse<T>>> fetchPaginatedData<T>({
+    required String endpoint,
+    PaginationParams? params,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? headers,
+    required T Function(Map<String, dynamic>) fromJson,
+  }) async {
+    final result = await _apiConsumer.get(
+      endpoint,
+      queryParameters: {
+        if (params != null) ...params.toJson(),
+        if (queryParameters != null) ...queryParameters,
+      }..removeWhere((key, value) => value == null || value == ''),
+      headers: headers,
+      data: data,
+    );
+    return result.fold(
+      (left) => Left(left),
+      (right) {
+        try {
+          final items = (right['data'] as List).map((e) => fromJson(e)).toList();
+          final pagination = PaginationModel.fromJson(right['pagination'] ?? {});
+          return Right(PaginatedResponse(data: items, pagination: pagination));
+        } catch (e, stackTrace) {
+          log(stackTrace.toString());
+          log(e.toString());
+          return Left(ParsingFailure(message: AppStrings.unknownError.tr()));
+        }
+      },
+    );
+  }
 
   Future<Either<Failure, List<T>>> fetchData<T>({
     required String endpoint,

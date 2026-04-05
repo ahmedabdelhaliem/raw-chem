@@ -386,7 +386,7 @@ mixin _$VerifyOtpUser {
   String? get companyName => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
-  String? get category => throw _privateConstructorUsedError;
+  CategoryModel? get category => throw _privateConstructorUsedError;
   int? get status => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -407,8 +407,10 @@ abstract class $VerifyOtpUserCopyWith<$Res> {
       @JsonKey(name: 'company_name') String? companyName,
       String? email,
       String? phone,
-      String? category,
+      CategoryModel? category,
       int? status});
+
+  $CategoryModelCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -456,12 +458,24 @@ class _$VerifyOtpUserCopyWithImpl<$Res, $Val extends VerifyOtpUser>
       category: freezed == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as CategoryModel?,
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as int?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $CategoryModelCopyWith<$Res>? get category {
+    if (_value.category == null) {
+      return null;
+    }
+
+    return $CategoryModelCopyWith<$Res>(_value.category!, (value) {
+      return _then(_value.copyWith(category: value) as $Val);
+    });
   }
 }
 
@@ -479,8 +493,11 @@ abstract class _$$VerifyOtpUserImplCopyWith<$Res>
       @JsonKey(name: 'company_name') String? companyName,
       String? email,
       String? phone,
-      String? category,
+      CategoryModel? category,
       int? status});
+
+  @override
+  $CategoryModelCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -526,7 +543,7 @@ class __$$VerifyOtpUserImplCopyWithImpl<$Res>
       category: freezed == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as CategoryModel?,
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -562,7 +579,7 @@ class _$VerifyOtpUserImpl implements _VerifyOtpUser {
   @override
   final String? phone;
   @override
-  final String? category;
+  final CategoryModel? category;
   @override
   final int? status;
 
@@ -613,7 +630,7 @@ abstract class _VerifyOtpUser implements VerifyOtpUser {
       @JsonKey(name: 'company_name') final String? companyName,
       final String? email,
       final String? phone,
-      final String? category,
+      final CategoryModel? category,
       final int? status}) = _$VerifyOtpUserImpl;
 
   factory _VerifyOtpUser.fromJson(Map<String, dynamic> json) =
@@ -631,7 +648,7 @@ abstract class _VerifyOtpUser implements VerifyOtpUser {
   @override
   String? get phone;
   @override
-  String? get category;
+  CategoryModel? get category;
   @override
   int? get status;
   @override

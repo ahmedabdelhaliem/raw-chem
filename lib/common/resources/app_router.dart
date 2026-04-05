@@ -27,8 +27,9 @@ import 'package:raw_chem/features/profile/view/terms_conditions_view.dart';
 import 'package:raw_chem/features/raw_materials/view/connect_supplier_view.dart';
 import 'package:raw_chem/features/raw_materials/view/raw_material_details_view.dart';
 import 'package:raw_chem/features/raw_materials/view/raw_materials_view.dart';
-import 'package:raw_chem/features/recipes/view/recipe_details_view.dart';
 import 'package:raw_chem/features/recipes/view/recipes_view.dart';
+import 'package:raw_chem/features/recipes/cubit/recipe_details_cubit.dart';
+import 'package:raw_chem/features/recipes/view/recipe_details_view.dart';
 import 'package:raw_chem/features/splash/view/splash_view.dart';
 import 'package:flutter/material.dart';
 
@@ -162,20 +163,20 @@ abstract class AppRouters {
       ),
       GoRoute(path: AppRouters.cartView, builder: (context, state) => const CartView()),
       GoRoute(path: AppRouters.orderSuccessView, builder: (context, state) => const OrderSuccessView()),
-      GoRoute(path: AppRouters.rawMaterialsView, builder: (context, state) => const RawMaterialsView()),
+      GoRoute(
+        path: AppRouters.rawMaterialsView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => instance<RawMaterialsCubit>()..fetchMaterials(),
+          child: const RawMaterialsView(),
+        ),
+      ),
       GoRoute(
         path: AppRouters.rawMaterialDetailsView,
         builder: (context, state) {
-          final data = state.extra as Map<String, dynamic>?;
-          return RawMaterialDetailsView(
-            imageUrl: data?['imageUrl'] ?? '',
-            title: data?['title'] ?? '',
-            category: data?['category'] ?? '',
-            description: data?['description'] ?? '',
-            casNumber: data?['casNumber'] ?? '',
-            averagePrice: data?['averagePrice'] ?? '',
-            supplier: data?['supplier'] ?? '',
-            heroTag: data?['heroTag'] ?? '',
+          final material = state.extra as RawMaterialModel;
+          return BlocProvider(
+            create: (context) => instance<RawMaterialDetailsCubit>()..getMaterialDetails(material.id),
+            child: RawMaterialDetailsView(material: material),
           );
         },
       ),
@@ -183,8 +184,11 @@ abstract class AppRouters {
       GoRoute(
         path: AppRouters.recipeDetailsView,
         builder: (context, state) {
-          final heroTag = state.extra as String?;
-          return RecipeDetailsView(heroTag: heroTag);
+          final recipe = state.extra as RecipeModel;
+          return BlocProvider(
+            create: (context) => instance<RecipeDetailsCubit>()..getRecipeDetails(recipe.id),
+            child: RecipeDetailsView(recipe: recipe),
+          );
         },
       ),
       GoRoute(path: AppRouters.orderDetailsView, builder: (context, state) => const OrderDetailsView()),

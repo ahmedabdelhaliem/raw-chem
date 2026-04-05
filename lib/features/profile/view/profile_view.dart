@@ -13,12 +13,6 @@ import 'package:raw_chem/core/state/base_state.dart';
 import 'package:raw_chem/common/extensions/context_extension.dart';
 import 'package:raw_chem/core/ui/skeleton/skeleton_widget.dart';
 
-import 'help_support_view.dart';
-import 'language_view.dart';
-import 'notifications_settings_view.dart';
-import 'orders_history_view.dart';
-import 'personal_data_view.dart';
-import 'terms_conditions_view.dart';
 import 'widgets/profile_skeleton.dart';
 
 class ProfileView extends StatefulWidget {

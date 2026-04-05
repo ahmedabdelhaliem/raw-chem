@@ -200,4 +200,6 @@ class AppStrings {
   static const String addToCart = "addToCart";
   static const String contactSupplier = "contactSupplier";
   static const String profileUpdatedSuccessfully = "profileUpdatedSuccessfully";
+  static const String retry = "Retry";
+  static const String noData = "No Data";
 }

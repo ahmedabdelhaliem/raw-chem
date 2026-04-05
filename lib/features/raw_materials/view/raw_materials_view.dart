@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
@@ -10,8 +12,21 @@ import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/common/widgets/filter_bottom_sheet_widget.dart';
 
-class RawMaterialsView extends StatelessWidget {
+class RawMaterialsView extends StatefulWidget {
   const RawMaterialsView({super.key});
+
+  @override
+  State<RawMaterialsView> createState() => _RawMaterialsViewState();
+}
+
+class _RawMaterialsViewState extends State<RawMaterialsView> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +93,50 @@ class RawMaterialsView extends StatelessWidget {
       body: Column(
         children: [
           _buildSearchSection(context),
-          Expanded(child: _buildMaterialsGrid()),
+          Expanded(
+            child: BlocBuilder<RawMaterialsCubit, BaseState<RawMaterialModel>>(
+              builder: (context, state) {
+                if (state.isLoading) {
+                  return const _RawMaterialsSkeleton();
+                } else if (state.isSuccess || state.isPaginationLoading || state.isPaginationFailure) {
+                  return PaginatedListWrapper(
+                    scrollController: _scrollController,
+                    paginationHandler: context.read<RawMaterialsCubit>().paginationHandler,
+                    fetchFunction: (page, limit, [params]) => instance<RawMaterialsRepo>().getMaterials(page: page),
+                    loadingWidget: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const Expanded(child: SkeletonCard(radius: 12)),
+                            SizedBox(width: 12.w),
+                            const Expanded(child: SkeletonCard(radius: 12)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    child: _buildMaterialsGrid(state.items),
+                  );
+                } else if (state.isFailure) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(state.errorMessage ?? AppStrings.unknownError.tr()),
+                        SizedBox(height: 10.h),
+                        ElevatedButton(
+                          onPressed: () => context.read<RawMaterialsCubit>().fetchMaterials(),
+                          child: Text(AppStrings.retry.tr()),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -149,55 +207,84 @@ class RawMaterialsView extends StatelessWidget {
     ).animate().fadeIn(duration: 500.ms).slideY(begin: -0.2);
   }
 
-  Widget _buildMaterialsGrid() {
-    return GridView.builder(
-      padding: EdgeInsets.all(20.w),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12.w,
-        mainAxisSpacing: 16.h,
-        childAspectRatio: 0.62, // Adjust aspect ratio to provide more height
-      ),
-      itemCount: 8,
-      itemBuilder: (context, index) {
-        final String heroTag = 'raw_material_grid_$index';
-        const String imageUrl = 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300';
-        const String title = 'حمض ألكيل بنزين السلفونيك الخطي (LABSA)';
-        const String category = 'مادة فعالة سطحياً';
-        const String description = 'يوفر تغلغل سطح الأميل الممتلئ بشكل قوي، وهو المكون الأساسي لمنظفات الغسيل.';
-        const String casNumber = '25155-30-0';
-        const String averagePrice = '1200 جنية - 1100 جنية';
-        const String supplier = 'دلتا للحلول الكيميائية';
+  Widget _buildMaterialsGrid(List<RawMaterialModel> materials) {
+    if (materials.isEmpty) {
+      return Center(child: Text(AppStrings.noData.tr()));
+    }
 
-        return RawMaterialCardWidget(
-          imageUrl: imageUrl,
-          title: title,
-          category: category,
-          description: description,
-          casNumber: casNumber,
-          averagePrice: averagePrice,
-          supplier: supplier,
-          heroTag: heroTag,
-          onTap: () {
-            context.push(
-              AppRouters.rawMaterialDetailsView,
-              extra: {
-                'imageUrl': imageUrl,
-                'title': title,
-                'category': category,
-                'description': description,
-                'casNumber': casNumber,
-                'averagePrice': averagePrice,
-                'supplier': supplier,
-                'heroTag': heroTag,
-              },
-            );
-          },
-        )
-            .animate()
-            .fadeIn(delay: (index * 50).ms, duration: 400.ms)
-            .scale(begin: const Offset(0.9, 0.9));
+    return ListView.builder(
+      controller: _scrollController,
+      padding: EdgeInsets.all(20.w),
+      itemCount: (materials.length / 2).ceil(),
+      itemBuilder: (context, index) {
+        final startIndex = index * 2;
+        final hasSecondItem = startIndex + 1 < materials.length;
+
+        return Padding(
+          padding: EdgeInsets.only(bottom: 16.h),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: _buildMaterialCard(context, materials[startIndex], startIndex)),
+                SizedBox(width: 12.w),
+                if (hasSecondItem)
+                  Expanded(child: _buildMaterialCard(context, materials[startIndex + 1], startIndex + 1))
+                else
+                  const Expanded(child: SizedBox.shrink()),
+              ],
+            ),
+          ),
+        );
       },
+    );
+  }
+
+  Widget _buildMaterialCard(BuildContext context, RawMaterialModel material, int index) {
+    return RawMaterialCardWidget(
+      imageUrl: material.image ?? 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300',
+      title: material.name ?? '',
+      category: material.family?.name ?? '',
+      description: material.description ?? '',
+      casNumber: material.casNumber ?? '',
+      averagePrice: '1200 جنية - 1100 جنية',
+      supplier: 'دلتا للحلول الكيميائية',
+      heroTag: 'raw_material_grid_${material.id}',
+      onTap: () {
+        context.push(AppRouters.rawMaterialDetailsView, extra: material);
+      },
+    )
+        .animate()
+        .fadeIn(delay: (index > 4 ? 50 : index * 50).ms, duration: 400.ms)
+        .scale(begin: const Offset(0.9, 0.9));
+  }
+}
+
+class _RawMaterialsSkeleton extends StatelessWidget {
+  const _RawMaterialsSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return SkeletonWidget(
+      isLoading: true,
+      child: ListView.builder(
+        padding: EdgeInsets.all(20.w),
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 4, // 4 rows * 2 = 8 skeleton items
+        itemBuilder: (context, index) => Padding(
+          padding: EdgeInsets.only(bottom: 16.h),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Expanded(child: SkeletonCard(radius: 12)),
+                SizedBox(width: 12.w),
+                const Expanded(child: SkeletonCard(radius: 12)),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
