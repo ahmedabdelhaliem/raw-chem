@@ -245,8 +245,7 @@ class _RecipesViewState extends State<RecipesView> {
 
   Widget _buildRecipeCard(BuildContext context, RecipeModel recipe, int index) {
     return RecipeCardWidget(
-      imageUrl: recipe.image ??
-          'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300',
+      imageUrl: recipe.image ?? '',
       title: recipe.name ?? '',
       category: 'Default', // API doesn't provide category name directly in this list
       description: recipe.description ?? '',

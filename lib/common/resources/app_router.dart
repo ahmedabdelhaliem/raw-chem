@@ -31,6 +31,7 @@ import 'package:raw_chem/features/recipes/view/recipes_view.dart';
 import 'package:raw_chem/features/recipes/cubit/recipe_details_cubit.dart';
 import 'package:raw_chem/features/recipes/view/recipe_details_view.dart';
 import 'package:raw_chem/features/splash/view/splash_view.dart';
+import 'package:raw_chem/features/suppliers/view/suppliers_view.dart';
 import 'package:flutter/material.dart';
 
 abstract class AppRouters {
@@ -62,6 +63,7 @@ abstract class AppRouters {
   static const String recipeDetailsView = '/recipeDetails';
   static const String connectSupplierView = '/connectSupplier';
   static const String orderDetailsView = '/orderDetails';
+  static const String suppliersView = '/suppliers';
   
 
   static final GoRouter router = GoRouter(
@@ -193,6 +195,13 @@ abstract class AppRouters {
       ),
       GoRoute(path: AppRouters.orderDetailsView, builder: (context, state) => const OrderDetailsView()),
       GoRoute(path: AppRouters.connectSupplierView, builder: (context, state) => const ConnectSupplierView()),
+      GoRoute(
+        path: AppRouters.suppliersView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => instance<SuppliersCubit>()..fetchSuppliers(),
+          child: const SuppliersView(),
+        ),
+      ),
     ],
   );
 }

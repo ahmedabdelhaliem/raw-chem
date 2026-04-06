@@ -105,11 +105,12 @@ class _ProfileViewState extends State<ProfileView> {
                                   child: CircleAvatar(
                                     radius: 50.r,
                                     backgroundColor: ColorManager.lightGrey.withOpacity(0.5),
-                                    backgroundImage: user.image != null
+                                    backgroundImage: user.image != null && user.image!.isNotEmpty
                                         ? NetworkImage(user.image!)
-                                        : const NetworkImage(
-                                            'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200',
-                                          ),
+                                        : null,
+                                    child: user.image == null || user.image!.isEmpty
+                                        ? Icon(Iconsax.user, size: 40.sp, color: ColorManager.greyTextColor)
+                                        : null,
                                   ),
                                 ),
                               ),

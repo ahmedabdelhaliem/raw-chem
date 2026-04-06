@@ -31,7 +31,11 @@ class ProfileCubit extends Cubit<BaseState<ProfileUser>> {
 
     result.fold(
       (failure) => emit(state.copyWith(status: Status.error, errorMessage: failure.message)),
-      (response) => emit(state.copyWith(status: Status.success, data: response.data)),
+      (response) {
+        emit(state.copyWith(status: Status.success, data: response.data));
+        // Refetch to get populated nested objects like category which the API omits in update responses
+        getProfile();
+      },
     );
   }
 

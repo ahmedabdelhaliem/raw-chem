@@ -24,6 +24,7 @@ class HomeView extends StatelessWidget {
         BlocProvider(create: (context) => instance<RecipesCubit>()..fetchRecipes()),
         BlocProvider(create: (context) => instance<RawMaterialsCubit>()..fetchMaterials()),
         BlocProvider(create: (context) => instance<BannersCubit>()..fetchBanners()),
+        BlocProvider(create: (context) => instance<SuppliersCubit>()..fetchSuppliers()),
       ],
       child: Scaffold(
         backgroundColor: ColorManager.bg,
@@ -50,7 +51,9 @@ class HomeView extends StatelessWidget {
               SizedBox(height: 10.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: _buildSectionHeader(context, AppStrings.suppliers.tr(), () {}),
+                child: _buildSectionHeader(context, AppStrings.suppliers.tr(), () {
+                  context.push(AppRouters.suppliersView);
+                }),
               ),
               _buildSuppliersList(),
               SizedBox(height: 10.h),
@@ -177,8 +180,6 @@ class HomeView extends StatelessWidget {
           return DefaultBannerWidget<BannerModel>(
             images: banners,
             imageUrl: (image) => image.banner ?? '',
-            title: (image) => AppStrings.bannerTitle.tr(),
-            isSpecialOffer: (image) => true,
             aspectRatio: 16 / 7,
           ).animate().scale(delay: 200.ms, duration: 500.ms);
         }
@@ -211,25 +212,52 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildSuppliersList() {
-    return SizedBox(
-      height: .105.sh,
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        scrollDirection: Axis.horizontal,
-        itemCount: 5,
-        physics: const BouncingScrollPhysics(),
-        separatorBuilder: (context, index) => SizedBox(width: 10.w),
-        itemBuilder: (context, index) {
-          return const SupplierCardWidget(
-            name: 'ايجيبت كيم الصناعية',
-            rating: '4.9',
-            location: 'مدينة السادات',
-            products: 'الزيوليت، كبريتات الصوديوم، الإنزيمات، STPP',
-            imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=200',
+    return BlocBuilder<SuppliersCubit, BaseState<SupplierModel>>(
+      builder: (context, state) {
+        if (state.isLoading) {
+          return SizedBox(
+            height: .105.sh,
+            child: ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              scrollDirection: Axis.horizontal,
+              itemCount: 3,
+              physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (context, index) => SizedBox(width: 10.w),
+              itemBuilder: (context, index) {
+                return SizedBox(width: .53.sw, child: const SkeletonCard(radius: 12));
+              },
+            ),
           );
-        },
-      ),
-    ).animate().fadeIn(delay: 300.ms, duration: 500.ms);
+        }
+        if (state.isSuccess) {
+          final suppliers = state.items;
+          if (suppliers.isEmpty) return const SizedBox.shrink();
+
+          final itemCount = suppliers.length > 5 ? 5 : suppliers.length;
+
+          return SizedBox(
+            height: .105.sh,
+            child: ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              scrollDirection: Axis.horizontal,
+              itemCount: itemCount,
+              physics: const BouncingScrollPhysics(),
+              separatorBuilder: (context, index) => SizedBox(width: 10.w),
+              itemBuilder: (context, index) {
+                final supplier = suppliers[index];
+                return SupplierCardWidget(
+                  name: supplier.name ?? '',
+                  address: supplier.address,
+                  desc: supplier.desc,
+                  imageUrl: supplier.image ?? '',
+                );
+              },
+            ),
+          ).animate().fadeIn(delay: 300.ms, duration: 500.ms);
+        }
+        return const SizedBox.shrink();
+      },
+    );
   }
 
   Widget _buildRawMaterialsList(BuildContext context) {
@@ -278,8 +306,7 @@ class HomeView extends StatelessWidget {
                       child: SizedBox(
                         width: .58.sw,
                         child: RawMaterialCardWidget(
-                          imageUrl: material.image ??
-                              'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300',
+                          imageUrl: material.image ?? '',
                           title: material.name ?? '',
                           category: material.family?.name ?? '',
                           description: material.description ?? '',
@@ -348,9 +375,7 @@ class HomeView extends StatelessWidget {
                       child: SizedBox(
                         width: .6.sw,
                         child: RecipeCardWidget(
-                          imageUrl:
-                              recipe.image ??
-                              'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=300',
+                          imageUrl: recipe.image ?? '',
                           title: recipe.name ?? '',
                           category: 'Default',
                           description: recipe.description ?? '',

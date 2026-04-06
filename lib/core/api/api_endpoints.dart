@@ -18,4 +18,6 @@ class EndPoints {
   static const String materials = "/materials";
   static const String banners = "/banners";
   static const String welcomeScreens = "/welcome-screens";
+  static const String supplierMaterials = "/supplier-materials";
+  static const String suppliers = "/suppliers";
 }

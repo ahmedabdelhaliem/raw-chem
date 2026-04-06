@@ -23,9 +23,7 @@ class RawMaterialDetailsView extends StatelessWidget {
         final currentMaterial = state.isSuccess ? state.data! : material;
         final bool isLoading = state.isLoading;
 
-        final String imageUrl =
-            currentMaterial.image ??
-            'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300';
+        final String imageUrl = currentMaterial.image ?? '';
         final String title = currentMaterial.name ?? '';
         final String category = currentMaterial.family?.name ?? 'Category';
         final String description = currentMaterial.description ?? '';

@@ -242,7 +242,7 @@ class _RawMaterialsViewState extends State<RawMaterialsView> {
 
   Widget _buildMaterialCard(BuildContext context, RawMaterialModel material, int index) {
     return RawMaterialCardWidget(
-      imageUrl: material.image ?? 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300',
+      imageUrl: material.image ?? '',
       title: material.name ?? '',
       category: material.family?.name ?? '',
       description: material.description ?? '',

@@ -172,11 +172,12 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                             backgroundColor: ColorManager.lightGrey.withOpacity(0.5),
                                             backgroundImage: _pickedImage != null
                                                 ? FileImage(File(_pickedImage!.path)) as ImageProvider
-                                                : (state.data?.image != null
+                                                : (state.data?.image != null && state.data!.image!.isNotEmpty
                                                     ? NetworkImage(state.data!.image!)
-                                                    : const NetworkImage(
-                                                        'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200',
-                                                      )),
+                                                    : null),
+                                            child: _pickedImage == null && (state.data?.image == null || state.data!.image!.isEmpty)
+                                                ? Icon(Iconsax.user, size: 50.sp, color: ColorManager.greyTextColor)
+                                                : null,
                                           ),
                                         ),
                                         Container(

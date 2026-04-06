@@ -7,6 +7,8 @@ import 'package:raw_chem/features/categories/view/categories_view.dart';
 import 'package:raw_chem/features/home/view/home_view.dart';
 import 'package:raw_chem/features/price_tracker/view/price_tracker_view.dart';
 import 'package:raw_chem/features/profile/view/profile_view.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:raw_chem/app/imports.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -20,7 +22,10 @@ class _MainViewState extends State<MainView> {
   List<Widget> get _pages => [
     const HomeView(),
     const CategoriesView(),
-    const PriceTrackerView(),
+    BlocProvider(
+      create: (context) => instance<PriceTrackerCubit>(),
+      child: const PriceTrackerView(),
+    ),
     const ProfileView(), // Replaced placeholder with actual ProfileView
   ];
 

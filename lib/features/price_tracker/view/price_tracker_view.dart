@@ -1,13 +1,34 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 
-class PriceTrackerView extends StatelessWidget {
+class PriceTrackerView extends StatefulWidget {
   const PriceTrackerView({super.key});
+
+  @override
+  State<PriceTrackerView> createState() => _PriceTrackerViewState();
+}
+
+class _PriceTrackerViewState extends State<PriceTrackerView> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<PriceTrackerCubit>().fetchSupplierMaterials();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,69 +38,59 @@ class PriceTrackerView extends StatelessWidget {
         text: AppStrings.priceTracker.tr(),
         backgroundColor: ColorManager.bg,
         titleColor: ColorManager.black,
-        withLeading: false,
+        withLeading: false, // In MainView, so no leading usually
       ),
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: ColorManager.white,
-                      borderRadius: BorderRadius.circular(12.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: ColorManager.black.withOpacity(0.03),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+          _buildSearchSection(context),
+          Expanded(
+            child: BlocBuilder<PriceTrackerCubit, BaseState<PriceTrackerModel>>(
+              builder: (context, state) {
+                if (state.isLoading) {
+                  return const _PriceTrackerSkeleton();
+                } else if (state.isSuccess ||
+                    state.isPaginationLoading ||
+                    state.isPaginationFailure) {
+                  if (state.items.isEmpty) {
+                    return Center(child: Text(AppStrings.noData.tr()));
+                  }
+                  return PaginatedListWrapper(
+                    scrollController: _scrollController,
+                    paginationHandler:
+                        context.read<PriceTrackerCubit>().paginationHandler,
+                    fetchFunction: (page, limit, [params]) => instance<PriceTrackerRepo>()
+                        .getSupplierMaterials(page: page),
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                      itemCount: state.items.length,
+                      itemBuilder: (context, index) {
+                        return PriceTrackerCard(model: state.items[index])
+                            .animate()
+                            .fadeIn(
+                                delay: (index > 4 ? 50 : index * 50).ms, duration: 400.ms)
+                            .slideX(begin: 0.1);
+                      },
+                    ),
+                  );
+                } else if (state.isError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(state.errorMessage ?? AppStrings.unknownError.tr()),
+                        SizedBox(height: 10.h),
+                        ElevatedButton(
+                          onPressed: () => context
+                              .read<PriceTrackerCubit>()
+                              .fetchSupplierMaterials(),
+                          child: Text(AppStrings.retry.tr()),
                         ),
                       ],
                     ),
-                    child: TextField(
-                      textAlign: context.locale.languageCode == 'ar'
-                          ? TextAlign.right
-                          : TextAlign.left,
-                      decoration: InputDecoration(
-                        hintText: '${AppStrings.search.tr()}...',
-                        hintStyle: TextStyle(color: ColorManager.grey, fontSize: 14.sp),
-                        prefixIcon: const Icon(Icons.search, color: ColorManager.grey),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 12.h),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 10.w),
-                Container(
-                  padding: EdgeInsets.all(12.w),
-                  decoration: BoxDecoration(
-                    color: ColorManager.white,
-                    borderRadius: BorderRadius.circular(12.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: ColorManager.black.withOpacity(0.03),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Icon(Icons.tune_rounded, color: ColorManager.black, size: 24.sp),
-                ),
-              ],
-            ).animate().fadeIn(duration: 500.ms).slideY(begin: -0.2),
-          ),
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return const PriceTrackerCard()
-                    .animate()
-                    .fadeIn(delay: (index * 50).ms, duration: 400.ms)
-                    .slideX(begin: 0.1);
+                  );
+                }
+                return const SizedBox.shrink();
               },
             ),
           ),
@@ -87,13 +98,71 @@ class PriceTrackerView extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildSearchSection(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: ColorManager.white,
+                borderRadius: BorderRadius.circular(12.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorManager.black.withOpacity(0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: TextField(
+                textAlign:
+                    context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+                decoration: InputDecoration(
+                  hintText: '${AppStrings.search.tr()}...',
+                  hintStyle: TextStyle(color: ColorManager.grey, fontSize: 14.sp),
+                  prefixIcon: const Icon(Icons.search, color: ColorManager.grey),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 12.h),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 10.w),
+          Container(
+            padding: EdgeInsets.all(12.w),
+            decoration: BoxDecoration(
+              color: ColorManager.white,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: ColorManager.black.withOpacity(0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Icon(Icons.tune_rounded, color: ColorManager.black, size: 24.sp),
+          ),
+        ],
+      ).animate().fadeIn(duration: 500.ms).slideY(begin: -0.2),
+    );
+  }
 }
 
 class PriceTrackerCard extends StatelessWidget {
-  const PriceTrackerCard({super.key});
+  final PriceTrackerModel model;
+
+  const PriceTrackerCard({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
+    final date = model.date != null
+        ? DateFormat('MMM dd, yyyy').format(DateTime.tryParse(model.date!) ?? DateTime.now())
+        : '';
+
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.w),
@@ -117,7 +186,9 @@ class PriceTrackerCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  "Sodium Lauryl Sulfate (SLS)",
+                  model.name ?? "Sodium Lauryl Sulfate (SLS)",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
@@ -127,10 +198,11 @@ class PriceTrackerCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Icon(Icons.calendar_today_outlined, size: 14.sp, color: const Color(0xFFB4B4CC)),
+                  Icon(Icons.calendar_today_outlined,
+                      size: 14.sp, color: const Color(0xFFB4B4CC)),
                   SizedBox(width: 4.w),
                   Text(
-                    "Nov 20, 2023",
+                    date,
                     style: TextStyle(fontSize: 12.sp, color: const Color(0xFFB4B4CC)),
                   ),
                 ],
@@ -138,32 +210,37 @@ class PriceTrackerCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: 6.h),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-            decoration: BoxDecoration(
-              color: const Color(0xFFE2F9D1),
-              borderRadius: BorderRadius.circular(6.r),
-            ),
-            child: Text(
-              AppStrings.surfactant.tr(),
-              style: TextStyle(
-                fontSize: 11.sp,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF4A7D2C),
+          if (model.family != null)
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE2F9D1),
+                borderRadius: BorderRadius.circular(6.r),
+              ),
+              child: Text(
+                model.family?.name ?? '',
+                style: TextStyle(
+                  fontSize: 11.sp,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF4A7D2C),
+                ),
               ),
             ),
-          ),
           SizedBox(height: 10.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                "${AppStrings.source.tr()} Supplier B",
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: const Color(0xFF4A7D2C),
-                  fontWeight: FontWeight.bold,
+              Flexible(
+                child: Text(
+                  "${AppStrings.source.tr()}: ${model.supplier?.name ?? ''}",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    color: const Color(0xFF4A7D2C),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Row(
@@ -202,7 +279,7 @@ class PriceTrackerCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        "${AppStrings.egp.tr()}28000",
+                        "${AppStrings.egp.tr()}${model.averagePrice ?? ''}",
                         style: TextStyle(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w900,
@@ -216,6 +293,32 @@ class PriceTrackerCard extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PriceTrackerSkeleton extends StatelessWidget {
+  const _PriceTrackerSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return SkeletonWidget(
+      isLoading: true,
+      child: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        itemCount: 6,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: 12.h),
+            child: SizedBox(
+              width: double.infinity,
+              height: 120.h,
+              child: const SkeletonCard(radius: 12),
+            ),
+          );
+        },
       ),
     );
   }

@@ -6,6 +6,10 @@ import 'package:raw_chem/app/app_prefs.dart';
 import 'package:raw_chem/common/data_source/generic_data_source.dart';
 import 'package:raw_chem/common/http/api_consumer.dart';
 import 'package:raw_chem/core/api/api_endpoints.dart';
+import 'package:raw_chem/features/price_tracker/repo/price_tracker_repo.dart';
+import 'package:raw_chem/features/price_tracker/cubit/price_tracker_cubit.dart';
+import 'package:raw_chem/features/suppliers/repo/suppliers_repo.dart';
+import 'package:raw_chem/features/suppliers/cubit/suppliers_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:raw_chem/features/auth/cubit/signup_cubit.dart';
@@ -69,6 +73,12 @@ export '../features/home/model/banner_model.dart';
 export '../features/onboarding/repo/onboarding_repo.dart';
 export '../features/onboarding/cubit/onboarding_cubit.dart';
 export '../features/onboarding/model/welcome_screen_model.dart';
+export '../features/price_tracker/model/price_tracker_model.dart';
+export '../features/price_tracker/repo/price_tracker_repo.dart';
+export '../features/price_tracker/cubit/price_tracker_cubit.dart';
+export '../features/suppliers/model/supplier_model.dart';
+export '../features/suppliers/repo/suppliers_repo.dart';
+export '../features/suppliers/cubit/suppliers_cubit.dart';
 
 import 'app_constants.dart';
 

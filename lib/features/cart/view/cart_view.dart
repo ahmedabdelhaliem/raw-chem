@@ -16,7 +16,7 @@ class CartView extends StatefulWidget {
 class _CartViewState extends State<CartView> {
   final List<Map<String, dynamic>> _mockItems = [
     {
-      'imageUrl': 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=300',
+      'imageUrl': '',
       'company': 'شركة الحلول الكيميائية',
       'title': 'حمض ألكيل بنزين السلفونيك الخطي (LABSA)',
       'category': 'مادة فعالة سطحياً',
@@ -24,7 +24,7 @@ class _CartViewState extends State<CartView> {
       'quantity': 1,
     },
     {
-      'imageUrl': 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=300',
+      'imageUrl': '',
       'company': 'شركة الحلول الكيميائية',
       'title': 'حمض ألكيل بنزين السلفونيك الخطي (LABSA)',
       'category': 'مادة فعالة سطحياً',
