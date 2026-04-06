@@ -215,17 +215,23 @@ class HomeView extends StatelessWidget {
     return BlocBuilder<SuppliersCubit, BaseState<SupplierModel>>(
       builder: (context, state) {
         if (state.isLoading) {
-          return SizedBox(
-            height: .105.sh,
-            child: ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              scrollDirection: Axis.horizontal,
-              itemCount: 3,
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) => SizedBox(width: 10.w),
-              itemBuilder: (context, index) {
-                return SizedBox(width: .53.sw, child: const SkeletonCard(radius: 12));
-              },
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: List.generate(3, (index) {
+                    return Padding(
+                      padding: EdgeInsetsDirectional.only(end: 15.w),
+                      child: SizedBox(width: .53.sw, child: const SkeletonCard(radius: 12)),
+                    );
+                  }),
+                ),
+              ),
             ),
           );
         }
@@ -235,23 +241,29 @@ class HomeView extends StatelessWidget {
 
           final itemCount = suppliers.length > 5 ? 5 : suppliers.length;
 
-          return SizedBox(
-            height: .105.sh,
-            child: ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              scrollDirection: Axis.horizontal,
-              itemCount: itemCount,
-              physics: const BouncingScrollPhysics(),
-              separatorBuilder: (context, index) => SizedBox(width: 10.w),
-              itemBuilder: (context, index) {
-                final supplier = suppliers[index];
-                return SupplierCardWidget(
-                  name: supplier.name ?? '',
-                  address: supplier.address,
-                  desc: supplier.desc,
-                  imageUrl: supplier.image ?? '',
-                );
-              },
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: List.generate(itemCount, (index) {
+                    final supplier = suppliers[index];
+                    return Padding(
+                      padding: EdgeInsetsDirectional.only(end: 15.w),
+                      child: SupplierCardWidget(
+                        name: supplier.name ?? '',
+                        address: supplier.address,
+                        desc: supplier.desc,
+                        imageUrl: supplier.image ?? '',
+                      ),
+                    );
+                  }),
+                ),
+              ),
             ),
           ).animate().fadeIn(delay: 300.ms, duration: 500.ms);
         }

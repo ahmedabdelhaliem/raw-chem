@@ -133,9 +133,9 @@ class _CategoryCard extends StatelessWidget {
 
   IconData _getIconForCategory(String name) {
     final lowerName = name.toLowerCase();
-    if (lowerName.contains('paint')) return Icons.format_paint_rounded;
-    if (lowerName.contains('cosmetic')) return Icons.face_retouching_natural_rounded;
-    if (lowerName.contains('detergent')) return Icons.sanitizer_rounded;
+    if (lowerName.contains('paint') || lowerName.contains('دهانات')) return Icons.format_paint_rounded;
+    if (lowerName.contains('cosmetic') || lowerName.contains('مستحضرات')) return Icons.face_retouching_natural_rounded;
+    if (lowerName.contains('detergent') || lowerName.contains('منظفات')) return Icons.sanitizer_rounded;
     return Icons.grid_view_rounded;
   }
 

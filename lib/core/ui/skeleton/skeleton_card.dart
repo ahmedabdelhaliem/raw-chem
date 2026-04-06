@@ -43,28 +43,31 @@ class SkeletonCard extends StatelessWidget {
           ),
           SizedBox(width: 16.w),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 12.h,
-                  color: Colors.grey.shade200,
-                ),
-                SizedBox(height: 8.h),
-                Container(
-                  width: 150.w,
-                  height: 12.h,
-                  color: Colors.grey.shade200,
-                ),
-                SizedBox(height: 8.h),
-                Container(
-                  width: 100.w,
-                  height: 12.h,
-                  color: Colors.grey.shade200,
-                ),
-              ],
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 12.h,
+                    color: Colors.grey.shade200,
+                  ),
+                  SizedBox(height: 8.h),
+                  Container(
+                    width: 150.w,
+                    height: 12.h,
+                    color: Colors.grey.shade200,
+                  ),
+                  SizedBox(height: 8.h),
+                  Container(
+                    width: 100.w,
+                    height: 12.h,
+                    color: Colors.grey.shade200,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

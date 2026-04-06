@@ -245,31 +245,7 @@ class PriceTrackerCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppStrings.priceTrend.tr(),
-                        style: TextStyle(fontSize: 10.sp, color: const Color(0xFFB4B4CC)),
-                      ),
-                      SizedBox(height: 4.h),
-                      Row(
-                        children: [
-                          Icon(Icons.trending_up_rounded, size: 16.sp, color: Colors.black),
-                          SizedBox(width: 4.w),
-                          Text(
-                            AppStrings.up.tr(),
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 25.w),
+                  // Removed Price Trend
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

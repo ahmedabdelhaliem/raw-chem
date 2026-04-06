@@ -25,7 +25,7 @@ Future<void> main() async {
   }
 
   // Firebase Messaging
-  await MessagingConfig.initFirebaseMessaging();
+  MessagingConfig.initFirebaseMessaging();
   FirebaseMessaging.onBackgroundMessage(MessagingConfig.messageHandler);
 
   // Initialize EasyLocalization and App Module

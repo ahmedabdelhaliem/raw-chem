@@ -19,14 +19,14 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   int _currentIndex = 0;
-  List<Widget> get _pages => [
+  late final List<Widget> _pages = [
     const HomeView(),
     const CategoriesView(),
     BlocProvider(
       create: (context) => instance<PriceTrackerCubit>(),
       child: const PriceTrackerView(),
     ),
-    const ProfileView(), // Replaced placeholder with actual ProfileView
+    const ProfileView(),
   ];
 
   @override
