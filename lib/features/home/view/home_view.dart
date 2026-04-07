@@ -51,14 +51,6 @@ class HomeView extends StatelessWidget {
               SizedBox(height: 10.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: _buildSectionHeader(context, AppStrings.suppliers.tr(), () {
-                  context.push(AppRouters.suppliersView);
-                }),
-              ),
-              _buildSuppliersList(),
-              SizedBox(height: 10.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: _buildSectionHeader(context, AppStrings.rawMaterials.tr(), () {
                   context.push(AppRouters.rawMaterialsView);
                 }),
@@ -71,6 +63,14 @@ class HomeView extends StatelessWidget {
                 }),
               ),
               _buildRecipesList(context),
+              SizedBox(height: 10.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: _buildSectionHeader(context, AppStrings.suppliers.tr(), () {
+                  context.push(AppRouters.suppliersView);
+                }),
+              ),
+              _buildSuppliersList(),
               SizedBox(height: 20.h),
             ],
           ),
@@ -259,6 +259,7 @@ class HomeView extends StatelessWidget {
                         address: supplier.address,
                         desc: supplier.desc,
                         imageUrl: supplier.image ?? '',
+                        onTap: () => context.push(AppRouters.supplierDetailsView, extra: supplier),
                       ),
                     );
                   }),

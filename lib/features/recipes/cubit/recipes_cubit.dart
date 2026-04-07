@@ -7,6 +7,8 @@ import 'package:raw_chem/features/recipes/repo/recipes_repo.dart';
 class RecipesCubit extends Cubit<BaseState<RecipeModel>> {
   final RecipesRepo _recipesRepo;
   late final PaginationHandler<RecipeModel, RecipesCubit> paginationHandler;
+  List<int> selectedTypes = [];
+  String searchQuery = '';
 
   RecipesCubit(this._recipesRepo) : super(const BaseState<RecipeModel>()) {
     paginationHandler = PaginationHandler<RecipeModel, RecipesCubit>(
@@ -15,11 +17,20 @@ class RecipesCubit extends Cubit<BaseState<RecipeModel>> {
     );
   }
 
-  Future<void> fetchRecipes() async {
-    await paginationHandler.loadFirstPage((page, limit, [params]) => _recipesRepo.getRecipes(page: page));
+  Future<void> fetchRecipes({List<int>? types, String? query}) async {
+    if (types != null) {
+      selectedTypes = types;
+    }
+    if (query != null) {
+      searchQuery = query;
+    }
+    await paginationHandler.loadFirstPage((page, limit, [params]) => 
+      _recipesRepo.getRecipes(page: page, types: selectedTypes, q: searchQuery));
   }
 
   Future<void> loadMore() async {
-    await paginationHandler.fetchData((page, limit, [params]) => _recipesRepo.getRecipes(page: page));
+    await paginationHandler.fetchData((page, limit, [params]) => 
+      _recipesRepo.getRecipes(page: page, types: selectedTypes, q: searchQuery));
   }
 }
+

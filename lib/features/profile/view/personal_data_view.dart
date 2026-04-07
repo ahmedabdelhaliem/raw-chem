@@ -31,6 +31,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   late TextEditingController _phoneController;
   late TextEditingController _companyController;
   bool _hasInitializedFields = false;
+  bool _isPopping = false;
   int? _selectedCategoryId;
   XFile? _pickedImage;
 
@@ -93,9 +94,14 @@ class _PersonalDataViewState extends State<PersonalDataView> {
             _companyController.text = state.data?.companyName ?? '';
             _selectedCategoryId = int.tryParse(state.data?.categoryId?.toString() ?? '') ?? state.data?.category?.id;
             _hasInitializedFields = true;
-          } else if (state.isSuccess && _hasInitializedFields && !state.isLoading) {
-            context.showSuccessMessage(AppStrings.profileUpdatedSuccessfully.tr());
-            Navigator.pop(context);
+          } else if (state.isSuccess && _hasInitializedFields && !state.isLoading && !_isPopping) {
+            _isPopping = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+               context.showSuccessMessage(AppStrings.profileUpdatedSuccessfully.tr());
+               if (context.mounted) {
+                 context.pop();
+               }
+            });
           } else if (state.isError) {
             context.showErrorMessage(state.errorMessage ?? "Update failed");
           }

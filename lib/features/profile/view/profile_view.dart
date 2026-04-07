@@ -1,17 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/common/extensions/context_extension.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/profile_menu_item_widget.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:raw_chem/app/imports.dart';
-import 'package:raw_chem/core/state/base_state.dart';
-import 'package:raw_chem/common/extensions/context_extension.dart';
-import 'package:raw_chem/core/ui/skeleton/skeleton_widget.dart';
 
 import 'widgets/profile_skeleton.dart';
 
@@ -48,14 +46,8 @@ class _ProfileViewState extends State<ProfileView> {
         return Scaffold(
           backgroundColor: ColorManager.bg,
           appBar: AppBar(
-            title: Text(
-              AppStrings.account.tr(),
-              style: TextStyle(
-                color: ColorManager.white,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            toolbarHeight: 00.h,
+
             centerTitle: true,
             backgroundColor: ColorManager.primary,
             elevation: 0,
@@ -109,7 +101,11 @@ class _ProfileViewState extends State<ProfileView> {
                                         ? NetworkImage(user.image!)
                                         : null,
                                     child: user.image == null || user.image!.isEmpty
-                                        ? Icon(Iconsax.user, size: 40.sp, color: ColorManager.greyTextColor)
+                                        ? Icon(
+                                            Iconsax.user,
+                                            size: 40.sp,
+                                            color: ColorManager.greyTextColor,
+                                          )
                                         : null,
                                   ),
                                 ),
@@ -263,11 +259,7 @@ class _ProfileViewState extends State<ProfileView> {
       padding: EdgeInsets.only(left: 8.w, bottom: 8.h, right: 8.w),
       child: Text(
         title,
-        style: TextStyle(
-          fontSize: 14.sp,
-          fontWeight: FontWeight.bold,
-          color: ColorManager.primary,
-        ),
+        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: ColorManager.primary),
       ),
     );
   }

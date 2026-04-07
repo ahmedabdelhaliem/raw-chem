@@ -11,10 +11,27 @@ class RawMaterialsRepo {
 
   RawMaterialsRepo(this._dataSource);
 
-  Future<Either<Failure, PaginatedResponse<RawMaterialModel>>> getMaterials({int page = 1}) async {
+  Future<Either<Failure, PaginatedResponse<RawMaterialModel>>> getMaterials({
+    int page = 1,
+    List<int>? materialFamilyIds,
+    String? q,
+    String? casNumber,
+  }) async {
+    final Map<String, dynamic> queryParams = {};
+    if (materialFamilyIds != null && materialFamilyIds.isNotEmpty) {
+      queryParams['material_family_ids'] = materialFamilyIds.join(',');
+    }
+    if (q != null && q.isNotEmpty) {
+      queryParams['q'] = q;
+    }
+    if (casNumber != null && casNumber.isNotEmpty) {
+      queryParams['cas_number'] = casNumber;
+    }
+
     return await _dataSource.fetchPaginatedData<RawMaterialModel>(
       endpoint: EndPoints.materials,
       params: PaginationParams(page: page, limit: 10),
+      queryParameters: queryParams,
       fromJson: (json) => RawMaterialModel.fromJson(json),
     );
   }
@@ -25,4 +42,12 @@ class RawMaterialsRepo {
       fromJson: (json) => RawMaterialModel.fromJson(json),
     );
   }
+
+  Future<Either<Failure, List<MaterialFamilyModel>>> getMaterialFamilies() async {
+    return await _dataSource.fetchData<MaterialFamilyModel>(
+      endpoint: EndPoints.materialFamilies,
+      fromJson: (json) => MaterialFamilyModel.fromJson(json),
+    );
+  }
 }
+

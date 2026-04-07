@@ -31,10 +31,15 @@ class ProfileCubit extends Cubit<BaseState<ProfileUser>> {
 
     result.fold(
       (failure) => emit(state.copyWith(status: Status.error, errorMessage: failure.message)),
-      (response) {
-        emit(state.copyWith(status: Status.success, data: response.data));
-        // Refetch to get populated nested objects like category which the API omits in update responses
-        getProfile();
+      (response) async {
+        // First emit with the partial data if needed, but we'll wait for the full profile
+        // logic: update is done, now we need to refresh to get full category object
+        final refreshResult = await _authRepo.getProfile();
+        
+        refreshResult.fold(
+          (failure) => emit(state.copyWith(status: Status.error, errorMessage: failure.message)),
+          (profileResponse) => emit(state.copyWith(status: Status.success, data: profileResponse.data)),
+        );
       },
     );
   }

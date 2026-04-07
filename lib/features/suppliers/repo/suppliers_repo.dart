@@ -18,4 +18,13 @@ class SuppliersRepo {
       fromJson: (json) => SupplierModel.fromJson(json),
     );
   }
+
+  Future<Either<Failure, PaginatedResponse<PriceTrackerModel>>> getSupplierMaterials({required int supplierId, int page = 1}) async {
+    return await _dataSource.fetchPaginatedData<PriceTrackerModel>(
+      endpoint: EndPoints.supplierMaterials,
+      queryParameters: {'supplier_id': supplierId},
+      params: PaginationParams(page: page, limit: 10),
+      fromJson: (json) => PriceTrackerModel.fromJson(json),
+    );
+  }
 }

@@ -15,7 +15,9 @@ class EndPoints {
   static const String faq = "/faq";
   static const String categories = "/categories";
   static const String recipes = "/recipes";
+  static const String recipeTypes = "/recipe-types";
   static const String materials = "/materials";
+  static const String materialFamilies = "/material-families";
   static const String banners = "/banners";
   static const String welcomeScreens = "/welcome-screens";
   static const String supplierMaterials = "/supplier-materials";

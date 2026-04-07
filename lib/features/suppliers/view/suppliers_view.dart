@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
@@ -76,6 +77,7 @@ class _SuppliersViewState extends State<SuppliersView> {
                             address: supplier.address,
                             desc: supplier.desc,
                             imageUrl: supplier.image ?? '',
+                            onTap: () => context.push(AppRouters.supplierDetailsView, extra: supplier),
                           ).animate().fadeIn(delay: (index > 4 ? 50 : index * 50).ms, duration: 400.ms).slideX(begin: 0.1),
                         );
                       },

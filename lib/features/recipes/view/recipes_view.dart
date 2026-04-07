@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -9,8 +11,9 @@ import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
-import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
 import 'package:raw_chem/common/widgets/filter_bottom_sheet_widget.dart';
+import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
+import 'package:raw_chem/features/recipes/cubit/recipe_types_cubit.dart';
 
 class RecipesView extends StatefulWidget {
   const RecipesView({super.key});
@@ -21,17 +24,25 @@ class RecipesView extends StatefulWidget {
 
 class _RecipesViewState extends State<RecipesView> {
   final ScrollController _scrollController = ScrollController();
+  Timer? _debounce;
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => instance<RecipesCubit>()..fetchRecipes(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => instance<RecipesCubit>()..fetchRecipes()),
+        BlocProvider(
+          create: (context) =>
+              instance<RecipeTypesCubit>(), // Ensure RecipeTypesCubit is registered in DI
+        ),
+      ],
       child: Scaffold(
         backgroundColor: ColorManager.bg,
         appBar: DefaultAppBar(
@@ -94,17 +105,24 @@ class _RecipesViewState extends State<RecipesView> {
         ),
         body: Column(
           children: [
-            _buildSearchSection(context),
+            Builder(
+              builder: (context) => _buildSearchSection(context),
+            ),
             Expanded(
               child: BlocBuilder<RecipesCubit, BaseState<RecipeModel>>(
                 builder: (context, state) {
                   if (state.isLoading) {
                     return const _RecipesSkeleton();
-                  } else if (state.isSuccess || state.isPaginationLoading || state.isPaginationFailure) {
+                  } else if (state.isSuccess ||
+                      state.isPaginationLoading ||
+                      state.isPaginationFailure) {
                     return PaginatedListWrapper(
                       scrollController: _scrollController,
                       paginationHandler: context.read<RecipesCubit>().paginationHandler,
-                      fetchFunction: (page, limit, [params]) => instance<RecipesRepo>().getRecipes(page: page),
+                      fetchFunction: (page, limit, [params]) => instance<RecipesRepo>().getRecipes(
+                        page: page,
+                        types: context.read<RecipesCubit>().selectedTypes,
+                      ),
                       loadingWidget: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
                         child: IntrinsicHeight(
@@ -151,28 +169,44 @@ class _RecipesViewState extends State<RecipesView> {
       child: Row(
         children: [
           // Filter Icon
-          GestureDetector(
-            onTap: () async {
-              final result = await FilterBottomSheetWidget.show(context);
-              if (result != null) {
-                // TODO: Apply filter based on selected index
-              }
-            },
-            child: Container(
-              padding: EdgeInsets.all(12.w),
-              decoration: BoxDecoration(
-                color: ColorManager.white,
-                borderRadius: BorderRadius.circular(12.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: ColorManager.black.withOpacity(0.03),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+          BlocBuilder<RecipeTypesCubit, BaseState<CategoryModel>>(
+            builder: (context, typesState) {
+              return GestureDetector(
+                onTap: () async {
+                  List<FilterItem> items = [];
+                  if (typesState.isSuccess) {
+                    items = typesState.items
+                        .where((type) => type.id != null && type.name != null)
+                        .map((type) => FilterItem(id: type.id!, title: type.name!))
+                        .toList();
+                  }
+
+                  final result = await FilterBottomSheetWidget.show(
+                    context: context,
+                    items: items,
+                    initialSelectedIds: context.read<RecipesCubit>().selectedTypes,
+                  );
+                  if (result != null) {
+                    context.read<RecipesCubit>().fetchRecipes(types: result);
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: ColorManager.white,
+                    borderRadius: BorderRadius.circular(12.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorManager.black.withOpacity(0.03),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Icon(Icons.tune_rounded, color: ColorManager.black, size: 24.sp),
-            ),
+                  child: Icon(Icons.tune_rounded, color: ColorManager.black, size: 24.sp),
+                ),
+              );
+            },
           ),
           SizedBox(width: 10.w),
           // Search Bar
@@ -192,6 +226,12 @@ class _RecipesViewState extends State<RecipesView> {
               ),
               child: TextField(
                 textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+                onChanged: (value) {
+                  if (_debounce?.isActive ?? false) _debounce?.cancel();
+                  _debounce = Timer(const Duration(seconds: 2), () {
+                    context.read<RecipesCubit>().fetchRecipes(query: value.trim());
+                  });
+                },
                 decoration: InputDecoration(
                   hintText: 'ابحث ...',
                   hintStyle: TextStyle(
@@ -214,7 +254,7 @@ class _RecipesViewState extends State<RecipesView> {
     if (recipes.isEmpty) {
       return Center(child: Text(AppStrings.noData.tr()));
     }
-    
+
     return ListView.builder(
       controller: _scrollController,
       padding: EdgeInsets.all(20.w),
@@ -232,7 +272,9 @@ class _RecipesViewState extends State<RecipesView> {
                 Expanded(child: _buildRecipeCard(context, recipes[startIndex], startIndex)),
                 SizedBox(width: 12.w),
                 if (hasSecondItem)
-                  Expanded(child: _buildRecipeCard(context, recipes[startIndex + 1], startIndex + 1))
+                  Expanded(
+                    child: _buildRecipeCard(context, recipes[startIndex + 1], startIndex + 1),
+                  )
                 else
                   const Expanded(child: SizedBox.shrink()),
               ],

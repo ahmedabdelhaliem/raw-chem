@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
+import 'package:raw_chem/features/raw_materials/model/raw_material_model.dart';
 
 class PriceTrackerView extends StatefulWidget {
   const PriceTrackerView({super.key});
@@ -163,8 +166,26 @@ class PriceTrackerCard extends StatelessWidget {
         ? DateFormat('MMM dd, yyyy').format(DateTime.tryParse(model.date!) ?? DateTime.now())
         : '';
 
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
+    return GestureDetector(
+      onTap: () {
+        final material = RawMaterialModel(
+          id: model.id,
+          name: model.name,
+          casNumber: model.casNumber,
+          description: model.description,
+          image: model.image,
+          family: model.family,
+        );
+        context.push(
+          AppRouters.rawMaterialDetailsView,
+          extra: {
+            'material': material,
+            'isFromPriceTracker': true,
+          },
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: const Color(0xFFF7FDF5),
@@ -270,7 +291,7 @@ class PriceTrackerCard extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ));
   }
 }
 

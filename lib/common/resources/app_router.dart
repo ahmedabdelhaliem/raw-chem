@@ -32,6 +32,8 @@ import 'package:raw_chem/features/recipes/cubit/recipe_details_cubit.dart';
 import 'package:raw_chem/features/recipes/view/recipe_details_view.dart';
 import 'package:raw_chem/features/splash/view/splash_view.dart';
 import 'package:raw_chem/features/suppliers/view/suppliers_view.dart';
+import 'package:raw_chem/features/suppliers/view/supplier_details_view.dart';
+import 'package:raw_chem/features/suppliers/cubit/suppliers_materials_cubit.dart';
 import 'package:flutter/material.dart';
 
 abstract class AppRouters {
@@ -64,6 +66,7 @@ abstract class AppRouters {
   static const String connectSupplierView = '/connectSupplier';
   static const String orderDetailsView = '/orderDetails';
   static const String suppliersView = '/suppliers';
+  static const String supplierDetailsView = '/supplierDetails';
   
 
   static final GoRouter router = GoRouter(
@@ -175,9 +178,20 @@ abstract class AppRouters {
       GoRoute(
         path: AppRouters.rawMaterialDetailsView,
         builder: (context, state) {
-          final material = state.extra as RawMaterialModel;
+          RawMaterialModel material;
+          bool isFromPriceTracker = false;
+
+          if (state.extra is RawMaterialModel) {
+            material = state.extra as RawMaterialModel;
+          } else {
+            final map = state.extra as Map<String, dynamic>;
+            material = map['material'] as RawMaterialModel;
+            isFromPriceTracker = map['isFromPriceTracker'] as bool? ?? false;
+          }
+
           return BlocProvider(
-            create: (context) => instance<RawMaterialDetailsCubit>()..getMaterialDetails(material.id),
+            create: (context) => instance<RawMaterialDetailsCubit>()
+              ..getMaterialDetails(material.id, isFromPriceTracker: isFromPriceTracker),
             child: RawMaterialDetailsView(material: material),
           );
         },
@@ -201,6 +215,16 @@ abstract class AppRouters {
           create: (context) => instance<SuppliersCubit>()..fetchSuppliers(),
           child: const SuppliersView(),
         ),
+      ),
+      GoRoute(
+        path: AppRouters.supplierDetailsView,
+        builder: (context, state) {
+          final supplier = state.extra as SupplierModel;
+          return BlocProvider(
+            create: (context) => instance<SuppliersMaterialsCubit>()..fetchMaterials(supplier.id),
+            child: SupplierDetailsView(supplier: supplier),
+          );
+        },
       ),
     ],
   );

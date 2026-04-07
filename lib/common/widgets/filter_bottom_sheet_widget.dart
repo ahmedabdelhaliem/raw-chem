@@ -3,19 +3,46 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 
+class FilterItem {
+  final int id;
+  final String title;
+
+  FilterItem({required this.id, required this.title});
+}
+
 class FilterBottomSheetWidget extends StatefulWidget {
-  final int initialIndex;
+  final List<FilterItem> items;
+  final List<int> initialSelectedIds;
+  final String title;
+  final String sectionTitle;
+  
+  const FilterBottomSheetWidget({
+    super.key, 
+    required this.items, 
+    this.initialSelectedIds = const [],
+    this.title = 'فلتر',
+    this.sectionTitle = 'الفئات',
+  });
 
-  const FilterBottomSheetWidget({super.key, this.initialIndex = 0});
-
-  static Future<int?> show(BuildContext context, {int initialIndex = 0}) {
-    return showModalBottomSheet<int>(
+  static Future<List<int>?> show({
+    required BuildContext context,
+    required List<FilterItem> items,
+    List<int> initialSelectedIds = const [],
+    String title = 'فلتر',
+    String sectionTitle = 'الفئات',
+  }) {
+    return showModalBottomSheet<List<int>>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: FilterBottomSheetWidget(initialIndex: initialIndex),
+        child: FilterBottomSheetWidget(
+          items: items, 
+          initialSelectedIds: initialSelectedIds,
+          title: title,
+          sectionTitle: sectionTitle,
+        ),
       ),
     );
   }
@@ -25,20 +52,12 @@ class FilterBottomSheetWidget extends StatefulWidget {
 }
 
 class _FilterBottomSheetWidgetState extends State<FilterBottomSheetWidget> {
-  late int _selectedIndex;
-
-  final List<String> _filters = [
-    'الأكثر مبيعاً',
-    'العروض',
-    'السعر: من الأقل للأعلى',
-    'السعر: من الأعلى للأقل',
-    'الأحدث',
-  ];
+  late List<int> _selectedIds;
 
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.initialIndex;
+    _selectedIds = List.from(widget.initialSelectedIds);
   }
 
   @override
@@ -61,7 +80,7 @@ class _FilterBottomSheetWidgetState extends State<FilterBottomSheetWidget> {
                 onPressed: () => Navigator.pop(context),
               ),
               Text(
-                'فلتر',
+                widget.title,
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
@@ -74,36 +93,48 @@ class _FilterBottomSheetWidgetState extends State<FilterBottomSheetWidget> {
           SizedBox(height: 20.h),
 
           // Filters Container
-          Container(
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF3F4F6),
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'الفئات',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+          if (widget.items.isNotEmpty)
+            Flexible(
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.all(20.w),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF3F4F6),
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.sectionTitle,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 15.h),
+                      ...widget.items.map((item) => _buildFilterItem(item)),
+                    ],
                   ),
                 ),
-                SizedBox(height: 15.h),
-                ...List.generate(_filters.length, (index) {
-                  return _buildFilterItem(index, _filters[index]);
-                }),
-              ],
+              ),
+            )
+          else
+            Container(
+              padding: EdgeInsets.all(20.w),
+              alignment: Alignment.center,
+              child: Text(
+                'لا توجد فلاتر متاحة',
+                style: TextStyle(fontSize: 14.sp, color: Colors.black54),
+              ),
             ),
-          ),
           SizedBox(height: 30.h),
 
           // Apply Button
           DefaultButtonWidget(
             text: 'تطبيق الفلتر',
-            onPressed: () => Navigator.pop(context, _selectedIndex),
+            onPressed: () => Navigator.pop(context, _selectedIds),
             color: const Color(0xFF006B3E),
             textColor: Colors.white,
             radius: 12.r,
@@ -125,12 +156,16 @@ class _FilterBottomSheetWidgetState extends State<FilterBottomSheetWidget> {
     );
   }
 
-  Widget _buildFilterItem(int index, String title) {
-    bool isSelected = _selectedIndex == index;
+  Widget _buildFilterItem(FilterItem item) {
+    bool isSelected = _selectedIds.contains(item.id);
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedIndex = index;
+          if (isSelected) {
+            _selectedIds.remove(item.id);
+          } else {
+            _selectedIds.add(item.id);
+          }
         });
       },
       behavior: HitTestBehavior.opaque,
@@ -155,7 +190,7 @@ class _FilterBottomSheetWidgetState extends State<FilterBottomSheetWidget> {
             SizedBox(width: 15.w),
             Expanded(
               child: Text(
-                title,
+                item.title,
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 12.sp,
@@ -170,3 +205,4 @@ class _FilterBottomSheetWidgetState extends State<FilterBottomSheetWidget> {
     );
   }
 }
+

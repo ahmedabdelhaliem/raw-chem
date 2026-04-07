@@ -24,56 +24,7 @@ class CategoriesView extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: ColorManager.white,
-                        borderRadius: BorderRadius.circular(12.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: ColorManager.black.withOpacity(0.03),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: TextField(
-                        textAlign: context.locale.languageCode == 'ar'
-                            ? TextAlign.right
-                            : TextAlign.left,
-                        decoration: InputDecoration(
-                          hintText: '${AppStrings.search.tr()}...',
-                          hintStyle: TextStyle(color: ColorManager.grey, fontSize: 14.sp),
-                          prefixIcon: const Icon(Icons.search, color: ColorManager.grey),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(vertical: 12.h),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10.w),
-                  Container(
-                    padding: EdgeInsets.all(12.w),
-                    decoration: BoxDecoration(
-                      color: ColorManager.white,
-                      borderRadius: BorderRadius.circular(12.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: ColorManager.black.withOpacity(0.03),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Icon(Icons.tune_rounded, color: ColorManager.black, size: 24.sp),
-                  ),
-                ],
-              ).animate().fadeIn(duration: 500.ms).slideY(begin: -0.1),
-            ),
+
             Expanded(
               child: BlocBuilder<CategoriesCubit, CategoriesState>(
                 builder: (context, state) {

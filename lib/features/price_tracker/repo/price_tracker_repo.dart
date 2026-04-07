@@ -18,4 +18,11 @@ class PriceTrackerRepo {
       fromJson: (json) => PriceTrackerModel.fromJson(json),
     );
   }
+
+  Future<Either<Failure, RawMaterialModel>> getSupplierMaterialDetails(int id) async {
+    return await _dataSource.fetchResult<RawMaterialModel>(
+      endpoint: '${EndPoints.supplierMaterials}/$id',
+      fromJson: (json) => RawMaterialModel.fromJson(json),
+    );
+  }
 }

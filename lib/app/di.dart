@@ -87,9 +87,12 @@ Future<void> initAppModule() async {
   instance.registerFactory<RecipesCubit>(() => RecipesCubit(instance()));
   instance.registerFactory<RecipeDetailsCubit>(() => RecipeDetailsCubit(instance()));
   instance.registerFactory<RawMaterialsCubit>(() => RawMaterialsCubit(instance()));
-  instance.registerFactory<RawMaterialDetailsCubit>(() => RawMaterialDetailsCubit(instance()));
+  instance.registerFactory<RawMaterialDetailsCubit>(() => RawMaterialDetailsCubit(instance(), instance()));
   instance.registerFactory<BannersCubit>(() => BannersCubit(instance()));
   instance.registerFactory<OnboardingCubit>(() => OnboardingCubit(instance()));
   instance.registerFactory<PriceTrackerCubit>(() => PriceTrackerCubit(instance()));
   instance.registerFactory<SuppliersCubit>(() => SuppliersCubit(instance()));
+  instance.registerFactory<SuppliersMaterialsCubit>(() => SuppliersMaterialsCubit(instance()));
+  instance.registerFactory<RecipeTypesCubit>(() => RecipeTypesCubit(instance()));
+  instance.registerFactory<RawMaterialFamiliesCubit>(() => RawMaterialFamiliesCubit(instance()));
 }
