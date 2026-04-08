@@ -108,19 +108,16 @@ dependencies:
   # video_player: ^2.8.1
   # =========================
 
-#flutter_native_splash:
-#  android: true
-#  ios: true
-#  web: false
-#  color: "#ffffff"
-#  image: assets/images/logo.png
-#  background_image: assets/images/opacity.png
-#  branding: assets/images/logo.png
-#  branding_mode: bottom
-#  android_12:
-#    image: assets/images/logo.png
-#    icon_background_color: "#ffffff"
-#    icon_background_color_dark: "#121212"
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  color: "#ffffff"
+  image: assets/images/splash_logo.png
+  android_12:
+    image: assets/images/splash_logo.png
+    icon_background_color: "#ffffff"
+    icon_background_color_dark: "#121212"
 dev_dependencies:
   flutter_lints: ^2.0.0
   json_serializable: ^6.7.1
