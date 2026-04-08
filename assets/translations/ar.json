@@ -145,5 +145,9 @@
   "contactSupplier": "اتصل بالمورد",
   "productDetails": "تفاصيل المنتج",
   "settings": "الإعدادات",
-  "profileUpdatedSuccessfully": "تم تحديث الملف الشخصي بنجاح"
+  "profileUpdatedSuccessfully": "تم تحديث الملف الشخصي بنجاح",
+  "detergents": "منظفات",
+  "cosmetics": "مستحضرات تجميل",  
+  "paints": "دهانات"
+
 }

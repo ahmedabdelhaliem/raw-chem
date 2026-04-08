@@ -204,4 +204,16 @@ class AppStrings {
   static const String retry = "Retry";
   static const String noData = "No Data";
   static const String productDetails = "productDetails";
+
+  // Recipes
+  static const String recipe = "recipe";
+  static const String ingredients = "ingredients";
+  static const String instructions = "instructions";
+  //==detergent
+  static const String detergent = "detergent";
+  //==cosmetic
+  static const String cosmetic = "cosmetic";
+  //==paint
+  static const String paint = "paint";
+
 }
