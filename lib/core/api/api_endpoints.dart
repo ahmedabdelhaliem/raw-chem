@@ -23,4 +23,8 @@ class EndPoints {
   static const String supplierMaterials = "/supplier-materials";
   static const String suppliers = "/suppliers";
   static String categoryItems(int id) => "/category-items/$id";
+  
+  // Chat
+  static const String chats = "/chats";
+  static String chatMessages(int id) => "/chats/$id/messages";
 }

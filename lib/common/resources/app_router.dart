@@ -12,6 +12,7 @@ import 'package:raw_chem/features/cart/view/cart_view.dart';
 import 'package:raw_chem/features/cart/view/order_success_view.dart';
 import 'package:raw_chem/features/categories/view/category_items_view.dart';
 import 'package:raw_chem/features/home/view/home_view.dart';
+import 'package:raw_chem/features/chat/presentation/view/chat_view.dart';
 import 'package:raw_chem/features/main/view/main_view.dart';
 import 'package:raw_chem/features/onboarding/view/onboarding_view.dart';
 import 'package:raw_chem/features/price_tracker/view/price_tracker_view.dart';
@@ -66,6 +67,7 @@ abstract class AppRouters {
   static const String supplierDetailsView = '/supplierDetails';
   static const String priceTrackerView = '/priceTracker';
   static const String categoryItemsView = '/categoryItems';
+  static const String chatView = '/chat';
 
   static final GoRouter router = GoRouter(
     initialLocation: AppRouters.splashView,
@@ -238,6 +240,18 @@ abstract class AppRouters {
         builder: (context, state) {
           final category = state.extra as CategoryModel;
           return CategoryItemsView(category: category);
+        },
+      ),
+    GoRoute(
+        path: AppRouters.chatView,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final chatId = extra['chatId'] as int;
+          final supplierName = extra['supplierName'] as String;
+          return BlocProvider(
+            create: (context) => instance<ChatCubit>(),
+            child: ChatView(chatId: chatId, supplierName: supplierName),
+          );
         },
       ),
     ],

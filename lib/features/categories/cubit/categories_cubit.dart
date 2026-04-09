@@ -8,8 +8,10 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   CategoriesCubit(this._categoriesRepo) : super(CategoriesInitial());
 
   Future<void> fetchCategories() async {
+    if (isClosed) return;
     emit(CategoriesLoading());
     final result = await _categoriesRepo.getCategories();
+    if (isClosed) return;
     result.fold(
       (failure) => emit(CategoriesError(failure)),
       (categories) => emit(CategoriesSuccess(categories)),

@@ -98,6 +98,8 @@ dependencies:
   iconsax: ^0.0.8
   qr_flutter: ^4.1.0
   mobile_scanner: ^5.2.3
+  web_socket_channel: ^3.0.3
+  intl: ^0.20.2
   # chat packages ============
   # cloud_firestore: ^6.0.3
   # firebase_storage: ^13.0.3

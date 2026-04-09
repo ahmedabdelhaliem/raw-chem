@@ -37,6 +37,12 @@ import 'package:raw_chem/features/home/cubit/banners_cubit.dart';
 import 'package:raw_chem/features/onboarding/repo/onboarding_repo.dart';
 import 'package:raw_chem/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:raw_chem/features/suppliers/cubit/suppliers_materials_cubit.dart';
+import 'package:raw_chem/features/chat/domain/repo/chat_repo.dart';
+import 'package:raw_chem/features/chat/presentation/cubit/chat_cubit.dart';
+import 'package:raw_chem/features/chat/data/data_source/chat_api_data_source.dart';
+import 'package:raw_chem/features/chat/data/data_source/chat_socket_service.dart';
+import 'package:raw_chem/features/chat/data/repo_impl/chat_repo_impl.dart';
+import 'package:raw_chem/features/chat/domain/model/message_model.dart';
 
 export 'package:get_it/get_it.dart';
 export 'package:dio/dio.dart';
@@ -87,6 +93,9 @@ export '../features/suppliers/model/supplier_model.dart';
 export '../features/suppliers/repo/suppliers_repo.dart';
 export '../features/suppliers/cubit/suppliers_cubit.dart';
 export '../features/suppliers/cubit/suppliers_materials_cubit.dart';
+export '../features/chat/domain/repo/chat_repo.dart';
+export '../features/chat/presentation/cubit/chat_cubit.dart';
+export '../features/chat/domain/model/message_model.dart';
 
 import 'app_constants.dart';
 
