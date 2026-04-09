@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:raw_chem/app/app_prefs.dart';
+import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/language_manager.dart';
@@ -122,8 +124,10 @@ class _LanguageViewState extends State<LanguageView> {
               _isLoading = true;
             });
 
-            // Set locale
+            // Set locale for UI
             await context.setLocale(locale);
+            // Sync with AppPreferences so Dio interceptor sends correct Accept-Language
+            await instance<AppPreferences>().setAppLanguage(locale.languageCode);
 
             // Small delay for smooth transition
             await Future.delayed(const Duration(milliseconds: 500));

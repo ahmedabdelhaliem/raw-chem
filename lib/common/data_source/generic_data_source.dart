@@ -37,7 +37,9 @@ class GenericDataSource {
       (left) => Left(left),
       (right) {
         try {
-          final items = (right['data'] as List).map((e) => fromJson(e)).toList();
+          final dataObj = right['data'];
+          final List itemsList = (dataObj is List) ? dataObj : dataObj['items'] ?? [];
+          final items = itemsList.map((e) => fromJson(e)).toList();
           final pagination = PaginationModel.fromJson(right['pagination'] ?? {});
           return Right(PaginatedResponse(data: items, pagination: pagination));
         } catch (e, stackTrace) {
@@ -70,7 +72,9 @@ class GenericDataSource {
       (left) => Left(left),
       (right) {
         try {
-          final items = (right['data'] as List).map((e) => fromJson(e)).toList();
+          final dataObj = right['data'];
+          final List itemsList = (dataObj is List) ? dataObj : dataObj['items'] ?? [];
+          final items = itemsList.map((e) => fromJson(e)).toList();
           return Right(items);
         } catch (e, stackTrace) {
           log(stackTrace.toString());

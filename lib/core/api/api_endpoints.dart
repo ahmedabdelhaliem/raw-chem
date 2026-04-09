@@ -22,4 +22,5 @@ class EndPoints {
   static const String welcomeScreens = "/welcome-screens";
   static const String supplierMaterials = "/supplier-materials";
   static const String suppliers = "/suppliers";
+  static String categoryItems(int id) => "/category-items/$id";
 }

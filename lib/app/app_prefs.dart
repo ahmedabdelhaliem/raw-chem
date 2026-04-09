@@ -26,12 +26,21 @@ class AppPreferences {
   AppPreferences(this._sharedPreferences);
 
   String getAppLanguage() {
+    // First, check our own saved key
     String? language = _sharedPreferences.getString(langKey);
     if (language != null && language.isNotEmpty) {
       return language;
-    } else {
-      return LanguageType.ARABIC.getValue();
     }
+    // Fallback: read directly from EasyLocalization's saved key
+    String? easyLocale = _sharedPreferences.getString('easy_localization');
+    if (easyLocale != null && easyLocale.isNotEmpty) {
+      return easyLocale;
+    }
+    return LanguageType.ARABIC.getValue();
+  }
+
+  Future<void> setAppLanguage(String languageCode) async {
+    await _sharedPreferences.setString(langKey, languageCode);
   }
 
   Future<void> changeAppLanguage() async {

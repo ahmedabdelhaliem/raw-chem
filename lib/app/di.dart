@@ -95,4 +95,6 @@ Future<void> initAppModule() async {
   instance.registerFactory<SuppliersMaterialsCubit>(() => SuppliersMaterialsCubit(instance()));
   instance.registerFactory<RecipeTypesCubit>(() => RecipeTypesCubit(instance()));
   instance.registerFactory<RawMaterialFamiliesCubit>(() => RawMaterialFamiliesCubit(instance()));
+  instance.registerFactory<CategoryRecipesCubit>(() => CategoryRecipesCubit(instance()));
+  instance.registerFactory<CategoryMaterialsCubit>(() => CategoryMaterialsCubit(instance()));
 }

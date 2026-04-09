@@ -31,6 +31,7 @@ import 'package:raw_chem/features/recipes/view/recipes_view.dart';
 import 'package:raw_chem/features/splash/view/splash_view.dart';
 import 'package:raw_chem/features/suppliers/view/supplier_details_view.dart';
 import 'package:raw_chem/features/suppliers/view/suppliers_view.dart';
+import 'package:raw_chem/features/categories/view/category_items_view.dart';
 
 abstract class AppRouters {
   static const String root = '/';
@@ -64,6 +65,7 @@ abstract class AppRouters {
   static const String suppliersView = '/suppliers';
   static const String supplierDetailsView = '/supplierDetails';
   static const String priceTrackerView = '/priceTracker';
+  static const String categoryItemsView = '/categoryItems';
 
   static final GoRouter router = GoRouter(
     initialLocation: AppRouters.splashView,
@@ -230,6 +232,13 @@ abstract class AppRouters {
           create: (context) => instance<PriceTrackerCubit>()..fetchSupplierMaterials(),
           child: const PriceTrackerView(),
         ),
+      ),
+      GoRoute(
+        path: AppRouters.categoryItemsView,
+        builder: (context, state) {
+          final category = state.extra as CategoryModel;
+          return CategoryItemsView(category: category);
+        },
       ),
     ],
   );
