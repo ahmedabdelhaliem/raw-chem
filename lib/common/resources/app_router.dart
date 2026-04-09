@@ -1,20 +1,19 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/features/auth/view/forgot_password_view.dart';
-import 'package:raw_chem/features/onboarding/view/onboarding_view.dart';
 import 'package:raw_chem/features/auth/view/login_view.dart';
 import 'package:raw_chem/features/auth/view/reset_password_view.dart';
 import 'package:raw_chem/features/auth/view/signup_success_view.dart';
 import 'package:raw_chem/features/auth/view/signup_view.dart';
 import 'package:raw_chem/features/auth/view/success_view.dart';
 import 'package:raw_chem/features/auth/view/verify_otp_view.dart';
-import 'package:raw_chem/features/auth/cubit/verify_otp_cubit.dart';
-import 'package:raw_chem/features/auth/cubit/forgot_pwd_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/features/cart/view/cart_view.dart';
 import 'package:raw_chem/features/cart/view/order_success_view.dart';
 import 'package:raw_chem/features/home/view/home_view.dart';
 import 'package:raw_chem/features/main/view/main_view.dart';
+import 'package:raw_chem/features/onboarding/view/onboarding_view.dart';
+import 'package:raw_chem/features/price_tracker/view/price_tracker_view.dart';
 import 'package:raw_chem/features/profile/view/about_us_view.dart';
 import 'package:raw_chem/features/profile/view/help_support_view.dart';
 import 'package:raw_chem/features/profile/view/language_view.dart';
@@ -27,14 +26,11 @@ import 'package:raw_chem/features/profile/view/terms_conditions_view.dart';
 import 'package:raw_chem/features/raw_materials/view/connect_supplier_view.dart';
 import 'package:raw_chem/features/raw_materials/view/raw_material_details_view.dart';
 import 'package:raw_chem/features/raw_materials/view/raw_materials_view.dart';
-import 'package:raw_chem/features/recipes/view/recipes_view.dart';
-import 'package:raw_chem/features/recipes/cubit/recipe_details_cubit.dart';
 import 'package:raw_chem/features/recipes/view/recipe_details_view.dart';
+import 'package:raw_chem/features/recipes/view/recipes_view.dart';
 import 'package:raw_chem/features/splash/view/splash_view.dart';
-import 'package:raw_chem/features/suppliers/view/suppliers_view.dart';
 import 'package:raw_chem/features/suppliers/view/supplier_details_view.dart';
-import 'package:raw_chem/features/suppliers/cubit/suppliers_materials_cubit.dart';
-import 'package:flutter/material.dart';
+import 'package:raw_chem/features/suppliers/view/suppliers_view.dart';
 
 abstract class AppRouters {
   static const String root = '/';
@@ -67,7 +63,7 @@ abstract class AppRouters {
   static const String orderDetailsView = '/orderDetails';
   static const String suppliersView = '/suppliers';
   static const String supplierDetailsView = '/supplierDetails';
-  
+  static const String priceTrackerView = '/priceTracker';
 
   static final GoRouter router = GoRouter(
     initialLocation: AppRouters.splashView,
@@ -87,25 +83,17 @@ abstract class AppRouters {
           final phone = extra?['phone'] as String? ?? '';
           final isForgotPassword = extra?['isForgotPassword'] as bool? ?? false;
           final autoResend = extra?['autoResend'] as bool? ?? false;
-          
+
           if (isForgotPassword) {
             return BlocProvider(
               create: (context) => instance<ForgotPwdCubit>(),
-              child: VerifyOtpView(
-                phone: phone,
-                isForgotPassword: true,
-                autoResend: autoResend,
-              ),
+              child: VerifyOtpView(phone: phone, isForgotPassword: true, autoResend: autoResend),
             );
           }
-          
+
           return BlocProvider(
             create: (context) => instance<VerifyOtpCubit>(),
-            child: VerifyOtpView(
-              phone: phone,
-              isForgotPassword: false,
-              autoResend: autoResend,
-            ),
+            child: VerifyOtpView(phone: phone, isForgotPassword: false, autoResend: autoResend),
           );
         },
       ),
@@ -126,10 +114,8 @@ abstract class AppRouters {
       ),
       GoRoute(
         path: AppRouters.btmNav,
-        builder: (context, state) => BlocProvider.value(
-          value: instance<ProfileCubit>(),
-          child: const MainView(),
-        ),
+        builder: (context, state) =>
+            BlocProvider.value(value: instance<ProfileCubit>(), child: const MainView()),
       ),
 
       GoRoute(path: AppRouters.homeView, builder: (context, state) => const HomeView()),
@@ -137,20 +123,22 @@ abstract class AppRouters {
       GoRoute(path: AppRouters.languageView, builder: (context, state) => const LanguageView()),
       GoRoute(
         path: AppRouters.personalDataView,
-        builder: (context, state) => BlocProvider.value(
-          value: instance<ProfileCubit>(),
-          child: const PersonalDataView(),
-        ),
+        builder: (context, state) =>
+            BlocProvider.value(value: instance<ProfileCubit>(), child: const PersonalDataView()),
       ),
 
-      GoRoute(path: AppRouters.ordersHistoryView, builder: (context, state) => const OrdersHistoryView()),
-      GoRoute(path: AppRouters.notificationsSettingsView, builder: (context, state) => const NotificationsSettingsView()),
+      GoRoute(
+        path: AppRouters.ordersHistoryView,
+        builder: (context, state) => const OrdersHistoryView(),
+      ),
+      GoRoute(
+        path: AppRouters.notificationsSettingsView,
+        builder: (context, state) => const NotificationsSettingsView(),
+      ),
       GoRoute(
         path: AppRouters.helpSupportView,
-        builder: (context, state) => BlocProvider(
-          create: (context) => instance<FaqCubit>(),
-          child: const HelpSupportView(),
-        ),
+        builder: (context, state) =>
+            BlocProvider(create: (context) => instance<FaqCubit>(), child: const HelpSupportView()),
       ),
       GoRoute(
         path: AppRouters.aboutUsView,
@@ -167,7 +155,10 @@ abstract class AppRouters {
         ),
       ),
       GoRoute(path: AppRouters.cartView, builder: (context, state) => const CartView()),
-      GoRoute(path: AppRouters.orderSuccessView, builder: (context, state) => const OrderSuccessView()),
+      GoRoute(
+        path: AppRouters.orderSuccessView,
+        builder: (context, state) => const OrderSuccessView(),
+      ),
       GoRoute(
         path: AppRouters.rawMaterialsView,
         builder: (context, state) => BlocProvider(
@@ -190,8 +181,9 @@ abstract class AppRouters {
           }
 
           return BlocProvider(
-            create: (context) => instance<RawMaterialDetailsCubit>()
-              ..getMaterialDetails(material.id, isFromPriceTracker: isFromPriceTracker),
+            create: (context) =>
+                instance<RawMaterialDetailsCubit>()
+                  ..getMaterialDetails(material.id, isFromPriceTracker: isFromPriceTracker),
             child: RawMaterialDetailsView(material: material),
           );
         },
@@ -207,8 +199,14 @@ abstract class AppRouters {
           );
         },
       ),
-      GoRoute(path: AppRouters.orderDetailsView, builder: (context, state) => const OrderDetailsView()),
-      GoRoute(path: AppRouters.connectSupplierView, builder: (context, state) => const ConnectSupplierView()),
+      GoRoute(
+        path: AppRouters.orderDetailsView,
+        builder: (context, state) => const OrderDetailsView(),
+      ),
+      GoRoute(
+        path: AppRouters.connectSupplierView,
+        builder: (context, state) => const ConnectSupplierView(),
+      ),
       GoRoute(
         path: AppRouters.suppliersView,
         builder: (context, state) => BlocProvider(
@@ -225,6 +223,13 @@ abstract class AppRouters {
             child: SupplierDetailsView(supplier: supplier),
           );
         },
+      ),
+      GoRoute(
+        path: AppRouters.priceTrackerView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => instance<PriceTrackerCubit>()..fetchSupplierMaterials(),
+          child: const PriceTrackerView(),
+        ),
       ),
     ],
   );

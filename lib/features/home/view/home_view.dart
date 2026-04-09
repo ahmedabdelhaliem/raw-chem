@@ -12,7 +12,6 @@ import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_banner_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
-import 'package:raw_chem/features/home/view/widgets/supplier_card_widget.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -24,7 +23,7 @@ class HomeView extends StatelessWidget {
         BlocProvider(create: (context) => instance<RecipesCubit>()..fetchRecipes()),
         BlocProvider(create: (context) => instance<RawMaterialsCubit>()..fetchMaterials()),
         BlocProvider(create: (context) => instance<BannersCubit>()..fetchBanners()),
-        BlocProvider(create: (context) => instance<SuppliersCubit>()..fetchSuppliers()),
+        BlocProvider(create: (context) => instance<PriceTrackerCubit>()..fetchSupplierMaterials()),
       ],
       child: Scaffold(
         backgroundColor: ColorManager.bg,
@@ -51,6 +50,13 @@ class HomeView extends StatelessWidget {
               SizedBox(height: 10.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: _buildSectionHeader(context, AppStrings.priceTracker.tr(), () {
+                  context.push(AppRouters.priceTrackerView);
+                }),
+              ),
+              _buildPriceTrackerList(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: _buildSectionHeader(context, AppStrings.rawMaterials.tr(), () {
                   context.push(AppRouters.rawMaterialsView);
                 }),
@@ -63,14 +69,6 @@ class HomeView extends StatelessWidget {
                 }),
               ),
               _buildRecipesList(context),
-              SizedBox(height: 10.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: _buildSectionHeader(context, AppStrings.suppliers.tr(), () {
-                  context.push(AppRouters.suppliersView);
-                }),
-              ),
-              _buildSuppliersList(),
               SizedBox(height: 20.h),
             ],
           ),
@@ -211,8 +209,8 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildSuppliersList() {
-    return BlocBuilder<SuppliersCubit, BaseState<SupplierModel>>(
+  Widget _buildPriceTrackerList() {
+    return BlocBuilder<PriceTrackerCubit, BaseState<PriceTrackerModel>>(
       builder: (context, state) {
         if (state.isLoading) {
           return SingleChildScrollView(
@@ -227,7 +225,7 @@ class HomeView extends StatelessWidget {
                   children: List.generate(3, (index) {
                     return Padding(
                       padding: EdgeInsetsDirectional.only(end: 15.w),
-                      child: SizedBox(width: .53.sw, child: const SkeletonCard(radius: 12)),
+                      child: SizedBox(width: .58.sw, child: const SkeletonCard(radius: 12)),
                     );
                   }),
                 ),
@@ -236,10 +234,10 @@ class HomeView extends StatelessWidget {
           );
         }
         if (state.isSuccess) {
-          final suppliers = state.items;
-          if (suppliers.isEmpty) return const SizedBox.shrink();
+          final items = state.items;
+          if (items.isEmpty) return const SizedBox.shrink();
 
-          final itemCount = suppliers.length > 5 ? 5 : suppliers.length;
+          final itemCount = items.length > 5 ? 5 : items.length;
 
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -251,26 +249,162 @@ class HomeView extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: List.generate(itemCount, (index) {
-                    final supplier = suppliers[index];
+                    final item = items[index];
+                    final date = item.date != null
+                        ? DateFormat(
+                            'MMM dd, yyyy',
+                          ).format(DateTime.tryParse(item.date!) ?? DateTime.now())
+                        : '';
+
                     return Padding(
                       padding: EdgeInsetsDirectional.only(end: 15.w),
-                      child: SupplierCardWidget(
-                        name: supplier.name ?? '',
-                        address: supplier.address,
-                        desc: supplier.desc,
-                        imageUrl: supplier.image ?? '',
-                        onTap: () => context.push(AppRouters.supplierDetailsView, extra: supplier),
+                      child: SizedBox(
+                        width: .58.sw,
+                        child:
+                            GestureDetector(
+                                  onTap: () {
+                                    final material = RawMaterialModel(
+                                      id: item.id,
+                                      name: item.name,
+                                      casNumber: item.casNumber,
+                                      description: item.description,
+                                      image: item.image,
+                                      family: item.family,
+                                    );
+                                    context.push(
+                                      AppRouters.rawMaterialDetailsView,
+                                      extra: {'material': material, 'isFromPriceTracker': true},
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(12.w),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFF7FDF5),
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      border: Border.all(color: const Color(0xFFE2F9D1), width: 1),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.02),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                item.name ?? "Product",
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: const Color(0xFF1B3D2F),
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.calendar_today_outlined,
+                                                  size: 14.sp,
+                                                  color: const Color(0xFFB4B4CC),
+                                                ),
+                                                SizedBox(width: 4.w),
+                                                Text(
+                                                  date,
+                                                  style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    color: const Color(0xFFB4B4CC),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 6.h),
+                                        if (item.family != null)
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 10.w,
+                                              vertical: 4.h,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFE2F9D1),
+                                              borderRadius: BorderRadius.circular(6.r),
+                                            ),
+                                            child: Text(
+                                              item.family?.name ?? '',
+                                              style: TextStyle(
+                                                fontSize: 11.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0xFF4A7D2C),
+                                              ),
+                                            ),
+                                          ),
+                                        SizedBox(height: 10.h),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                "${AppStrings.source.tr()}: ${item.supplier?.name ?? ''}",
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: 11.sp,
+                                                  color: const Color(0xFF4A7D2C),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  AppStrings.currentPrice.tr(),
+                                                  style: TextStyle(
+                                                    fontSize: 10.sp,
+                                                    color: const Color(0xFFB4B4CC),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 4.h),
+                                                Text(
+                                                  "${AppStrings.egp.tr()}${item.averagePrice ?? ''}",
+                                                  style: TextStyle(
+                                                    fontSize: 13.sp,
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                                .animate()
+                                .fadeIn(delay: (index > 4 ? 50 : index * 50).ms, duration: 400.ms)
+                                .slideX(begin: 0.1),
                       ),
                     );
                   }),
                 ),
               ),
             ),
-          ).animate().fadeIn(delay: 300.ms, duration: 500.ms);
+          );
         }
         return const SizedBox.shrink();
       },
-    );
+    ).animate().fadeIn(delay: 500.ms, duration: 500.ms);
   }
 
   Widget _buildRawMaterialsList(BuildContext context) {
