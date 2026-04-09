@@ -115,7 +115,7 @@ class _DefaultBannerWidgetState<T> extends State<DefaultBannerWidget<T>> {
               ),
             ),
             height: double.infinity,
-            width: double.infinity,
+             width: double.infinity,
             placeholder: (context, url) => const ShimmerContainerWidget(height: double.infinity),
             errorWidget: (context, url, error) => Container(
               color: Colors.grey.shade200,
