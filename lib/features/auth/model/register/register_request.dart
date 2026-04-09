@@ -16,6 +16,7 @@ class RegisterRequest with _$RegisterRequest {
     required String passwordConfirmation,
     required List<int> categoryIds,
     MultipartFile? image,
+    String? fcmToken,
   }) = _RegisterRequest;
 
   Future<FormData> toFormData() async {
@@ -28,6 +29,7 @@ class RegisterRequest with _$RegisterRequest {
       "password_confirmation": passwordConfirmation,
       "category_ids[]": categoryIds,
       if (image != null) "image": image,
+      if (fcmToken != null) "fcm_token": fcmToken,
     });
   }
 }

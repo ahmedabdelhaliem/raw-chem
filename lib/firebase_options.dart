@@ -49,22 +49,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBRxUlP48VAK4SNHF4ufW_7aPx_YB2GixQ',
-    appId: '1:365422018557:android:a4ba69dc6fd4196a7de394',
-    messagingSenderId: '365422018557',
-    projectId: 'authon-f466d',
-    storageBucket: 'authon-f466d.firebasestorage.app',
+    apiKey: 'AIzaSyDftJ6t10klyJ5-miCqknmYaAX9VZ_-ZjI',
+    appId: '1:632822449676:android:41609b6b1d0f9505e49029',
+    messagingSenderId: '632822449676',
+    projectId: 'rowchem-4c7a3',
+    storageBucket: 'rowchem-4c7a3.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDYwHdnFLRNNCc5C-ToxGpqx5a5J3QECTA',
-    appId: '1:365422018557:ios:33be6f093c13101d7de394',
-    messagingSenderId: '365422018557',
-    projectId: 'authon-f466d',
-    storageBucket: 'authon-f466d.firebasestorage.app',
-    androidClientId: '365422018557-a4186gprmsjqqv90tquvcqig46v1dfls.apps.googleusercontent.com',
-    iosClientId: '365422018557-lqm85i01qq2lbvicc10r1p5r5gn269ri.apps.googleusercontent.com',
-    iosBundleId: 'tech.brmja.cochizer',
+    apiKey: 'AIzaSyBc-eTsp--DInjx20VBYbPDNvoetc8AkaQ',
+    appId: '1:632822449676:ios:573ad5e0d4fdc9ade49029',
+    messagingSenderId: '632822449676',
+    projectId: 'rowchem-4c7a3',
+    storageBucket: 'rowchem-4c7a3.firebasestorage.app',
+    iosBundleId: 'com.example.rawChem',
   );
 
 }

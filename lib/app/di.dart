@@ -76,7 +76,7 @@ Future<void> initAppModule() async {
   instance.registerLazySingleton<SuppliersRepo>(() => SuppliersRepo(instance()));
 
   // Register Cubits
-  instance.registerFactory<SignupCubit>(() => SignupCubit(instance()));
+  instance.registerFactory<SignupCubit>(() => SignupCubit(instance(), instance()));
   instance.registerFactory<VerifyOtpCubit>(() => VerifyOtpCubit(instance(), instance()));
   instance.registerFactory<ForgotPwdCubit>(() => ForgotPwdCubit(instance()));
   instance.registerFactory<LoginCubit>(() => LoginCubit(instance(), instance()));

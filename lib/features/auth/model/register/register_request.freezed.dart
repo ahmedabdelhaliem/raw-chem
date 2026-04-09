@@ -24,6 +24,7 @@ mixin _$RegisterRequest {
   String get passwordConfirmation => throw _privateConstructorUsedError;
   List<int> get categoryIds => throw _privateConstructorUsedError;
   MultipartFile? get image => throw _privateConstructorUsedError;
+  String? get fcmToken => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $RegisterRequestCopyWith<RegisterRequest> get copyWith =>
@@ -44,7 +45,8 @@ abstract class $RegisterRequestCopyWith<$Res> {
       String password,
       String passwordConfirmation,
       List<int> categoryIds,
-      MultipartFile? image});
+      MultipartFile? image,
+      String? fcmToken});
 }
 
 /// @nodoc
@@ -68,6 +70,7 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
     Object? passwordConfirmation = null,
     Object? categoryIds = null,
     Object? image = freezed,
+    Object? fcmToken = freezed,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -102,6 +105,10 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as MultipartFile?,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -122,7 +129,8 @@ abstract class _$$RegisterRequestImplCopyWith<$Res>
       String password,
       String passwordConfirmation,
       List<int> categoryIds,
-      MultipartFile? image});
+      MultipartFile? image,
+      String? fcmToken});
 }
 
 /// @nodoc
@@ -144,6 +152,7 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
     Object? passwordConfirmation = null,
     Object? categoryIds = null,
     Object? image = freezed,
+    Object? fcmToken = freezed,
   }) {
     return _then(_$RegisterRequestImpl(
       name: null == name
@@ -178,6 +187,10 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as MultipartFile?,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -193,7 +206,8 @@ class _$RegisterRequestImpl extends _RegisterRequest {
       required this.password,
       required this.passwordConfirmation,
       required final List<int> categoryIds,
-      this.image})
+      this.image,
+      this.fcmToken})
       : _categoryIds = categoryIds,
         super._();
 
@@ -219,10 +233,12 @@ class _$RegisterRequestImpl extends _RegisterRequest {
 
   @override
   final MultipartFile? image;
+  @override
+  final String? fcmToken;
 
   @override
   String toString() {
-    return 'RegisterRequest(name: $name, email: $email, phone: $phone, birthDate: $birthDate, password: $password, passwordConfirmation: $passwordConfirmation, categoryIds: $categoryIds, image: $image)';
+    return 'RegisterRequest(name: $name, email: $email, phone: $phone, birthDate: $birthDate, password: $password, passwordConfirmation: $passwordConfirmation, categoryIds: $categoryIds, image: $image, fcmToken: $fcmToken)';
   }
 
   @override
@@ -241,7 +257,9 @@ class _$RegisterRequestImpl extends _RegisterRequest {
                 other.passwordConfirmation == passwordConfirmation) &&
             const DeepCollectionEquality()
                 .equals(other._categoryIds, _categoryIds) &&
-            (identical(other.image, image) || other.image == image));
+            (identical(other.image, image) || other.image == image) &&
+            (identical(other.fcmToken, fcmToken) ||
+                other.fcmToken == fcmToken));
   }
 
   @override
@@ -254,7 +272,8 @@ class _$RegisterRequestImpl extends _RegisterRequest {
       password,
       passwordConfirmation,
       const DeepCollectionEquality().hash(_categoryIds),
-      image);
+      image,
+      fcmToken);
 
   @JsonKey(ignore: true)
   @override
@@ -273,7 +292,8 @@ abstract class _RegisterRequest extends RegisterRequest {
       required final String password,
       required final String passwordConfirmation,
       required final List<int> categoryIds,
-      final MultipartFile? image}) = _$RegisterRequestImpl;
+      final MultipartFile? image,
+      final String? fcmToken}) = _$RegisterRequestImpl;
   const _RegisterRequest._() : super._();
 
   @override
@@ -292,6 +312,8 @@ abstract class _RegisterRequest extends RegisterRequest {
   List<int> get categoryIds;
   @override
   MultipartFile? get image;
+  @override
+  String? get fcmToken;
   @override
   @JsonKey(ignore: true)
   _$$RegisterRequestImplCopyWith<_$RegisterRequestImpl> get copyWith =>

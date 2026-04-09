@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "632822449676",
+    "project_id": "rowchem-4c7a3",
+    "storage_bucket": "rowchem-4c7a3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:632822449676:android:41609b6b1d0f9505e49029",
+        "android_client_info": {
+          "package_name": "com.example.raw_chem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDftJ6t10klyJ5-miCqknmYaAX9VZ_-ZjI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

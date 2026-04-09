@@ -11,6 +11,7 @@ class LoginRequest with _$LoginRequest {
   const factory LoginRequest({
     required String phone,
     required String password,
+    String? fcmToken,
   }) = _LoginRequest;
 
   factory LoginRequest.fromJson(Map<String, dynamic> json) =>
@@ -20,6 +21,7 @@ class LoginRequest with _$LoginRequest {
     return FormData.fromMap({
       'phone': phone,
       'password': password,
+      if (fcmToken != null) 'fcm_token': fcmToken,
     });
   }
 }

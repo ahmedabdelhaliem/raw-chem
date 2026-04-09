@@ -22,6 +22,7 @@ LoginRequest _$LoginRequestFromJson(Map<String, dynamic> json) {
 mixin _$LoginRequest {
   String get phone => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
+  String? get fcmToken => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $LoginRequestCopyWith<$Res> {
           LoginRequest value, $Res Function(LoginRequest) then) =
       _$LoginRequestCopyWithImpl<$Res, LoginRequest>;
   @useResult
-  $Res call({String phone, String password});
+  $Res call({String phone, String password, String? fcmToken});
 }
 
 /// @nodoc
@@ -53,6 +54,7 @@ class _$LoginRequestCopyWithImpl<$Res, $Val extends LoginRequest>
   $Res call({
     Object? phone = null,
     Object? password = null,
+    Object? fcmToken = freezed,
   }) {
     return _then(_value.copyWith(
       phone: null == phone
@@ -63,6 +65,10 @@ class _$LoginRequestCopyWithImpl<$Res, $Val extends LoginRequest>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -75,7 +81,7 @@ abstract class _$$LoginRequestImplCopyWith<$Res>
       __$$LoginRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String phone, String password});
+  $Res call({String phone, String password, String? fcmToken});
 }
 
 /// @nodoc
@@ -91,6 +97,7 @@ class __$$LoginRequestImplCopyWithImpl<$Res>
   $Res call({
     Object? phone = null,
     Object? password = null,
+    Object? fcmToken = freezed,
   }) {
     return _then(_$LoginRequestImpl(
       phone: null == phone
@@ -101,6 +108,10 @@ class __$$LoginRequestImplCopyWithImpl<$Res>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -108,7 +119,8 @@ class __$$LoginRequestImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LoginRequestImpl extends _LoginRequest {
-  const _$LoginRequestImpl({required this.phone, required this.password})
+  const _$LoginRequestImpl(
+      {required this.phone, required this.password, this.fcmToken})
       : super._();
 
   factory _$LoginRequestImpl.fromJson(Map<String, dynamic> json) =>
@@ -118,10 +130,12 @@ class _$LoginRequestImpl extends _LoginRequest {
   final String phone;
   @override
   final String password;
+  @override
+  final String? fcmToken;
 
   @override
   String toString() {
-    return 'LoginRequest(phone: $phone, password: $password)';
+    return 'LoginRequest(phone: $phone, password: $password, fcmToken: $fcmToken)';
   }
 
   @override
@@ -131,12 +145,14 @@ class _$LoginRequestImpl extends _LoginRequest {
             other is _$LoginRequestImpl &&
             (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.password, password) ||
-                other.password == password));
+                other.password == password) &&
+            (identical(other.fcmToken, fcmToken) ||
+                other.fcmToken == fcmToken));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, phone, password);
+  int get hashCode => Object.hash(runtimeType, phone, password, fcmToken);
 
   @JsonKey(ignore: true)
   @override
@@ -155,7 +171,8 @@ class _$LoginRequestImpl extends _LoginRequest {
 abstract class _LoginRequest extends LoginRequest {
   const factory _LoginRequest(
       {required final String phone,
-      required final String password}) = _$LoginRequestImpl;
+      required final String password,
+      final String? fcmToken}) = _$LoginRequestImpl;
   const _LoginRequest._() : super._();
 
   factory _LoginRequest.fromJson(Map<String, dynamic> json) =
@@ -165,6 +182,8 @@ abstract class _LoginRequest extends LoginRequest {
   String get phone;
   @override
   String get password;
+  @override
+  String? get fcmToken;
   @override
   @JsonKey(ignore: true)
   _$$LoginRequestImplCopyWith<_$LoginRequestImpl> get copyWith =>

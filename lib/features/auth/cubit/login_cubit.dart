@@ -15,7 +15,9 @@ class LoginCubit extends Cubit<BaseState<LoginResponse>> {
 
   Future<void> login(LoginRequest request) async {
     emit(state.copyWith(status: Status.loading));
-    final result = await _authRepo.login(request);
+    final fcmToken = _appPrefs.getFcmToken();
+    final updatedRequest = request.copyWith(fcmToken: fcmToken);
+    final result = await _authRepo.login(updatedRequest);
     result.fold(
       (failure) {
         if (failure is ActiveAccountFailure) {
