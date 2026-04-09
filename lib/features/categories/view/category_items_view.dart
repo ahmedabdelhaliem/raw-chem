@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
@@ -58,15 +59,16 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
           body: Column(
             children: [
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+                padding: EdgeInsets.all(5.r),
                 decoration: BoxDecoration(
                   color: ColorManager.white,
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: ColorManager.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      color: ColorManager.black.withOpacity(0.04),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
                     ),
                   ],
                 ),
@@ -74,20 +76,56 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
                   indicator: BoxDecoration(
                     color: ColorManager.primary,
                     borderRadius: BorderRadius.circular(12.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorManager.primary.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   labelColor: ColorManager.white,
                   unselectedLabelColor: ColorManager.greyTextColor,
+                  indicatorSize: TabBarIndicatorSize.tab,
                   labelStyle: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
                   unselectedLabelStyle: TextStyle(
                     fontSize: 14.sp,
-                    fontWeight: FontWeight.normal,
+                    fontWeight: FontWeight.w600,
                   ),
                   tabs: [
-                    Tab(text: AppStrings.rawMaterials.tr()),
-                    Tab(text: AppStrings.recipes.tr()),
+                    Tab(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Iconsax.box_1, size: 18.sp),
+                          SizedBox(width: 4.w),
+                          Flexible(
+                            child: Text(
+                              AppStrings.rawMaterials.tr(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Tab(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Iconsax.task_square, size: 18.sp),
+                          SizedBox(width: 4.w),
+                          Flexible(
+                            child: Text(
+                              AppStrings.recipes.tr(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -162,7 +200,7 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
 
   Widget _buildMaterialsGrid(List<RawMaterialModel> materials) {
     if (materials.isEmpty) {
-      return Center(child: Text(AppStrings.noData.tr()));
+      return _buildEmptyState();
     }
 
     return ListView.builder(
@@ -209,7 +247,7 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
 
   Widget _buildRecipesGrid(List<RecipeModel> recipes) {
     if (recipes.isEmpty) {
-      return Center(child: Text(AppStrings.noData.tr()));
+      return _buildEmptyState();
     }
 
     return ListView.builder(
@@ -256,19 +294,75 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
     ).animate().fadeIn(delay: (50 * (index % 10)).ms).scale(begin: const Offset(0.95, 0.95));
   }
 
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+              color: ColorManager.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: ColorManager.black.withOpacity(0.05),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Icon(Iconsax.box_add, size: 50.sp, color: ColorManager.primary.withOpacity(0.5)),
+          ),
+          SizedBox(height: 16.h),
+          Text(
+            AppStrings.noData.tr(),
+            style: TextStyle(
+              fontSize: 16.sp,
+              color: ColorManager.blackText,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            AppStrings.noItemsToDisplay.tr(),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: ColorManager.greyTextColor,
+            ),
+          ),
+        ],
+      ).animate().fadeIn(duration: 500.ms).scale(begin: const Offset(0.9, 0.9)),
+    );
+  }
+
   Widget _buildErrorState(String message, VoidCallback onRetry) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(message),
-          SizedBox(height: 10.h),
-          ElevatedButton(
+          Icon(Iconsax.warning_2, size: 60.sp, color: Colors.orangeAccent),
+          SizedBox(height: 16.h),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.sp, color: ColorManager.blackText, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 24.h),
+          ElevatedButton.icon(
             onPressed: onRetry,
-            child: Text(AppStrings.retry.tr()),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ColorManager.primary,
+              foregroundColor: ColorManager.white,
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+              elevation: 0,
+            ),
+            icon: Icon(Iconsax.refresh, size: 20.sp),
+            label: Text(AppStrings.retry.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
           ),
         ],
-      ),
+      ).animate().fadeIn().scale(),
     );
   }
 }

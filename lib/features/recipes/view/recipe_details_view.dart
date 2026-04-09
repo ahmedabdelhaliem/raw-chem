@@ -10,6 +10,7 @@ import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
+import 'package:raw_chem/common/resources/strings_manager.dart';
 
 class RecipeDetailsView extends StatelessWidget {
   final RecipeModel recipe;
@@ -35,7 +36,7 @@ class RecipeDetailsView extends StatelessWidget {
         return Scaffold(
           backgroundColor: ColorManager.bg,
           appBar: DefaultAppBar(
-            text: 'تفاصيل الوصفة',
+            text: AppStrings.recipeDetails.tr(),
             backgroundColor: ColorManager.bg,
             titleColor: ColorManager.black,
             withLeading: context.locale.languageCode != 'ar',
@@ -76,13 +77,11 @@ class RecipeDetailsView extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2),
                     SizedBox(height: 10.h),
-                    
-                    
 
                     // Description
                     _buildSection(
                       context,
-                      title: 'الوصف :',
+                      title: '${AppStrings.description.tr()} :',
                       content: desc,
                       isLoading: isLoading,
                       delay: 300,
@@ -91,29 +90,21 @@ class RecipeDetailsView extends StatelessWidget {
                     // Ingredients
                     _buildSectionWithCopy(
                       context,
-                      title: 'مكونات',
+                      title: AppStrings.ingredients.tr(),
                       content: ingredients,
-                      copyLabel: 'نسخ',
+                      copyLabel: AppStrings.copy.tr(),
                       isLoading: isLoading,
                       delay: 400,
                     ),
 
                     // Measurements
-                    _buildSectionWithCopy(
-                      context,
-                      title: 'القياسات',
-                      content: measurements,
-                      copyLabel: 'نسخ',
-                      isLoading: isLoading,
-                      delay: 500,
-                    ),
 
                     // Preparation
                     _buildSectionWithCopy(
                       context,
-                      title: 'تعليمات التحضير',
+                      title: AppStrings.preparationInstructions.tr(),
                       content: preparation,
-                      copyLabel: 'نسخ',
+                      copyLabel: AppStrings.copy.tr(),
                       isLoading: isLoading,
                       delay: 600,
                     ),
@@ -137,7 +128,7 @@ class RecipeDetailsView extends StatelessWidget {
                     ],
                   ),
                   child: DefaultButtonWidget(
-                    text: 'نسخ الوصفة الكاملة',
+                    text: AppStrings.copyFullRecipe.tr(),
                     color: ColorManager.primary,
                     textColor: ColorManager.white,
                     radius: 12.r,
@@ -148,11 +139,11 @@ class RecipeDetailsView extends StatelessWidget {
                     iconBuilder: Icon(Icons.copy_rounded, color: ColorManager.white, size: 20.sp),
                     onPressed: () {
                       final fullRecipe =
-                          'الوصفة: $title\n\nالمكونات:\n$ingredients\n\nالقياسات:\n$measurements\n\nطريقة التحضير:\n$preparation';
+                          '${AppStrings.recipe.tr()}: $title\n\n${AppStrings.ingredients.tr()}:\n$ingredients\n\n${AppStrings.measurements.tr()}:\n$measurements\n\n${AppStrings.preparationInstructions.tr()}:\n$preparation';
                       Clipboard.setData(ClipboardData(text: fullRecipe));
                       ScaffoldMessenger.of(
                         context,
-                      ).showSnackBar(const SnackBar(content: Text('تم نسخ الوصفة الكاملة بنجاح')));
+                      ).showSnackBar(SnackBar(content: Text(AppStrings.fullRecipeCopiedSuccessfully.tr())));
                     },
                   ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.5),
                 ),
@@ -251,7 +242,7 @@ class RecipeDetailsView extends StatelessWidget {
                 Clipboard.setData(ClipboardData(text: content));
                 ScaffoldMessenger.of(
                   context,
-                ).showSnackBar(SnackBar(content: Text('تم نسخ $title بنجاح')));
+                ).showSnackBar(SnackBar(content: Text('$title ${AppStrings.copiedSuccessfully.tr()}')));
               },
               borderRadius: BorderRadius.circular(8.r),
               child: Container(

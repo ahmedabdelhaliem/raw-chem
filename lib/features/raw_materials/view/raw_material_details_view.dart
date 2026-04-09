@@ -52,16 +52,35 @@ class RawMaterialDetailsView extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       color: const Color(0xFFF3FAF0),
-                      child: CachedNetworkImage(
-                        imageUrl: imageUrl,
-                        height: .25.sh,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: Container(color: Colors.white, height: .25.sh),
-                        ),
-                      ),
+                      child: imageUrl.isEmpty
+                          ? Container(
+                              height: .25.sh,
+                              color: Colors.grey[200],
+                              child: Icon(
+                                Icons.image_not_supported_outlined,
+                                size: 40.sp,
+                                color: Colors.grey[400],
+                              ),
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              height: .25.sh,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(color: Colors.white, height: .25.sh),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                height: .25.sh,
+                                color: Colors.grey[200],
+                                child: Icon(
+                                  Icons.image_not_supported_outlined,
+                                  size: 40.sp,
+                                  color: Colors.grey[400],
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                 ),
@@ -96,15 +115,15 @@ class RawMaterialDetailsView extends StatelessWidget {
                 SizedBox(height: 20.h),
 
                 // Description
-                _buildInfoSection('الوصف :', description, isLoading: isLoading),
+                _buildInfoSection('${AppStrings.description.tr()} :', description, isLoading: isLoading),
                 SizedBox(height: 15.h),
 
                 // Average Price
 
                 // Meta Data
-                _buildInfoSection('التفاصيل الفنية', '', isTitle: true, isLoading: false),
+                _buildInfoSection(AppStrings.technicalDetails.tr(), '', isTitle: true, isLoading: false),
                 SizedBox(height: 8.h),
-                _buildInfoRow('CAS Number: ', casNumber, isLoading: isLoading),
+                _buildInfoRow(AppStrings.casNumber.tr(), casNumber, isLoading: isLoading),
 
                 SizedBox(height: 40.h),
 

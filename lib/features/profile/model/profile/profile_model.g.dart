@@ -35,6 +35,9 @@ _$ProfileUserImpl _$$ProfileUserImplFromJson(Map<String, dynamic> json) =>
       category: json['category'] == null
           ? null
           : CategoryModel.fromJson(json['category'] as Map<String, dynamic>),
+      categories: (json['categories'] as List<dynamic>?)
+          ?.map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       categoryId: json['category_id'],
       fcmToken: json['fcm_token'] as String?,
       status: (json['status'] as num?)?.toInt(),
@@ -52,6 +55,7 @@ Map<String, dynamic> _$$ProfileUserImplToJson(_$ProfileUserImpl instance) =>
       'email': instance.email,
       'phone': instance.phone,
       'category': instance.category,
+      'categories': instance.categories,
       'category_id': instance.categoryId,
       'fcm_token': instance.fcmToken,
       'status': instance.status,

@@ -218,6 +218,7 @@ mixin _$ProfileUser {
   String? get email => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
   CategoryModel? get category => throw _privateConstructorUsedError;
+  List<CategoryModel>? get categories => throw _privateConstructorUsedError;
   @JsonKey(name: 'category_id')
   dynamic get categoryId => throw _privateConstructorUsedError;
   @JsonKey(name: 'fcm_token')
@@ -250,6 +251,7 @@ abstract class $ProfileUserCopyWith<$Res> {
       String? email,
       String? phone,
       CategoryModel? category,
+      List<CategoryModel>? categories,
       @JsonKey(name: 'category_id') dynamic categoryId,
       @JsonKey(name: 'fcm_token') String? fcmToken,
       int? status,
@@ -280,6 +282,7 @@ class _$ProfileUserCopyWithImpl<$Res, $Val extends ProfileUser>
     Object? email = freezed,
     Object? phone = freezed,
     Object? category = freezed,
+    Object? categories = freezed,
     Object? categoryId = freezed,
     Object? fcmToken = freezed,
     Object? status = freezed,
@@ -316,6 +319,10 @@ class _$ProfileUserCopyWithImpl<$Res, $Val extends ProfileUser>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as CategoryModel?,
+      categories: freezed == categories
+          ? _value.categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<CategoryModel>?,
       categoryId: freezed == categoryId
           ? _value.categoryId
           : categoryId // ignore: cast_nullable_to_non_nullable
@@ -372,6 +379,7 @@ abstract class _$$ProfileUserImplCopyWith<$Res>
       String? email,
       String? phone,
       CategoryModel? category,
+      List<CategoryModel>? categories,
       @JsonKey(name: 'category_id') dynamic categoryId,
       @JsonKey(name: 'fcm_token') String? fcmToken,
       int? status,
@@ -401,6 +409,7 @@ class __$$ProfileUserImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? phone = freezed,
     Object? category = freezed,
+    Object? categories = freezed,
     Object? categoryId = freezed,
     Object? fcmToken = freezed,
     Object? status = freezed,
@@ -437,6 +446,10 @@ class __$$ProfileUserImplCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as CategoryModel?,
+      categories: freezed == categories
+          ? _value._categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<CategoryModel>?,
       categoryId: freezed == categoryId
           ? _value.categoryId
           : categoryId // ignore: cast_nullable_to_non_nullable
@@ -476,12 +489,14 @@ class _$ProfileUserImpl implements _ProfileUser {
       this.email,
       this.phone,
       this.category,
+      final List<CategoryModel>? categories,
       @JsonKey(name: 'category_id') this.categoryId,
       @JsonKey(name: 'fcm_token') this.fcmToken,
       this.status,
       @JsonKey(name: 'email_verified_at') this.emailVerifiedAt,
       @JsonKey(name: 'created_at') this.createdAt,
-      @JsonKey(name: 'updated_at') this.updatedAt});
+      @JsonKey(name: 'updated_at') this.updatedAt})
+      : _categories = categories;
 
   factory _$ProfileUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileUserImplFromJson(json);
@@ -501,6 +516,16 @@ class _$ProfileUserImpl implements _ProfileUser {
   final String? phone;
   @override
   final CategoryModel? category;
+  final List<CategoryModel>? _categories;
+  @override
+  List<CategoryModel>? get categories {
+    final value = _categories;
+    if (value == null) return null;
+    if (_categories is EqualUnmodifiableListView) return _categories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   @JsonKey(name: 'category_id')
   final dynamic categoryId;
@@ -521,7 +546,7 @@ class _$ProfileUserImpl implements _ProfileUser {
 
   @override
   String toString() {
-    return 'ProfileUser(id: $id, name: $name, image: $image, companyName: $companyName, email: $email, phone: $phone, category: $category, categoryId: $categoryId, fcmToken: $fcmToken, status: $status, emailVerifiedAt: $emailVerifiedAt, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ProfileUser(id: $id, name: $name, image: $image, companyName: $companyName, email: $email, phone: $phone, category: $category, categories: $categories, categoryId: $categoryId, fcmToken: $fcmToken, status: $status, emailVerifiedAt: $emailVerifiedAt, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -538,6 +563,8 @@ class _$ProfileUserImpl implements _ProfileUser {
             (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.category, category) ||
                 other.category == category) &&
+            const DeepCollectionEquality()
+                .equals(other._categories, _categories) &&
             const DeepCollectionEquality()
                 .equals(other.categoryId, categoryId) &&
             (identical(other.fcmToken, fcmToken) ||
@@ -562,6 +589,7 @@ class _$ProfileUserImpl implements _ProfileUser {
       email,
       phone,
       category,
+      const DeepCollectionEquality().hash(_categories),
       const DeepCollectionEquality().hash(categoryId),
       fcmToken,
       status,
@@ -592,6 +620,7 @@ abstract class _ProfileUser implements ProfileUser {
           final String? email,
           final String? phone,
           final CategoryModel? category,
+          final List<CategoryModel>? categories,
           @JsonKey(name: 'category_id') final dynamic categoryId,
           @JsonKey(name: 'fcm_token') final String? fcmToken,
           final int? status,
@@ -618,6 +647,8 @@ abstract class _ProfileUser implements ProfileUser {
   String? get phone;
   @override
   CategoryModel? get category;
+  @override
+  List<CategoryModel>? get categories;
   @override
   @JsonKey(name: 'category_id')
   dynamic get categoryId;

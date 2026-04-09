@@ -146,8 +146,18 @@
   "productDetails": "تفاصيل المنتج",
   "settings": "الإعدادات",
   "profileUpdatedSuccessfully": "تم تحديث الملف الشخصي بنجاح",
-  "detergents": "منظفات",
-  "cosmetics": "مستحضرات تجميل",  
-  "paints": "دهانات"
-
+  "noItemsToDisplay": "لا توجد عناصر لعرضها في الوقت الحالي",
+  "recipeDetails": "تفاصيل الوصفة",
+  "description": "الوصف",
+  "ingredients": "المكونات",
+  "preparationInstructions": "تعليمات التحضير",
+  "copy": "نسخ",
+  "copyFullRecipe": "نسخ الوصفة الكاملة",
+  "recipe": "الوصفة",
+  "measurements": "القياسات",
+  "fullRecipeCopiedSuccessfully": "تم نسخ الوصفة الكاملة بنجاح",
+  "copiedSuccessfully": "تم النسخ بنجاح",
+  "searchHint": "ابحث ...",
+  "viewMaterialDetails": "عرض تفاصيل المادة",
+  "technicalDetails": "التفاصيل الفنية"
 }

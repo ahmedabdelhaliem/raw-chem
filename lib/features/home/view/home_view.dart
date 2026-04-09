@@ -132,7 +132,7 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ],
-    ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.1);
+    ).animate().fadeIn(duration: 600.ms).slideY(begin: -0.2); // Slide down for header
   }
 
   Widget _buildSearchBar(BuildContext context) {
@@ -158,7 +158,7 @@ class HomeView extends StatelessWidget {
           contentPadding: EdgeInsets.symmetric(vertical: 12.h),
         ),
       ),
-    ).animate().fadeIn(delay: 100.ms, duration: 500.ms);
+    ).animate().fadeIn(delay: 200.ms, duration: 600.ms).slideY(begin: 0.2); // Slide up for search bar
   }
 
   Widget _buildBanner() {
@@ -179,7 +179,7 @@ class HomeView extends StatelessWidget {
             images: banners,
             imageUrl: (image) => image.banner ?? '',
             aspectRatio: 16 / 7,
-          ).animate().scale(delay: 200.ms, duration: 500.ms);
+          ).animate().fadeIn(delay: 400.ms, duration: 600.ms).scale(begin: const Offset(0.9, 0.9));
         }
         return const SizedBox.shrink();
       },
@@ -390,10 +390,7 @@ class HomeView extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                )
-                                .animate()
-                                .fadeIn(delay: (index > 4 ? 50 : index * 50).ms, duration: 400.ms)
-                                .slideX(begin: 0.1),
+                                ),
                       ),
                     );
                   }),
@@ -404,7 +401,7 @@ class HomeView extends StatelessWidget {
         }
         return const SizedBox.shrink();
       },
-    ).animate().fadeIn(delay: 500.ms, duration: 500.ms);
+    ).animate().fadeIn(delay: 600.ms, duration: 600.ms).slideY(begin: 0.1);
   }
 
   Widget _buildRawMaterialsList(BuildContext context) {
@@ -473,7 +470,7 @@ class HomeView extends StatelessWidget {
         }
         return const SizedBox.shrink();
       },
-    ).animate().fadeIn(delay: 400.ms, duration: 500.ms);
+    ).animate().fadeIn(delay: 800.ms, duration: 600.ms).slideY(begin: 0.1);
   }
 
   Widget _buildRecipesList(BuildContext context) {
@@ -544,6 +541,6 @@ class HomeView extends StatelessWidget {
         }
         return const SizedBox.shrink();
       },
-    ).animate().fadeIn(delay: 500.ms, duration: 500.ms);
+    ).animate().fadeIn(delay: 1000.ms, duration: 600.ms).slideY(begin: 0.1);
   }
 }

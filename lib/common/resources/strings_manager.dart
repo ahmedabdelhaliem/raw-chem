@@ -137,7 +137,7 @@ class AppStrings {
   static const String casNumber = "casNumber";
   static const String averagePrice = "averagePrice";
   static const String supplier = "supplier";
-  static const String viewRecipeDetails = "viewRecipeDetails";
+  static const String viewMaterialDetails = "viewMaterialDetails";
   static const String bannerTitle = "bannerTitle";
   static const String cosmetics = "cosmetics";
   static const String paints = "paints";
@@ -201,13 +201,25 @@ class AppStrings {
   static const String addToCart = "addToCart";
   static const String contactSupplier = "contactSupplier";
   static const String profileUpdatedSuccessfully = "profileUpdatedSuccessfully";
-  static const String retry = "Retry";
-  static const String noData = "No Data";
+  static const String retry = "retry"; // fixed to match json key if we want (wait, earlier it was uppercase Retry, it's fine)
+  static const String noData = "noDataFound"; // changed to match json key
   static const String productDetails = "productDetails";
+  static const String technicalDetails = "technicalDetails";
 
-  // Recipes
-  static const String recipe = "recipe";
+  // Recipes / Items
+  static const String noItemsToDisplay = "noItemsToDisplay";
+  static const String recipeDetails = "recipeDetails";
+  static const String description = "description";
   static const String ingredients = "ingredients";
+  static const String preparationInstructions = "preparationInstructions";
+  static const String copy = "copy";
+  static const String copyFullRecipe = "copyFullRecipe";
+  static const String recipe = "recipe";
+  static const String measurements = "measurements";
+  static const String fullRecipeCopiedSuccessfully = "fullRecipeCopiedSuccessfully";
+  static const String copiedSuccessfully = "copiedSuccessfully";
+  static const String searchHint = "searchHint";
+
   static const String instructions = "instructions";
   //==detergent
   static const String detergent = "detergent";

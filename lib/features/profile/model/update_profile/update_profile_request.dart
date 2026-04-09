@@ -14,7 +14,7 @@ class UpdateProfileRequest with _$UpdateProfileRequest {
     required String email,
     required String phone,
     @JsonKey(name: 'company_name') required String companyName,
-    @JsonKey(name: 'category_id') required int categoryId,
+    @JsonKey(name: 'category_ids') required List<int> categoryIds,
     @JsonKey(includeFromJson: false, includeToJson: false) XFile? image,
   }) = _UpdateProfileRequest;
 
@@ -27,7 +27,7 @@ class UpdateProfileRequest with _$UpdateProfileRequest {
       'email': email,
       'phone': phone,
       'company_name': companyName,
-      'category_id': categoryId,
+      'category_ids[]': categoryIds,
       if (image != null)
         'image': await MultipartFile.fromFile(
           image!.path,

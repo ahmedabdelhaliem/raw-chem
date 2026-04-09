@@ -100,7 +100,7 @@ class RecipeCardWidget extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     DefaultButtonWidget(
-                      text: buttonText ?? AppStrings.viewRecipeDetails.tr(),
+                      text: buttonText ?? AppStrings.viewMaterialDetails.tr(),
                       onPressed: onButtonTap,
                       color: ColorManager.primary,
                       textColor: ColorManager.white,
@@ -121,22 +121,28 @@ class RecipeCardWidget extends StatelessWidget {
   Widget _buildImage() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15.r),
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        fit: BoxFit.cover,
-        width: .75.sw,
-        height: .75.sh,
-        placeholder: (context, url) => Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: Container(color: Colors.white, width: .75.sw, height: .75.sh),
-        ),
-        errorWidget: (context, url, error) => Icon(
-          Icons.image_not_supported_outlined,
-          size: 28.sp,
-          color: ColorManager.greyTextColor.withOpacity(0.3),
-        ),
-      ),
+      child: imageUrl.isEmpty
+          ? Icon(
+              Icons.image_not_supported_outlined,
+              size: 28.sp,
+              color: ColorManager.greyTextColor.withOpacity(0.3),
+            )
+          : CachedNetworkImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+              width: .75.sw,
+              height: .75.sh,
+              placeholder: (context, url) => Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(color: Colors.white, width: .75.sw, height: .75.sh),
+              ),
+              errorWidget: (context, url, error) => Icon(
+                Icons.image_not_supported_outlined,
+                size: 28.sp,
+                color: ColorManager.greyTextColor.withOpacity(0.3),
+              ),
+            ),
     );
   }
 }

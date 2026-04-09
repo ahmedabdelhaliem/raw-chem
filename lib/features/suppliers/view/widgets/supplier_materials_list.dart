@@ -8,6 +8,8 @@ import 'package:raw_chem/features/price_tracker/model/price_tracker_model.dart';
 import 'package:raw_chem/features/suppliers/cubit/suppliers_materials_cubit.dart';
 import 'package:shimmer/shimmer.dart';
 import 'supplier_material_card.dart';
+import 'package:go_router/go_router.dart';
+import 'package:raw_chem/common/resources/app_router.dart';
 
 class SupplierMaterialsList extends StatelessWidget {
   const SupplierMaterialsList({super.key});
@@ -46,7 +48,19 @@ class SupplierMaterialsList extends StatelessWidget {
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  return SupplierMaterialCard(model: state.items[index])
+                  final model = state.items[index];
+                  return SupplierMaterialCard(
+                    model: model,
+                    onTap: () {
+                      context.push(
+                        AppRouters.rawMaterialDetailsView,
+                        extra: {
+                          'material': model.toRawMaterial(),
+                          'isFromPriceTracker': true,
+                        },
+                      );
+                    },
+                  )
                       .animate()
                       .fadeIn(delay: (index * 50).ms, duration: 400.ms)
                       .slideX(begin: 0.1);

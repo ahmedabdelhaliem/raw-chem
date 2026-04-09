@@ -13,7 +13,9 @@ _$UpdateProfileRequestImpl _$$UpdateProfileRequestImplFromJson(
       email: json['email'] as String,
       phone: json['phone'] as String,
       companyName: json['company_name'] as String,
-      categoryId: (json['category_id'] as num).toInt(),
+      categoryIds: (json['category_ids'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$$UpdateProfileRequestImplToJson(
@@ -23,5 +25,5 @@ Map<String, dynamic> _$$UpdateProfileRequestImplToJson(
       'email': instance.email,
       'phone': instance.phone,
       'company_name': instance.companyName,
-      'category_id': instance.categoryId,
+      'category_ids': instance.categoryIds,
     };

@@ -14,7 +14,7 @@ class RegisterRequest with _$RegisterRequest {
     required String birthDate,
     required String password,
     required String passwordConfirmation,
-    required int categoryId,
+    required List<int> categoryIds,
     MultipartFile? image,
   }) = _RegisterRequest;
 
@@ -26,7 +26,7 @@ class RegisterRequest with _$RegisterRequest {
       "birth_date": birthDate,
       "password": password,
       "password_confirmation": passwordConfirmation,
-      "category_id": categoryId,
+      "category_ids[]": categoryIds,
       if (image != null) "image": image,
     });
   }

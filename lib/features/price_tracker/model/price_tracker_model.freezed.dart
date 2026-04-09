@@ -264,7 +264,7 @@ class __$$PriceTrackerModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$PriceTrackerModelImpl implements _PriceTrackerModel {
+class _$PriceTrackerModelImpl extends _PriceTrackerModel {
   const _$PriceTrackerModelImpl(
       {required this.id,
       this.supplier,
@@ -276,7 +276,8 @@ class _$PriceTrackerModelImpl implements _PriceTrackerModel {
       @JsonKey(name: 'min_price') this.minPrice,
       @JsonKey(name: 'max_price') this.maxPrice,
       @JsonKey(name: 'average_price') this.averagePrice,
-      this.date});
+      this.date})
+      : super._();
 
   factory _$PriceTrackerModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$PriceTrackerModelImplFromJson(json);
@@ -357,7 +358,7 @@ class _$PriceTrackerModelImpl implements _PriceTrackerModel {
   }
 }
 
-abstract class _PriceTrackerModel implements PriceTrackerModel {
+abstract class _PriceTrackerModel extends PriceTrackerModel {
   const factory _PriceTrackerModel(
       {required final int id,
       final SupplierModel? supplier,
@@ -370,6 +371,7 @@ abstract class _PriceTrackerModel implements PriceTrackerModel {
       @JsonKey(name: 'max_price') final String? maxPrice,
       @JsonKey(name: 'average_price') final String? averagePrice,
       final String? date}) = _$PriceTrackerModelImpl;
+  const _PriceTrackerModel._() : super._();
 
   factory _PriceTrackerModel.fromJson(Map<String, dynamic> json) =
       _$PriceTrackerModelImpl.fromJson;

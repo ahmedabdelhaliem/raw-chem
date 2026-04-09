@@ -147,6 +147,19 @@
   "addToCart": "Add to Cart",
   "productDetails": "Product Details",
   "settings": "Settings",
-  "profileUpdatedSuccessfully": "Profile updated successfully"
- 
+  "profileUpdatedSuccessfully": "Profile updated successfully",
+  "noItemsToDisplay": "No items to display at this time",
+  "recipeDetails": "Recipe Details",
+  "description": "Description",
+  "ingredients": "Ingredients",
+  "preparationInstructions": "Preparation Instructions",
+  "copy": "Copy",
+  "copyFullRecipe": "Copy Full Recipe",
+  "recipe": "Recipe",
+  "measurements": "Measurements",
+  "fullRecipeCopiedSuccessfully": "Full recipe copied successfully",
+  "copiedSuccessfully": "Copied successfully",
+  "searchHint": "Search ...",
+  "viewMaterialDetails": "View Material Details",
+  "technicalDetails": "Technical Details"
 }

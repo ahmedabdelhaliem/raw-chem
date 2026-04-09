@@ -34,7 +34,7 @@ class _SignupViewState extends State<SignupView> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  int? _selectedCategoryId;
+  List<int> _selectedCategoryIds = [];
 
   @override
   void dispose() {
@@ -94,10 +94,10 @@ class _SignupViewState extends State<SignupView> {
                         birthDateController: _birthDateController,
                         passwordController: _passwordController,
                         confirmPasswordController: _confirmPasswordController,
-                        selectedCategoryId: _selectedCategoryId,
-                        onCategoryChanged: (id) {
+                        selectedCategoryIds: _selectedCategoryIds,
+                        onCategoryChanged: (ids) {
                           setState(() {
-                            _selectedCategoryId = id;
+                            _selectedCategoryIds = ids;
                           });
                         },
                       ),
@@ -115,7 +115,7 @@ class _SignupViewState extends State<SignupView> {
                                     birthDate: _birthDateController.text,
                                     password: _passwordController.text,
                                     passwordConfirmation: _confirmPasswordController.text,
-                                    categoryId: _selectedCategoryId ?? 1,
+                                    categoryIds: _selectedCategoryIds.isNotEmpty ? _selectedCategoryIds : [1],
                                   ),
                                 );
                           }

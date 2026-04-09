@@ -16,6 +16,7 @@ import 'package:raw_chem/features/profile/model/update_profile/update_profile_re
 import 'package:raw_chem/features/profile/cubit/profile_cubit.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 import 'package:raw_chem/core/ui/skeleton/skeleton_widget.dart';
+import 'package:raw_chem/common/widgets/filter_bottom_sheet_widget.dart';
 import 'widgets/personal_data_skeleton.dart';
 
 class PersonalDataView extends StatefulWidget {
@@ -32,7 +33,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   late TextEditingController _companyController;
   bool _hasInitializedFields = false;
   bool _isPopping = false;
-  int? _selectedCategoryId;
+  List<int> _selectedCategoryIds = [];
   XFile? _pickedImage;
 
   Future<void> _pickImage() async {
@@ -60,7 +61,14 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       _emailController = TextEditingController(text: user.email ?? '');
       _phoneController = TextEditingController(text: user.phone ?? '');
       _companyController = TextEditingController(text: user.companyName ?? '');
-      _selectedCategoryId = int.tryParse(user.categoryId?.toString() ?? '') ?? user.category?.id;
+      if (user.categories != null && user.categories!.isNotEmpty) {
+        _selectedCategoryIds = user.categories!.map((c) => c.id!).toList();
+      } else {
+        final singleId = int.tryParse(user.categoryId?.toString() ?? '') ?? user.category?.id;
+        if (singleId != null) {
+          _selectedCategoryIds = [singleId];
+        }
+      }
       _hasInitializedFields = true;
     } else {
       _nameController = TextEditingController();
@@ -92,7 +100,14 @@ class _PersonalDataViewState extends State<PersonalDataView> {
             _emailController.text = state.data?.email ?? '';
             _phoneController.text = state.data?.phone ?? '';
             _companyController.text = state.data?.companyName ?? '';
-            _selectedCategoryId = int.tryParse(state.data?.categoryId?.toString() ?? '') ?? state.data?.category?.id;
+            if (state.data?.categories != null && state.data!.categories!.isNotEmpty) {
+              _selectedCategoryIds = state.data!.categories!.map((c) => c.id!).toList();
+            } else {
+              final singleId = int.tryParse(state.data?.categoryId?.toString() ?? '') ?? state.data?.category?.id;
+              if (singleId != null) {
+                _selectedCategoryIds = [singleId];
+              }
+            }
             _hasInitializedFields = true;
           } else if (state.isSuccess && _hasInitializedFields && !state.isLoading && !_isPopping) {
             _isPopping = true;
@@ -270,7 +285,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                         email: _emailController.text,
                                         phone: _phoneController.text,
                                         companyName: _companyController.text,
-                                        categoryId: _selectedCategoryId ?? 1,
+                                        categoryIds: _selectedCategoryIds.isNotEmpty ? _selectedCategoryIds : [1],
                                         image: _pickedImage,
                                       );
                                       context.read<ProfileCubit>().updateProfile(request);
@@ -367,13 +382,39 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               categories = state.categories;
             }
 
-            final hasValidValue = _selectedCategoryId != null && categories.any((cat) => cat.id == _selectedCategoryId);
+            final selectedNames = _selectedCategoryIds.isNotEmpty
+                ? categories
+                    .where((cat) => _selectedCategoryIds.contains(cat.id))
+                    .map((cat) => cat.name)
+                    .join(', ')
+                : '';
 
-            return DropdownButtonFormField<int>(
-              value: hasValidValue ? _selectedCategoryId : null,
-              dropdownColor: ColorManager.white,
+            return TextFormField(
+              controller: TextEditingController(text: selectedNames),
+              readOnly: true,
               style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500, color: ColorManager.blackText),
+              onTap: () async {
+                List<FilterItem> items = categories
+                    .where((cat) => cat.id != null && cat.name != null)
+                    .map((cat) => FilterItem(id: cat.id!, title: cat.name!))
+                    .toList();
+
+                final result = await FilterBottomSheetWidget.show(
+                  context: context,
+                  items: items,
+                  initialSelectedIds: _selectedCategoryIds,
+                  title: AppStrings.field.tr(),
+                );
+
+                if (result != null) {
+                  setState(() {
+                    _selectedCategoryIds = result;
+                  });
+                }
+              },
               decoration: InputDecoration(
+                hintText: AppStrings.field.tr(),
+                hintStyle: const TextStyle(color: ColorManager.greyTextColor),
                 prefixIcon: Icon(Iconsax.grid_5, color: ColorManager.primary, size: 20.sp),
                 filled: true,
                 fillColor: ColorManager.bg.withOpacity(0.5),
@@ -391,17 +432,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                   borderSide: const BorderSide(color: ColorManager.primary, width: 1.5),
                 ),
               ),
-              items: categories.map((cat) {
-                return DropdownMenuItem<int>(
-                  value: cat.id,
-                  child: Text(cat.name ?? ''),
-                );
-              }).toList(),
-              onChanged: (id) {
-                setState(() {
-                  _selectedCategoryId = id;
-                });
-              },
+              validator: (value) => _selectedCategoryIds.isEmpty ? 'يرجى اختيار مجال' : null,
             );
           },
         ),

@@ -233,7 +233,7 @@ class _RecipesViewState extends State<RecipesView> {
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: 'ابحث ...',
+                  hintText: AppStrings.searchHint.tr(),
                   hintStyle: TextStyle(
                     color: ColorManager.greyTextColor.withOpacity(0.5),
                     fontSize: 14.sp,

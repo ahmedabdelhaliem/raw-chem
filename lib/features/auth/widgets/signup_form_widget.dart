@@ -6,6 +6,7 @@ import 'package:raw_chem/app/imports.dart';
 import '../../../../common/resources/color_manager.dart';
 import '../../../../common/resources/strings_manager.dart';
 import '../../../../common/widgets/default_form_field.dart';
+import '../../../../common/widgets/filter_bottom_sheet_widget.dart';
 
 class SignupFormWidget extends StatelessWidget {
   final TextEditingController nameController;
@@ -15,8 +16,8 @@ class SignupFormWidget extends StatelessWidget {
   final TextEditingController birthDateController;
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
-  final int? selectedCategoryId;
-  final void Function(int?) onCategoryChanged;
+  final List<int> selectedCategoryIds;
+  final void Function(List<int>) onCategoryChanged;
 
   const SignupFormWidget({
     super.key,
@@ -27,7 +28,7 @@ class SignupFormWidget extends StatelessWidget {
     required this.birthDateController,
     required this.passwordController,
     required this.confirmPasswordController,
-    required this.selectedCategoryId,
+    required this.selectedCategoryIds,
     required this.onCategoryChanged,
   });
 
@@ -57,31 +58,36 @@ class SignupFormWidget extends StatelessWidget {
             if (state is CategoriesSuccess) {
               categories = state.categories;
             }
-            return DropdownButtonFormField<int>(
-              value: selectedCategoryId,
-              hint: Text(AppStrings.field.tr(), style: const TextStyle(color: ColorManager.greyTextColor)),
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.grid_view_outlined, color: ColorManager.greyTextColor),
-                filled: true,
-                fillColor: ColorManager.white,
-                contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: ColorManager.lightGrey),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: ColorManager.lightGrey),
-                ),
-              ),
-              items: categories.map((cat) {
-                return DropdownMenuItem<int>(
-                  value: cat.id,
-                  child: Text(cat.name ?? ''),
+            final selectedNames = selectedCategoryIds.isNotEmpty
+                ? categories
+                    .where((cat) => selectedCategoryIds.contains(cat.id))
+                    .map((cat) => cat.name)
+                    .join(', ')
+                : '';
+
+            return DefaultFormField(
+              controller: TextEditingController(text: selectedNames),
+              hintText: AppStrings.field.tr(),
+              readOnly: true,
+              prefixWidget: const Icon(Icons.grid_view_outlined, color: ColorManager.greyTextColor),
+              onTap: () async {
+                List<FilterItem> items = categories
+                    .where((cat) => cat.id != null && cat.name != null)
+                    .map((cat) => FilterItem(id: cat.id!, title: cat.name!))
+                    .toList();
+
+                final result = await FilterBottomSheetWidget.show(
+                  context: context,
+                  items: items,
+                  initialSelectedIds: selectedCategoryIds,
+                  title: AppStrings.field.tr(),
                 );
-              }).toList(),
-              onChanged: onCategoryChanged,
-              validator: (value) => value == null ? 'Please select a category' : null,
+                
+                if (result != null) {
+                  onCategoryChanged(result);
+                }
+              },
+              validator: (value) => selectedCategoryIds.isEmpty ? 'Please select at least one category' : null,
             );
           },
         ),

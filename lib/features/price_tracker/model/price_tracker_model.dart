@@ -7,6 +7,8 @@ part 'price_tracker_model.g.dart';
 
 @freezed
 class PriceTrackerModel with _$PriceTrackerModel {
+  const PriceTrackerModel._();
+
   const factory PriceTrackerModel({
     required int id,
     SupplierModel? supplier,
@@ -23,4 +25,15 @@ class PriceTrackerModel with _$PriceTrackerModel {
 
   factory PriceTrackerModel.fromJson(Map<String, dynamic> json) =>
       _$PriceTrackerModelFromJson(json);
+
+  RawMaterialModel toRawMaterial() {
+    return RawMaterialModel(
+      id: id,
+      name: name,
+      description: description,
+      casNumber: casNumber,
+      image: image,
+      family: family,
+    );
+  }
 }
