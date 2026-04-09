@@ -228,4 +228,29 @@ class AppStrings {
   static const String cosmetic = "cosmetic";
   //==paint
   static const String paint = "paint";
+
+  // Raw Materials & Connection
+  static const String connectWithSupplier = "connectWithSupplier";
+  static const String welcomeUser = "welcomeUser";
+  static const String happyToConnectMessage = "happyToConnectMessage";
+  static const String fullNameHint = "enterFullname";
+  static const String messageLabel = "message";
+  static const String messageHint = "writeMessage";
+  static const String requestQuoteButton = "requestPriceQuote";
+  static const String requestSentSuccess = "requestSentSuccess";
+  static const String startingChat = "startingChat";
+  static const String failedToStartChat = "failedToStartChat";
+  static const String supportComplaints = "supportAndComplaints";
+  static const String unexpectedError = "unexpectedErrorOccurred";
+  static const String searchMaterialsHint = "rawMaterialsSearchHint";
+  static const String subscriptionPackagesTitle = "subscriptionPackagesTitle";
+  static const String choosePackageSubtitle = "chooseSpecialPackage";
+  static const String package1Title = "packageOne";
+  static const String package2Title = "packageTwo";
+  static const String package3Title = "packageThree";
+  static const String egpMonth = "egpMonth";
+  static const String egp2Months = "egpTwoMonths";
+  static const String egp3Months = "egpThreeMonths";
+  static const String sendRequestButton = "sendRequest";
+  static const String category = "category";
 }

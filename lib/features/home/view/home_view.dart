@@ -40,11 +40,6 @@ class HomeView extends StatelessWidget {
               SizedBox(height: 10.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: _buildSearchBar(context),
-              ),
-              SizedBox(height: 10.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: _buildBanner(),
               ),
               SizedBox(height: 10.h),
@@ -78,46 +73,16 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: 80.h),
-            child: Image.asset(ImageAssets.logoBlack, fit: BoxFit.contain),
-          ),
+    return Align(
+      alignment: Alignment.centerRight,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: 80.h),
+        child: Image.asset(
+          ImageAssets.logoBlack,
+          fit: BoxFit.contain,
         ),
-      ],
+      ),
     ).animate().fadeIn(duration: 600.ms).slideY(begin: -0.2); // Slide down for header
-  }
-
-  Widget _buildSearchBar(BuildContext context) {
-    return Container(
-          decoration: BoxDecoration(
-            color: ColorManager.white,
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: ColorManager.black.withOpacity(0.03),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: TextField(
-            textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
-            decoration: InputDecoration(
-              hintText: AppStrings.search.tr(),
-              hintStyle: TextStyle(color: ColorManager.grey, fontSize: 14.sp),
-              prefixIcon: const Icon(Icons.search, color: ColorManager.grey),
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(vertical: 12.h),
-            ),
-          ),
-        )
-        .animate()
-        .fadeIn(delay: 200.ms, duration: 600.ms)
-        .slideY(begin: 0.2); // Slide up for search bar
   }
 
   Widget _buildBanner() {

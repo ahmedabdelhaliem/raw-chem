@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
+import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 import 'package:raw_chem/common/widgets/default_form_field.dart';
@@ -33,7 +35,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
     return Scaffold(
       backgroundColor: ColorManager.bg,
       appBar: DefaultAppBar(
-        text: 'تواصل مع المورد',
+        text: AppStrings.connectWithSupplier.tr(),
         backgroundColor: ColorManager.bg,
         titleColor: ColorManager.black,
         withLeading: true,
@@ -45,7 +47,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
           children: [
             // Welcome Section
             Text(
-              'مرحبا بك',
+              AppStrings.welcomeUser.tr(),
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
@@ -55,7 +57,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
             ),
             SizedBox(height: 10.h),
             Text(
-              'نسعد بتواصلك معنا ، يرجى ملء النموذج أدناه وسنعاود\nالاتصال بك في أقرب وقت ممكن.',
+              AppStrings.happyToConnectMessage.tr(),
               style: TextStyle(
                 fontSize: 12.sp,
                 color: ColorManager.greyTextColor,
@@ -68,14 +70,14 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
             // Form Section
             DefaultFormField(
               controller: _nameController,
-              title: 'الاسم بالكامل',
-              hintText: 'ادخل اسمك بالكامل',
+              title: AppStrings.fullName.tr(),
+              hintText: AppStrings.fullNameHint.tr(),
               fillColor: ColorManager.white,
             ),
             SizedBox(height: 20.h),
             DefaultFormField(
               controller: _emailController,
-              title: 'الايميل',
+              title: AppStrings.email.tr(),
               hintText: 'example@gmail.com',
               fillColor: ColorManager.white,
               suffixIcon: const Icon(Icons.email_outlined, color: ColorManager.greyTextColor),
@@ -84,8 +86,8 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
             SizedBox(height: 20.h),
             DefaultFormField(
               controller: _messageController,
-              title: 'الرسالة',
-              hintText: 'اكتب رسالتك هنا ...',
+              title: AppStrings.messageLabel.tr(),
+              hintText: AppStrings.messageHint.tr(),
               fillColor: ColorManager.white,
               maxLines: 5,
             ),
@@ -96,11 +98,11 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
               children: [
                 Expanded(
                   child: DefaultButtonWidget(
-                    text: 'طلب عرض سعر',
+                    text: AppStrings.requestQuoteButton.tr(),
                     onPressed: () {
                       // TODO: Submit logic
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('تم إرسال طلبك بنجاح')),
+                        SnackBar(content: Text(AppStrings.requestSentSuccess.tr())),
                       );
                       Navigator.pop(context);
                     },
@@ -155,7 +157,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
   Future<void> _handleChat(BuildContext context) async {
     debugPrint("Chat integration: Starting chat initialization...");
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('جاري بدء المحادثة...'), duration: Duration(seconds: 1)),
+      SnackBar(content: Text(AppStrings.startingChat.tr()), duration: const Duration(seconds: 1)),
     );
     
     // Using supplierId 1 as a fallback for support if no specific ID is available
@@ -169,7 +171,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
           debugPrint("Chat integration: API Failure - ${failure.message}");
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('عذراً، فشل بدء المحادثة: ${failure.message}'),
+              content: Text(AppStrings.failedToStartChat.tr(args: [failure.message])),
               backgroundColor: Colors.red,
             ),
           );
@@ -183,7 +185,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
             AppRouters.chatView,
             extra: {
               'chatId': response.chatId,
-              'supplierName': 'الدعم الفني والشكاوى',
+              'supplierName': AppStrings.supportComplaints.tr(),
             },
           );
         },
@@ -191,8 +193,8 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
     } catch (e) {
       debugPrint("Chat integration: Unexpected Error - $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('حدث خطأ غير متوقع، يرجى المحاولة لاحقاً'),
+        SnackBar(
+          content: Text(AppStrings.unexpectedError.tr()),
           backgroundColor: Colors.red,
         ),
       );

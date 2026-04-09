@@ -25,7 +25,7 @@ class RawMaterialDetailsView extends StatelessWidget {
 
         final String imageUrl = currentMaterial.image ?? '';
         final String title = currentMaterial.name ?? '';
-        final String category = currentMaterial.family?.name ?? 'Category';
+        final String category = currentMaterial.family?.name ?? AppStrings.category.tr();
         final String description = currentMaterial.description ?? '';
         final String casNumber = currentMaterial.casNumber ?? '';
 
@@ -33,134 +33,155 @@ class RawMaterialDetailsView extends StatelessWidget {
 
         return Scaffold(
           backgroundColor: ColorManager.bg,
+          extendBodyBehindAppBar: true,
           appBar: DefaultAppBar(
             text: AppStrings.productDetails.tr(),
-            backgroundColor: ColorManager.bg,
+            backgroundColor: Colors.transparent,
             titleColor: ColorManager.black,
             withLeading: true,
           ),
           body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Product Image
+                // Product Image Container
                 Hero(
                   tag: 'raw_material_grid_${currentMaterial.id}',
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20.r),
-                    child: Container(
-                      width: double.infinity,
-                      color: const Color(0xFFF3FAF0),
-                      child: imageUrl.isEmpty
-                          ? Container(
-                              height: .25.sh,
-                              color: Colors.grey[200],
-                              child: Icon(
-                                Icons.image_not_supported_outlined,
-                                size: 40.sp,
-                                color: Colors.grey[400],
+                  child: Container(
+                    width: double.infinity,
+                    height: 0.4.sh,
+                    color: const Color(0xFFF3FAF0),
+                    child: imageUrl.isEmpty
+                        ? Icon(
+                            Icons.image_not_supported_outlined,
+                            size: 60.sp,
+                            color: Colors.grey[400],
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(color: Colors.white),
+                            ),
+                          ),
+                  ),
+                ),
+                
+                // Content Sheet
+                Transform.translate(
+                  offset: Offset(0, -30.r),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
+                    decoration: BoxDecoration(
+                      color: ColorManager.white,
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 15,
+                          offset: const Offset(0, -5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Title Section
+                        Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                title,
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF1B3D2F),
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                            )
-                          : CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              height: .25.sh,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: Container(color: Colors.white, height: .25.sh),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                height: .25.sh,
-                                color: Colors.grey[200],
-                                child: Icon(
-                                  Icons.image_not_supported_outlined,
-                                  size: 40.sp,
-                                  color: Colors.grey[400],
+                              SizedBox(height: 12.h),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFE2F9D1),
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
+                                child: Text(
+                                  category,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: const Color(0xFF4A7D2C),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 30.h),
+
+                        // Description Section
+                        Row(
+                          children: [
+                            const Icon(Icons.description_outlined, color: Color(0xFF4A7D2C), size: 20),
+                            SizedBox(width: 8.w),
+                            Text(
+                              AppStrings.description.tr(),
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF1B3D2F),
+                              ),
                             ),
+                          ],
+                        ),
+                        SizedBox(height: 12.h),
+                        Text(
+                          description,
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: ColorManager.greyTextColor,
+                            height: 1.6,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                        SizedBox(height: 30.h),
+
+                        // Technical Details Section
+                        Container(
+                          padding: EdgeInsets.all(20.w),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF9FBFB),
+                            borderRadius: BorderRadius.circular(20.r),
+                            border: Border.all(color: const Color(0xFFE5E7EB)),
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.info_outline, color: Color(0xFF4A7D2C), size: 18),
+                                  SizedBox(width: 8.w),
+                                  Text(
+                                    AppStrings.technicalDetails.tr(),
+                                    style: TextStyle(
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF1B3D2F),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Divider(height: 24.h, color: const Color(0xFFE5E7EB)),
+                              _buildInfoRow(AppStrings.casNumber.tr(), casNumber, isLoading: isLoading),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 40.h),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(height: 20.h),
-
-                // Title & Category
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF1B3D2F),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 10.h),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE2F9D1),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Text(
-                    category,
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: const Color(0xFF4A7D2C),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
-
-                // Description
-                _buildInfoSection(
-                  '${AppStrings.description.tr()} :',
-                  description,
-                  isLoading: isLoading,
-                ),
-                SizedBox(height: 15.h),
-
-                // Average Price
-
-                // Meta Data
-                _buildInfoSection(
-                  AppStrings.technicalDetails.tr(),
-                  '',
-                  isTitle: true,
-                  isLoading: false,
-                ),
-                SizedBox(height: 8.h),
-                _buildInfoRow(AppStrings.casNumber.tr(), casNumber, isLoading: isLoading),
-
-                SizedBox(height: 40.h),
-
-                // Action Buttons
-                DefaultButtonWidget(
-                  text: AppStrings.addToCart.tr(),
-                  onPressed: () {
-                    // TODO: Add cart logic
-                  },
-                  color: ColorManager.white,
-                  textColor: const Color(0xFF006B3E),
-                  withBorder: true,
-                  borderColor: const Color(0xFF006B3E),
-                  radius: 12.r,
-                  height: 50.h,
-                ),
-                SizedBox(height: 15.h),
-                DefaultButtonWidget(
-                  text: AppStrings.contactSupplier.tr(),
-                  onPressed: () {
-                    PackagesBottomSheet.show(context);
-                  },
-                  color: const Color(0xFF006B3E),
-                  textColor: Colors.white,
-                  radius: 12.r,
-                  height: 50.h,
-                ),
-                SizedBox(height: 20.h),
               ],
             ),
           ),

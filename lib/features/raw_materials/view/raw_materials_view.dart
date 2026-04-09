@@ -195,7 +195,7 @@ class _RawMaterialsViewState extends State<RawMaterialsView> {
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: 'حمض، أو رقم CAS ...',
+                  hintText: AppStrings.searchMaterialsHint.tr(),
                   hintStyle: TextStyle(
                     color: ColorManager.greyTextColor.withOpacity(0.5),
                     fontSize: 14.sp,

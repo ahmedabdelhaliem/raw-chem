@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
+import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 import 'package:raw_chem/features/raw_materials/view/connect_supplier_view.dart';
 
@@ -28,7 +30,7 @@ class PackagesBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'باقات الاشتراك للتواصل مع المورد',
+            AppStrings.subscriptionPackagesTitle.tr(),
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.bold,
@@ -37,7 +39,7 @@ class PackagesBottomSheet extends StatelessWidget {
           ),
           SizedBox(height: 10.h),
           Text(
-            'اختر الباقة المناسبة لك',
+            AppStrings.choosePackageSubtitle.tr(),
             style: TextStyle(fontSize: 12.sp, color: ColorManager.greyTextColor),
           ),
           SizedBox(height: 25.h),
@@ -47,22 +49,22 @@ class PackagesBottomSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildPackageCard(
-                title: 'الباقة الأولى',
-                price: '100 جنية',
-                duration: 'جنية مصري / لشهر',
+                title: AppStrings.package1Title.tr(),
+                price: '100 ${AppStrings.egp.tr()}',
+                duration: AppStrings.egpMonth.tr(),
                 color: const Color(0xFF1B3D2F),
               ),
               _buildPackageCard(
-                title: 'الباقة الثانية',
-                price: '190 جنية',
-                duration: 'جنية مصري / 2 شهر',
+                title: AppStrings.package2Title.tr(),
+                price: '190 ${AppStrings.egp.tr()}',
+                duration: AppStrings.egp2Months.tr(),
                 color: const Color(0xFFD4E7C5),
                 textColor: const Color(0xFF1B3D2F),
               ),
               _buildPackageCard(
-                title: 'الباقة الثالثة',
-                price: '280 جنية',
-                duration: 'جنية مصري / 3 شهر',
+                title: AppStrings.package3Title.tr(),
+                price: '280 ${AppStrings.egp.tr()}',
+                duration: AppStrings.egp3Months.tr(),
                 color: const Color(0xFFBBE4A2),
                 textColor: const Color(0xFF1B3D2F),
               ),
@@ -72,7 +74,7 @@ class PackagesBottomSheet extends StatelessWidget {
 
           // Action Button
           DefaultButtonWidget(
-            text: 'إرسال طلب',
+            text: AppStrings.sendRequestButton.tr(),
             onPressed: () {
               Navigator.pop(context); // Close sheet
               Navigator.push(

@@ -106,11 +106,17 @@ class _DefaultBannerWidgetState<T> extends State<DefaultBannerWidget<T>> {
           borderRadius: BorderRadius.circular(16.r),
           child: CachedNetworkImage(
             imageUrl: widget.imageUrl(image),
+            imageBuilder: (context, imageProvider) => Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             height: double.infinity,
             width: double.infinity,
-            fit: BoxFit.cover,
-            placeholder: (context, url) =>
-                const ShimmerContainerWidget(height: double.infinity),
+            placeholder: (context, url) => const ShimmerContainerWidget(height: double.infinity),
             errorWidget: (context, url, error) => Container(
               color: Colors.grey.shade200,
               child: const Icon(Icons.broken_image, color: Colors.grey),
@@ -144,4 +150,3 @@ class _DefaultBannerWidgetState<T> extends State<DefaultBannerWidget<T>> {
     );
   }
 }
-
