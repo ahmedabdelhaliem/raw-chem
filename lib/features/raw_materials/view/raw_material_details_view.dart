@@ -115,13 +115,22 @@ class RawMaterialDetailsView extends StatelessWidget {
                 SizedBox(height: 20.h),
 
                 // Description
-                _buildInfoSection('${AppStrings.description.tr()} :', description, isLoading: isLoading),
+                _buildInfoSection(
+                  '${AppStrings.description.tr()} :',
+                  description,
+                  isLoading: isLoading,
+                ),
                 SizedBox(height: 15.h),
 
                 // Average Price
 
                 // Meta Data
-                _buildInfoSection(AppStrings.technicalDetails.tr(), '', isTitle: true, isLoading: false),
+                _buildInfoSection(
+                  AppStrings.technicalDetails.tr(),
+                  '',
+                  isTitle: true,
+                  isLoading: false,
+                ),
                 SizedBox(height: 8.h),
                 _buildInfoRow(AppStrings.casNumber.tr(), casNumber, isLoading: isLoading),
 

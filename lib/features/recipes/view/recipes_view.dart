@@ -51,51 +51,6 @@ class _RecipesViewState extends State<RecipesView> {
           titleColor: ColorManager.black,
           withLeading: context.locale.languageCode != 'ar',
           actions: [
-            GestureDetector(
-              onTap: () {
-                context.push(AppRouters.cartView);
-              },
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 10.w),
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: ColorManager.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorManager.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Icon(Icons.shopping_cart_outlined, color: ColorManager.black, size: 20.sp),
-                    Positioned(
-                      top: -2.h,
-                      right: -2.w,
-                      child: Container(
-                        padding: EdgeInsets.all(3.w),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF006B3E),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          '2',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 6.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
             if (context.locale.languageCode == 'ar')
               IconButton(
                 icon: const Icon(Icons.arrow_forward_ios_rounded, color: ColorManager.black),
@@ -105,9 +60,7 @@ class _RecipesViewState extends State<RecipesView> {
         ),
         body: Column(
           children: [
-            Builder(
-              builder: (context) => _buildSearchSection(context),
-            ),
+            Builder(builder: (context) => _buildSearchSection(context)),
             Expanded(
               child: BlocBuilder<RecipesCubit, BaseState<RecipeModel>>(
                 builder: (context, state) {

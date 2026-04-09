@@ -10,6 +10,7 @@ import 'package:raw_chem/features/auth/view/success_view.dart';
 import 'package:raw_chem/features/auth/view/verify_otp_view.dart';
 import 'package:raw_chem/features/cart/view/cart_view.dart';
 import 'package:raw_chem/features/cart/view/order_success_view.dart';
+import 'package:raw_chem/features/categories/view/category_items_view.dart';
 import 'package:raw_chem/features/home/view/home_view.dart';
 import 'package:raw_chem/features/main/view/main_view.dart';
 import 'package:raw_chem/features/onboarding/view/onboarding_view.dart';
@@ -31,7 +32,6 @@ import 'package:raw_chem/features/recipes/view/recipes_view.dart';
 import 'package:raw_chem/features/splash/view/splash_view.dart';
 import 'package:raw_chem/features/suppliers/view/supplier_details_view.dart';
 import 'package:raw_chem/features/suppliers/view/suppliers_view.dart';
-import 'package:raw_chem/features/categories/view/category_items_view.dart';
 
 abstract class AppRouters {
   static const String root = '/';
@@ -156,7 +156,7 @@ abstract class AppRouters {
           child: const TermsConditionsView(),
         ),
       ),
-      GoRoute(path: AppRouters.cartView, builder: (context, state) => const CartView()),
+      // GoRoute(path: AppRouters.cartView, builder: (context, state) => const CartView()),
       GoRoute(
         path: AppRouters.orderSuccessView,
         builder: (context, state) => const OrderSuccessView(),

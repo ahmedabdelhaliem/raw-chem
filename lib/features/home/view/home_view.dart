@@ -87,78 +87,37 @@ class HomeView extends StatelessWidget {
             child: Image.asset(ImageAssets.logoBlack, fit: BoxFit.contain),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            context.push(AppRouters.cartView);
-          },
-          child: Container(
-            padding: EdgeInsets.all(10.w),
-            decoration: BoxDecoration(
-              color: ColorManager.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: ColorManager.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Icon(Icons.shopping_cart_outlined, color: ColorManager.black, size: 24.sp),
-                Positioned(
-                  top: -2.h,
-                  right: -2.w,
-                  child: Container(
-                    padding: EdgeInsets.all(4.w),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF006B3E),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '2',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 8.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ],
     ).animate().fadeIn(duration: 600.ms).slideY(begin: -0.2); // Slide down for header
   }
 
   Widget _buildSearchBar(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: ColorManager.white,
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: ColorManager.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+          decoration: BoxDecoration(
+            color: ColorManager.white,
+            borderRadius: BorderRadius.circular(12.r),
+            boxShadow: [
+              BoxShadow(
+                color: ColorManager.black.withOpacity(0.03),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: TextField(
-        textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
-        decoration: InputDecoration(
-          hintText: AppStrings.search.tr(),
-          hintStyle: TextStyle(color: ColorManager.grey, fontSize: 14.sp),
-          prefixIcon: const Icon(Icons.search, color: ColorManager.grey),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 12.h),
-        ),
-      ),
-    ).animate().fadeIn(delay: 200.ms, duration: 600.ms).slideY(begin: 0.2); // Slide up for search bar
+          child: TextField(
+            textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+            decoration: InputDecoration(
+              hintText: AppStrings.search.tr(),
+              hintStyle: TextStyle(color: ColorManager.grey, fontSize: 14.sp),
+              prefixIcon: const Icon(Icons.search, color: ColorManager.grey),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(vertical: 12.h),
+            ),
+          ),
+        )
+        .animate()
+        .fadeIn(delay: 200.ms, duration: 600.ms)
+        .slideY(begin: 0.2); // Slide up for search bar
   }
 
   Widget _buildBanner() {
@@ -260,137 +219,133 @@ class HomeView extends StatelessWidget {
                       padding: EdgeInsetsDirectional.only(end: 15.w),
                       child: SizedBox(
                         width: .58.sw,
-                        child:
-                            GestureDetector(
-                                  onTap: () {
-                                    final material = RawMaterialModel(
-                                      id: item.id,
-                                      name: item.name,
-                                      casNumber: item.casNumber,
-                                      description: item.description,
-                                      image: item.image,
-                                      family: item.family,
-                                    );
-                                    context.push(
-                                      AppRouters.rawMaterialDetailsView,
-                                      extra: {'material': material, 'isFromPriceTracker': true},
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(12.w),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFF7FDF5),
-                                      borderRadius: BorderRadius.circular(12.r),
-                                      border: Border.all(color: const Color(0xFFE2F9D1), width: 1),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.02),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 4),
+                        child: GestureDetector(
+                          onTap: () {
+                            final material = RawMaterialModel(
+                              id: item.id,
+                              name: item.name,
+                              casNumber: item.casNumber,
+                              description: item.description,
+                              image: item.image,
+                              family: item.family,
+                            );
+                            context.push(
+                              AppRouters.rawMaterialDetailsView,
+                              extra: {'material': material, 'isFromPriceTracker': true},
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(12.w),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF7FDF5),
+                              borderRadius: BorderRadius.circular(12.r),
+                              border: Border.all(color: const Color(0xFFE2F9D1), width: 1),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.02),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        item.name ?? "Product",
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF1B3D2F),
+                                        ),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_today_outlined,
+                                          size: 14.sp,
+                                          color: const Color(0xFFB4B4CC),
+                                        ),
+                                        SizedBox(width: 4.w),
+                                        Text(
+                                          date,
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: const Color(0xFFB4B4CC),
+                                          ),
                                         ),
                                       ],
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                item.name ?? "Product",
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: const Color(0xFF1B3D2F),
-                                                ),
-                                              ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.calendar_today_outlined,
-                                                  size: 14.sp,
-                                                  color: const Color(0xFFB4B4CC),
-                                                ),
-                                                SizedBox(width: 4.w),
-                                                Text(
-                                                  date,
-                                                  style: TextStyle(
-                                                    fontSize: 12.sp,
-                                                    color: const Color(0xFFB4B4CC),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 6.h),
-                                        if (item.family != null)
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 10.w,
-                                              vertical: 4.h,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xFFE2F9D1),
-                                              borderRadius: BorderRadius.circular(6.r),
-                                            ),
-                                            child: Text(
-                                              item.family?.name ?? '',
-                                              style: TextStyle(
-                                                fontSize: 11.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: const Color(0xFF4A7D2C),
-                                              ),
-                                            ),
-                                          ),
-                                        SizedBox(height: 10.h),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                "${AppStrings.source.tr()}: ${item.supplier?.name ?? ''}",
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 11.sp,
-                                                  color: const Color(0xFF4A7D2C),
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  AppStrings.currentPrice.tr(),
-                                                  style: TextStyle(
-                                                    fontSize: 10.sp,
-                                                    color: const Color(0xFFB4B4CC),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 4.h),
-                                                Text(
-                                                  "${AppStrings.egp.tr()}${item.averagePrice ?? ''}",
-                                                  style: TextStyle(
-                                                    fontSize: 13.sp,
-                                                    fontWeight: FontWeight.w900,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                  ],
+                                ),
+                                SizedBox(height: 6.h),
+                                if (item.family != null)
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFE2F9D1),
+                                      borderRadius: BorderRadius.circular(6.r),
+                                    ),
+                                    child: Text(
+                                      item.family?.name ?? '',
+                                      style: TextStyle(
+                                        fontSize: 11.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF4A7D2C),
+                                      ),
                                     ),
                                   ),
+                                SizedBox(height: 10.h),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "${AppStrings.source.tr()}: ${item.supplier?.name ?? ''}",
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 11.sp,
+                                          color: const Color(0xFF4A7D2C),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          AppStrings.currentPrice.tr(),
+                                          style: TextStyle(
+                                            fontSize: 10.sp,
+                                            color: const Color(0xFFB4B4CC),
+                                          ),
+                                        ),
+                                        SizedBox(height: 4.h),
+                                        Text(
+                                          "${AppStrings.egp.tr()}${item.averagePrice ?? ''}",
+                                          style: TextStyle(
+                                            fontSize: 13.sp,
+                                            fontWeight: FontWeight.w900,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     );
                   }),

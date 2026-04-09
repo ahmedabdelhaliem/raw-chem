@@ -167,7 +167,7 @@ class AppStrings {
   static const String fullName = "fullName";
   static const String dateOfBirth = "dateOfBirth";
   static const String save = "save";
-  
+
   // Orders
   static const String currentOrders = "currentOrders";
   static const String previousOrders = "previousOrders";
@@ -201,7 +201,8 @@ class AppStrings {
   static const String addToCart = "addToCart";
   static const String contactSupplier = "contactSupplier";
   static const String profileUpdatedSuccessfully = "profileUpdatedSuccessfully";
-  static const String retry = "retry"; // fixed to match json key if we want (wait, earlier it was uppercase Retry, it's fine)
+  static const String retry =
+      "retry"; // fixed to match json key if we want (wait, earlier it was uppercase Retry, it's fine)
   static const String noData = "noDataFound"; // changed to match json key
   static const String productDetails = "productDetails";
   static const String technicalDetails = "technicalDetails";
@@ -227,5 +228,4 @@ class AppStrings {
   static const String cosmetic = "cosmetic";
   //==paint
   static const String paint = "paint";
-
 }

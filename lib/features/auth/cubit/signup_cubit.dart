@@ -1,3 +1,4 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/app_prefs.dart';
 import '../../../../core/state/base_state.dart';
 import '../model/register/register_request.dart';

@@ -20,8 +20,16 @@ Future<void> main() async {
   ]);
 
   // Initialize Firebase once
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    if (e.toString().contains('duplicate-app')) {
+      debugPrint('Firebase already initialized');
+    } else {
+      rethrow;
+    }
   }
 
   // Firebase Messaging
