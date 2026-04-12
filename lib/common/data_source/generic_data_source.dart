@@ -87,24 +87,47 @@ class GenericDataSource {
 
   Future<Either<Failure, T>> fetchResult<T>({
     required String endpoint,
+    String method = 'GET',
     PaginationParams? params,
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
     T Function(Map<String, dynamic>)? fromJson,
   }) async {
-    final result = await _apiConsumer.get(endpoint,
-        data: data,
-        queryParameters: {
-          if (params != null) ...params.toJson(),
-          if (queryParameters != null) ...queryParameters,
-        },
-        headers: headers);
-    return result.fold(
+    final Future<Either<Failure, Map<String, dynamic>>> result;
+
+    switch (method.toUpperCase()) {
+      case 'POST':
+        result = _apiConsumer.post(endpoint,
+            data: data, queryParameters: queryParameters, headers: headers);
+        break;
+      case 'PATCH':
+        result = _apiConsumer.patch(endpoint,
+            data: data, queryParameters: queryParameters, headers: headers);
+        break;
+      case 'PUT':
+        result = _apiConsumer.put(endpoint,
+            data: data, queryParameters: queryParameters, headers: headers);
+        break;
+      case 'DELETE':
+        result = _apiConsumer.delete(endpoint,
+            data: data, queryParameters: queryParameters, headers: headers);
+        break;
+      default:
+        result = _apiConsumer.get(endpoint,
+            data: data,
+            queryParameters: {
+              if (params != null) ...params.toJson(),
+              if (queryParameters != null) ...queryParameters,
+            },
+            headers: headers);
+    }
+
+    return (await result).fold(
       (left) => Left(left),
       (right) {
         try {
-          return Right(fromJson!(right['data']));
+          return Right(fromJson != null ? fromJson(right['data']) : right['data'] as T);
         } catch (e, stackTrace) {
           log(stackTrace.toString());
           log(e.toString());

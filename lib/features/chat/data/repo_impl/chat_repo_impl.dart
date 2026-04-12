@@ -3,6 +3,7 @@ import 'package:raw_chem/common/http/failure.dart';
 import 'package:raw_chem/features/chat/data/data_source/chat_api_data_source.dart';
 import 'package:raw_chem/features/chat/data/data_source/chat_socket_service.dart';
 import 'package:raw_chem/features/chat/domain/model/message_model.dart';
+import 'package:raw_chem/features/chat/domain/model/chat_model.dart';
 import 'package:raw_chem/features/chat/domain/repo/chat_repo.dart';
 
 class ChatRepoImpl implements ChatRepo {
@@ -38,6 +39,11 @@ class ChatRepoImpl implements ChatRepo {
       "chat_id": chatId,
       "message": message,
     });
+  }
+
+  @override
+  Future<Either<Failure, List<ChatModel>>> getChats() {
+    return _apiDataSource.getChats();
   }
 
   @override

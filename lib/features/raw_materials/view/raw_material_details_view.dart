@@ -3,7 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
@@ -13,8 +15,13 @@ import 'package:shimmer/shimmer.dart';
 
 class RawMaterialDetailsView extends StatelessWidget {
   final RawMaterialModel material;
+  final bool isFromPriceTracker;
 
-  const RawMaterialDetailsView({super.key, required this.material});
+  const RawMaterialDetailsView({
+    super.key,
+    required this.material,
+    this.isFromPriceTracker = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -185,6 +192,29 @@ class RawMaterialDetailsView extends StatelessWidget {
               ],
             ),
           ),
+          bottomNavigationBar: isFromPriceTracker
+              ? Container(
+                  padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 20.h),
+                  decoration: BoxDecoration(
+                    color: ColorManager.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, -5),
+                      ),
+                    ],
+                  ),
+                  child: DefaultButtonWidget(
+                    text: AppStrings.purchaseRequest.tr(),
+                    color: ColorManager.primary,
+                    textColor: ColorManager.white,
+                    onPressed: () {
+                      context.push(AppRouters.connectSupplierView, extra: currentMaterial.id);
+                    },
+                  ),
+                )
+              : null,
         );
       },
     );

@@ -184,5 +184,15 @@
   "egpTwoMonths": "EGP / 2 Months",
   "egpThreeMonths": "EGP / 3 Months",
   "sendRequest": "Send Request",
-  "category": "Category"
+  "category": "Category",
+  "purchaseRequest": "Purchase Request",
+  "country": "Country",
+  "city": "City",
+  "governorate": "Governorate",
+  "detailedArea": "Detailed Area",
+  "detailedAreaHint": "Write the detailed area here...",
+  "quantity": "Quantity",
+  "quantityHint": "Enter requested quantity",
+  "recipientPhone": "Recipient Phone",
+  "recipientPhoneHint": "Enter phone number"
 }

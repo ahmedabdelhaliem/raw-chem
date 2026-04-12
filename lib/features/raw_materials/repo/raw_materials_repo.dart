@@ -49,5 +49,30 @@ class RawMaterialsRepo {
       fromJson: (json) => MaterialFamilyModel.fromJson(json),
     );
   }
+
+  Future<Either<Failure, dynamic>> createPurchaseOrder({
+    required int materialId,
+    required double quantity,
+    required int countryId,
+    required int governorateId,
+    required int cityId,
+    required String distinguishingMark,
+    required String recipientPhone,
+  }) async {
+    return await _dataSource.fetchResult<dynamic>(
+      endpoint: EndPoints.createPurchaseOrder,
+      method: 'POST',
+      data: {
+        'supplier_material_id': materialId,
+        'quantity': quantity,
+        'country_id': countryId,
+        'governorate_id': governorateId,
+        'city_id': cityId,
+        'distinguishing_mark': distinguishingMark,
+        'recipient_phone': recipientPhone,
+      },
+      fromJson: (json) => json, // Returning the raw response data
+    );
+  }
 }
 

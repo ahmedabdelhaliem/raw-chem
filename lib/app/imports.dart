@@ -12,6 +12,10 @@ import 'package:raw_chem/features/suppliers/repo/suppliers_repo.dart';
 import 'package:raw_chem/features/suppliers/cubit/suppliers_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:raw_chem/features/raw_materials/repo/locations_repo.dart';
+import 'package:raw_chem/features/raw_materials/cubit/locations_cubit.dart';
+import 'package:raw_chem/features/raw_materials/cubit/create_purchase_order_cubit.dart';
+
 import 'package:raw_chem/features/auth/cubit/signup_cubit.dart';
 import 'package:raw_chem/features/auth/cubit/verify_otp_cubit.dart';
 import 'package:raw_chem/features/auth/cubit/forgot_pwd_cubit.dart';
@@ -39,6 +43,7 @@ import 'package:raw_chem/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:raw_chem/features/suppliers/cubit/suppliers_materials_cubit.dart';
 import 'package:raw_chem/features/chat/domain/repo/chat_repo.dart';
 import 'package:raw_chem/features/chat/presentation/cubit/chat_cubit.dart';
+import 'package:raw_chem/features/chat/presentation/cubit/chat_inbox_cubit.dart';
 import 'package:raw_chem/features/chat/data/data_source/chat_api_data_source.dart';
 import 'package:raw_chem/features/chat/data/data_source/chat_socket_service.dart';
 import 'package:raw_chem/features/chat/data/repo_impl/chat_repo_impl.dart';
@@ -67,6 +72,10 @@ export '../features/raw_materials/cubit/raw_materials_cubit.dart';
 export '../features/raw_materials/cubit/raw_material_details_cubit.dart';
 export '../features/raw_materials/model/raw_material_model.dart';
 export '../features/raw_materials/repo/raw_materials_repo.dart';
+export '../features/raw_materials/repo/locations_repo.dart';
+export '../features/raw_materials/cubit/locations_cubit.dart';
+export '../features/raw_materials/cubit/create_purchase_order_cubit.dart';
+export '../features/raw_materials/model/location_models.dart';
 export '../features/recipes/cubit/recipes_cubit.dart';
 export '../features/recipes/cubit/recipe_details_cubit.dart';
 export '../features/recipes/model/recipe_model.dart';
@@ -95,6 +104,7 @@ export '../features/suppliers/cubit/suppliers_cubit.dart';
 export '../features/suppliers/cubit/suppliers_materials_cubit.dart';
 export '../features/chat/domain/repo/chat_repo.dart';
 export '../features/chat/presentation/cubit/chat_cubit.dart';
+export '../features/chat/presentation/cubit/chat_inbox_cubit.dart';
 export '../features/chat/domain/model/message_model.dart';
 
 import 'app_constants.dart';

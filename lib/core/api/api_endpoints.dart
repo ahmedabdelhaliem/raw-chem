@@ -27,4 +27,11 @@ class EndPoints {
   // Chat
   static const String chats = "/chats";
   static String chatMessages(int id) => "/chats/$id/messages";
+
+  // Locations
+  static const String countries = "/countries";
+  static String governorates(int countryId) => "/governorates/$countryId";
+  static String cities(int governorateId) => "/cities/$governorateId";
+
+  static const String createPurchaseOrder = "/supplier-materials/purchase-orders";
 }

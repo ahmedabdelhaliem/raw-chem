@@ -253,4 +253,20 @@ class AppStrings {
   static const String egp3Months = "egpThreeMonths";
   static const String sendRequestButton = "sendRequest";
   static const String category = "category";
+  static const String purchaseRequest = "purchaseRequest";
+  static const String country = "country";
+  static const String city = "city";
+  static const String governorate = "governorate";
+  static const String detailedArea = "detailedArea";
+  static const String detailedAreaHint = "detailedAreaHint";
+  static const String quantity = "quantity";
+  static const String quantityHint = "quantityHint";
+  static const String recipientPhone = "recipientPhone";
+  static const String recipientPhoneHint = "recipientPhoneHint";
+  
+  // Chat
+  static const String messages = "messages";
+  static const String noMessagesYet = "noMessagesYet";
+  static const String typeAMessage = "typeAMessage";
+  static const String chatInbox = "chatInbox";
 }

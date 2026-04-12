@@ -7,14 +7,15 @@ import 'package:raw_chem/common/widgets/default_button_widget.dart';
 import 'package:raw_chem/features/raw_materials/view/connect_supplier_view.dart';
 
 class PackagesBottomSheet extends StatelessWidget {
-  const PackagesBottomSheet({super.key});
+  final int materialId;
+  const PackagesBottomSheet({super.key, required this.materialId});
 
-  static void show(BuildContext context) {
+  static void show(BuildContext context, int materialId) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => const PackagesBottomSheet(),
+      builder: (context) => PackagesBottomSheet(materialId: materialId),
     );
   }
 
@@ -79,7 +80,7 @@ class PackagesBottomSheet extends StatelessWidget {
               Navigator.pop(context); // Close sheet
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ConnectSupplierView()),
+                MaterialPageRoute(builder: (context) => ConnectSupplierView(materialId: this.materialId)),
               );
             },
             color: const Color(0xFF006B3E),

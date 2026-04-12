@@ -1,12 +1,14 @@
 import 'package:raw_chem/common/http/api_consumer.dart';
 import 'package:raw_chem/core/api/api_endpoints.dart';
 import 'package:raw_chem/features/chat/domain/model/message_model.dart';
+import 'package:raw_chem/features/chat/domain/model/chat_model.dart';
 import 'package:raw_chem/common/http/failure.dart';
 import 'package:raw_chem/common/http/either.dart';
 
 abstract class ChatApiDataSource {
   Future<Either<Failure, CreateChatResponse>> createChat(int supplierId);
   Future<Either<Failure, List<MessageModel>>> getChatMessages(int chatId);
+  Future<Either<Failure, List<ChatModel>>> getChats();
 }
 
 class ChatApiDataSourceImpl implements ChatApiDataSource {
@@ -34,6 +36,18 @@ class ChatApiDataSourceImpl implements ChatApiDataSource {
       (json) {
         final List data = json['data'] ?? [];
         return Right(data.map((e) => MessageModel.fromJson(e)).toList());
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ChatModel>>> getChats() async {
+    final response = await _apiConsumer.get(EndPoints.chats);
+    return response.fold(
+      (failure) => Left(failure),
+      (json) {
+        final List data = json['data'] ?? [];
+        return Right(data.map((e) => ChatModel.fromJson(e)).toList());
       },
     );
   }

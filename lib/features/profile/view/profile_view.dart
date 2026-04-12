@@ -161,19 +161,25 @@ class _ProfileViewState extends State<ProfileView> {
                               children: [
                                 // Account Section
                                 _buildSectionTitle(AppStrings.myPersonalData.tr()),
-                                _buildMenuCard([
-                                  ProfileMenuItemWidget(
-                                    title: AppStrings.myPersonalData.tr(),
-                                    iconData: Iconsax.user,
-                                    onTap: () => context.push(AppRouters.personalDataView),
-                                  ),
-                                  _buildDivider(),
-                                  ProfileMenuItemWidget(
-                                    title: AppStrings.ordersHistory.tr(),
-                                    iconData: Iconsax.document,
-                                    onTap: () => context.push(AppRouters.ordersHistoryView),
-                                  ),
-                                ]),
+                                  _buildMenuCard([
+                                    ProfileMenuItemWidget(
+                                      title: AppStrings.myPersonalData.tr(),
+                                      iconData: Iconsax.user,
+                                      onTap: () => context.push(AppRouters.personalDataView),
+                                    ),
+                                    _buildDivider(),
+                                    ProfileMenuItemWidget(
+                                      title: AppStrings.chatInbox.tr(),
+                                      iconData: Iconsax.message_2,
+                                      onTap: () => context.push(AppRouters.chatInboxView),
+                                    ),
+                                    _buildDivider(),
+                                    ProfileMenuItemWidget(
+                                      title: AppStrings.ordersHistory.tr(),
+                                      iconData: Iconsax.document,
+                                      onTap: () => context.push(AppRouters.ordersHistoryView),
+                                    ),
+                                  ]),
 
                                 SizedBox(height: 24.h),
 

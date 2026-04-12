@@ -8,11 +8,12 @@ import 'package:raw_chem/features/auth/view/signup_success_view.dart';
 import 'package:raw_chem/features/auth/view/signup_view.dart';
 import 'package:raw_chem/features/auth/view/success_view.dart';
 import 'package:raw_chem/features/auth/view/verify_otp_view.dart';
-import 'package:raw_chem/features/cart/view/cart_view.dart';
 import 'package:raw_chem/features/cart/view/order_success_view.dart';
 import 'package:raw_chem/features/categories/view/category_items_view.dart';
-import 'package:raw_chem/features/home/view/home_view.dart';
+import 'package:raw_chem/features/chat/presentation/view/chat_inbox_view.dart';
+import 'package:raw_chem/features/chat/presentation/cubit/chat_inbox_cubit.dart';
 import 'package:raw_chem/features/chat/presentation/view/chat_view.dart';
+import 'package:raw_chem/features/home/view/home_view.dart';
 import 'package:raw_chem/features/main/view/main_view.dart';
 import 'package:raw_chem/features/onboarding/view/onboarding_view.dart';
 import 'package:raw_chem/features/price_tracker/view/price_tracker_view.dart';
@@ -68,6 +69,7 @@ abstract class AppRouters {
   static const String priceTrackerView = '/priceTracker';
   static const String categoryItemsView = '/categoryItems';
   static const String chatView = '/chat';
+  static const String chatInboxView = '/chatInbox';
 
   static final GoRouter router = GoRouter(
     initialLocation: AppRouters.splashView,
@@ -188,7 +190,10 @@ abstract class AppRouters {
             create: (context) =>
                 instance<RawMaterialDetailsCubit>()
                   ..getMaterialDetails(material.id, isFromPriceTracker: isFromPriceTracker),
-            child: RawMaterialDetailsView(material: material),
+            child: RawMaterialDetailsView(
+              material: material,
+              isFromPriceTracker: isFromPriceTracker,
+            ),
           );
         },
       ),
@@ -209,7 +214,10 @@ abstract class AppRouters {
       ),
       GoRoute(
         path: AppRouters.connectSupplierView,
-        builder: (context, state) => const ConnectSupplierView(),
+        builder: (context, state) {
+          final materialId = state.extra as int;
+          return ConnectSupplierView(materialId: materialId);
+        },
       ),
       GoRoute(
         path: AppRouters.suppliersView,
@@ -242,7 +250,7 @@ abstract class AppRouters {
           return CategoryItemsView(category: category);
         },
       ),
-    GoRoute(
+      GoRoute(
         path: AppRouters.chatView,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
@@ -253,6 +261,13 @@ abstract class AppRouters {
             child: ChatView(chatId: chatId, supplierName: supplierName),
           );
         },
+      ),
+      GoRoute(
+        path: AppRouters.chatInboxView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => instance<ChatInboxCubit>(),
+          child: const ChatInboxView(),
+        ),
       ),
     ],
   );

@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
@@ -12,10 +11,41 @@ class NotificationsSettingsView extends StatefulWidget {
   State<NotificationsSettingsView> createState() => _NotificationsSettingsViewState();
 }
 
+class DummyNotification {
+  final String title;
+  final String body;
+  final String time;
+  final bool isRead;
+
+  DummyNotification({
+    required this.title,
+    required this.body,
+    required this.time,
+    this.isRead = false,
+  });
+}
+
 class _NotificationsSettingsViewState extends State<NotificationsSettingsView> {
-  bool _soundEnabled = true;
-  bool _generalNotificationsEnabled = true;
-  bool _appUpdatesEnabled = true;
+  final List<DummyNotification> _notifications = [
+    DummyNotification(
+      title: "New Offer Available!",
+      body: "Up to 30% discount on raw materials has been added.",
+      time: "2 hours ago",
+      isRead: false,
+    ),
+    DummyNotification(
+      title: "Order Update #12345",
+      body: "Your order has been shipped successfully.",
+      time: "5 hours ago",
+      isRead: true,
+    ),
+    DummyNotification(
+      title: "Price Alert",
+      body: "There are price changes in tracked products.",
+      time: "2 days ago",
+      isRead: true,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -35,61 +65,101 @@ class _NotificationsSettingsViewState extends State<NotificationsSettingsView> {
         elevation: 0,
         iconTheme: const IconThemeData(color: ColorManager.blackText),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
-        child: Container(
-          decoration: BoxDecoration(
-            color: ColorManager.white,
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Column(
-            children: [
-              _buildSwitchRow(
-                title: AppStrings.sound.tr(),
-                value: _soundEnabled,
-                onChanged: (val) => setState(() => _soundEnabled = val),
+      body: _notifications.isEmpty
+          ? Center(
+              child: Text(
+                AppStrings.noItemsToDisplay.tr(),
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: ColorManager.greyTextColor,
+                ),
               ),
-              Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
-              _buildSwitchRow(
-                title: AppStrings.generalNotifications.tr(),
-                value: _generalNotificationsEnabled,
-                onChanged: (val) => setState(() => _generalNotificationsEnabled = val),
-              ),
-              Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
-              _buildSwitchRow(
-                title: AppStrings.appUpdates.tr(),
-                value: _appUpdatesEnabled,
-                onChanged: (val) => setState(() => _appUpdatesEnabled = val),
-              ),
-            ],
-          ),
-        ),
-      ),
+            )
+          : ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+              itemCount: _notifications.length,
+              separatorBuilder: (context, index) => SizedBox(height: 12.h),
+              itemBuilder: (context, index) {
+                final notification = _notifications[index];
+                return _buildNotificationCard(notification);
+              },
+            ),
     );
   }
 
-  Widget _buildSwitchRow({
-    required String title,
-    required bool value,
-    required ValueChanged<bool> onChanged,
-  }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+  Widget _buildNotificationCard(DummyNotification notification) {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: notification.isRead ? ColorManager.white : const Color(0xFFF0F9F5),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: notification.isRead ? Colors.transparent : ColorManager.primary.withOpacity(0.3),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: ColorManager.blackText,
-              fontWeight: FontWeight.w500,
+          Container(
+            padding: EdgeInsets.all(10.w),
+            decoration: BoxDecoration(
+              color: notification.isRead ? ColorManager.bg : ColorManager.primary,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.notifications_active_outlined,
+              color: notification.isRead ? ColorManager.primary : ColorManager.white,
+              size: 20.sp,
             ),
           ),
-          CupertinoSwitch(
-            value: value,
-            activeColor: ColorManager.primary,
-            onChanged: onChanged,
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        notification.title,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          color: ColorManager.blackText,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      notification.time,
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: ColorManager.greyTextColor,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 6.h),
+                Text(
+                  notification.body,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: ColorManager.greyTextColor,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

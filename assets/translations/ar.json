@@ -182,5 +182,15 @@
   "egpTwoMonths": "جنية مصري / 2 شهر",
   "egpThreeMonths": "جنية مصري / 3 شهر",
   "sendRequest": "إرسال طلب",
-  "category": "القسم"
+  "category": "القسم",
+  "purchaseRequest": "طلب شراء",
+  "country": "الدولة",
+  "city": "المدينة",
+  "governorate": "المحافظة",
+  "detailedArea": "المنطقة بالتفصيل",
+  "detailedAreaHint": "اكتب المنطقة بالتفصيل هنا...",
+  "quantity": "الكمية",
+  "quantityHint": "ادخل الكمية المطلوبة",
+  "recipientPhone": "رقم هاتف المستلم",
+  "recipientPhoneHint": "ادخل رقم الهاتف"
 }
