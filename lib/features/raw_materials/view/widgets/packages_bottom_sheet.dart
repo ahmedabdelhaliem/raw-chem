@@ -80,7 +80,9 @@ class PackagesBottomSheet extends StatelessWidget {
               Navigator.pop(context); // Close sheet
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ConnectSupplierView(materialId: this.materialId)),
+                MaterialPageRoute(
+                  builder: (context) => ConnectSupplierView(materialId: materialId),
+                ),
               );
             },
             color: const Color(0xFF006B3E),
@@ -91,10 +93,7 @@ class PackagesBottomSheet extends StatelessWidget {
             textFirst: true,
             iconBuilder: Container(
               padding: EdgeInsets.all(5.w),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
+              decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
               child: Icon(Icons.arrow_back, color: const Color(0xFF006B3E), size: 14.sp),
             ),
           ),

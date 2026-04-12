@@ -12,6 +12,7 @@ import 'package:raw_chem/features/cart/view/order_success_view.dart';
 import 'package:raw_chem/features/categories/view/category_items_view.dart';
 import 'package:raw_chem/features/chat/presentation/view/chat_inbox_view.dart';
 import 'package:raw_chem/features/chat/presentation/cubit/chat_inbox_cubit.dart';
+import 'package:raw_chem/features/payment/view/fawaterk_webview.dart';
 import 'package:raw_chem/features/chat/presentation/view/chat_view.dart';
 import 'package:raw_chem/features/home/view/home_view.dart';
 import 'package:raw_chem/features/main/view/main_view.dart';
@@ -70,6 +71,7 @@ abstract class AppRouters {
   static const String categoryItemsView = '/categoryItems';
   static const String chatView = '/chat';
   static const String chatInboxView = '/chatInbox';
+  static const String fawaterkWebView = '/fawaterkWebView';
 
   static final GoRouter router = GoRouter(
     initialLocation: AppRouters.splashView,
@@ -268,6 +270,21 @@ abstract class AppRouters {
           create: (context) => instance<ChatInboxCubit>(),
           child: const ChatInboxView(),
         ),
+      ),
+      GoRoute(
+        path: AppRouters.fawaterkWebView,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final url = extra['url'] as String;
+          final successUrl = extra['successUrl'] as String?;
+          final failureUrl = extra['failureUrl'] as String?;
+          
+          return FawaterkWebView(
+            url: url,
+            successUrl: successUrl,
+            failureUrl: failureUrl,
+          );
+        },
       ),
     ],
   );

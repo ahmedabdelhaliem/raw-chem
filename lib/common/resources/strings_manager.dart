@@ -269,4 +269,11 @@ class AppStrings {
   static const String noMessagesYet = "noMessagesYet";
   static const String typeAMessage = "typeAMessage";
   static const String chatInbox = "chatInbox";
+  
+  // Payment
+  static const String paymentSecure = "paymentSecure";
+  static const String paymentProcessing = "paymentProcessing";
+  static const String paymentFailed = "paymentFailed";
+  static const String paymentSuccess = "paymentSuccess";
+  static const String close = "close";
 }

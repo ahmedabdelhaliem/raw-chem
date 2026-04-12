@@ -48,10 +48,17 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
           BlocListener<CreatePurchaseOrderCubit, BaseState<dynamic>>(
             listener: (context, state) {
               if (state.isSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(AppStrings.requestSentSuccess.tr())),
-                );
-                context.pop();
+                final response = state.data;
+                final paymentUrl = response?['payment_url'] ?? response?['invoice_url'];
+
+                if (paymentUrl != null) {
+                  context.push(AppRouters.fawaterkWebView, extra: {'url': paymentUrl});
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(AppStrings.requestSentSuccess.tr())),
+                  );
+                  context.pop();
+                }
               } else if (state.isError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
