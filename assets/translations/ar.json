@@ -192,5 +192,12 @@
   "quantity": "الكمية",
   "quantityHint": "ادخل الكمية المطلوبة",
   "recipientPhone": "رقم هاتف المستلم",
-  "recipientPhoneHint": "ادخل رقم الهاتف"
+  "recipientPhoneHint": "ادخل رقم الهاتف",
+  "chatInbox": "صندوق الوارد",
+  "retry": "إعادة المحاولة",
+  "DesignedAndDevelopedBy": "تم التصميم والتطوير بواسطة",
+  "copyright": "2026 برمجة تك – جميع الحقوق محفوظة©"
 }
+
+
+

@@ -9,6 +9,10 @@ import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
+import 'package:raw_chem/common/widgets/empty_state_widget.dart';
+import 'package:raw_chem/common/widgets/default_error_widget.dart';
+import 'package:raw_chem/common/resources/assets_manager.dart';
+
 import 'package:raw_chem/features/home/view/widgets/supplier_card_widget.dart';
 import 'package:raw_chem/features/suppliers/cubit/suppliers_cubit.dart';
 import 'package:raw_chem/features/suppliers/model/supplier_model.dart';
@@ -57,8 +61,12 @@ class _SuppliersViewState extends State<SuppliersView> {
                   return const _SuppliersSkeleton();
                 } else if (state.isSuccess || state.isPaginationLoading || state.isPaginationFailure) {
                   if (state.items.isEmpty) {
-                    return Center(child: Text(AppStrings.noData.tr()));
+                    return EmptyStateWidget(
+                      onButtonPressed: () => context.read<SuppliersCubit>().fetchSuppliers(),
+                      buttonTitle: AppStrings.retry.tr(),
+                    );
                   }
+
                   return PaginatedListWrapper(
                     scrollController: _scrollController,
                     paginationHandler: context.read<SuppliersCubit>().paginationHandler,
@@ -84,20 +92,16 @@ class _SuppliersViewState extends State<SuppliersView> {
                     ),
                   );
                 } else if (state.isError) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(state.errorMessage ?? AppStrings.unknownError.tr()),
-                        SizedBox(height: 10.h),
-                        ElevatedButton(
-                          onPressed: () => context.read<SuppliersCubit>().fetchSuppliers(),
-                          child: Text(AppStrings.retry.tr()),
-                        ),
-                      ],
-                    ),
+                  final isNoInternet = state.failure is NetworkFailure;
+                  return DefaultErrorWidget(
+                    errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
+                    imagePath: isNoInternet ? ImageAssets.noInternet : null,
+                    isLottie: !isNoInternet,
+                    buttonTitle: AppStrings.retry.tr(),
+                    onPressed: () => context.read<SuppliersCubit>().fetchSuppliers(),
                   );
                 }
+
                 return const SizedBox.shrink();
               },
             ),

@@ -28,6 +28,7 @@ mixin _$PriceTrackerModel {
   String? get casNumber => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
+  String? get price => throw _privateConstructorUsedError;
   @JsonKey(name: 'min_price')
   String? get minPrice => throw _privateConstructorUsedError;
   @JsonKey(name: 'max_price')
@@ -56,6 +57,7 @@ abstract class $PriceTrackerModelCopyWith<$Res> {
       @JsonKey(name: 'cas_number') String? casNumber,
       String? description,
       String? image,
+      String? price,
       @JsonKey(name: 'min_price') String? minPrice,
       @JsonKey(name: 'max_price') String? maxPrice,
       @JsonKey(name: 'average_price') String? averagePrice,
@@ -85,6 +87,7 @@ class _$PriceTrackerModelCopyWithImpl<$Res, $Val extends PriceTrackerModel>
     Object? casNumber = freezed,
     Object? description = freezed,
     Object? image = freezed,
+    Object? price = freezed,
     Object? minPrice = freezed,
     Object? maxPrice = freezed,
     Object? averagePrice = freezed,
@@ -118,6 +121,10 @@ class _$PriceTrackerModelCopyWithImpl<$Res, $Val extends PriceTrackerModel>
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
+              as String?,
+      price: freezed == price
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
               as String?,
       minPrice: freezed == minPrice
           ? _value.minPrice
@@ -179,6 +186,7 @@ abstract class _$$PriceTrackerModelImplCopyWith<$Res>
       @JsonKey(name: 'cas_number') String? casNumber,
       String? description,
       String? image,
+      String? price,
       @JsonKey(name: 'min_price') String? minPrice,
       @JsonKey(name: 'max_price') String? maxPrice,
       @JsonKey(name: 'average_price') String? averagePrice,
@@ -208,6 +216,7 @@ class __$$PriceTrackerModelImplCopyWithImpl<$Res>
     Object? casNumber = freezed,
     Object? description = freezed,
     Object? image = freezed,
+    Object? price = freezed,
     Object? minPrice = freezed,
     Object? maxPrice = freezed,
     Object? averagePrice = freezed,
@@ -242,6 +251,10 @@ class __$$PriceTrackerModelImplCopyWithImpl<$Res>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as String?,
+      price: freezed == price
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as String?,
       minPrice: freezed == minPrice
           ? _value.minPrice
           : minPrice // ignore: cast_nullable_to_non_nullable
@@ -273,6 +286,7 @@ class _$PriceTrackerModelImpl extends _PriceTrackerModel {
       @JsonKey(name: 'cas_number') this.casNumber,
       this.description,
       this.image,
+      this.price,
       @JsonKey(name: 'min_price') this.minPrice,
       @JsonKey(name: 'max_price') this.maxPrice,
       @JsonKey(name: 'average_price') this.averagePrice,
@@ -298,6 +312,8 @@ class _$PriceTrackerModelImpl extends _PriceTrackerModel {
   @override
   final String? image;
   @override
+  final String? price;
+  @override
   @JsonKey(name: 'min_price')
   final String? minPrice;
   @override
@@ -311,7 +327,7 @@ class _$PriceTrackerModelImpl extends _PriceTrackerModel {
 
   @override
   String toString() {
-    return 'PriceTrackerModel(id: $id, supplier: $supplier, family: $family, name: $name, casNumber: $casNumber, description: $description, image: $image, minPrice: $minPrice, maxPrice: $maxPrice, averagePrice: $averagePrice, date: $date)';
+    return 'PriceTrackerModel(id: $id, supplier: $supplier, family: $family, name: $name, casNumber: $casNumber, description: $description, image: $image, price: $price, minPrice: $minPrice, maxPrice: $maxPrice, averagePrice: $averagePrice, date: $date)';
   }
 
   @override
@@ -329,6 +345,7 @@ class _$PriceTrackerModelImpl extends _PriceTrackerModel {
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.image, image) || other.image == image) &&
+            (identical(other.price, price) || other.price == price) &&
             (identical(other.minPrice, minPrice) ||
                 other.minPrice == minPrice) &&
             (identical(other.maxPrice, maxPrice) ||
@@ -340,8 +357,20 @@ class _$PriceTrackerModelImpl extends _PriceTrackerModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, supplier, family, name,
-      casNumber, description, image, minPrice, maxPrice, averagePrice, date);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      supplier,
+      family,
+      name,
+      casNumber,
+      description,
+      image,
+      price,
+      minPrice,
+      maxPrice,
+      averagePrice,
+      date);
 
   @JsonKey(ignore: true)
   @override
@@ -367,6 +396,7 @@ abstract class _PriceTrackerModel extends PriceTrackerModel {
       @JsonKey(name: 'cas_number') final String? casNumber,
       final String? description,
       final String? image,
+      final String? price,
       @JsonKey(name: 'min_price') final String? minPrice,
       @JsonKey(name: 'max_price') final String? maxPrice,
       @JsonKey(name: 'average_price') final String? averagePrice,
@@ -391,6 +421,8 @@ abstract class _PriceTrackerModel extends PriceTrackerModel {
   String? get description;
   @override
   String? get image;
+  @override
+  String? get price;
   @override
   @JsonKey(name: 'min_price')
   String? get minPrice;

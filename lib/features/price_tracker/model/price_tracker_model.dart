@@ -17,6 +17,7 @@ class PriceTrackerModel with _$PriceTrackerModel {
     @JsonKey(name: 'cas_number') String? casNumber,
     String? description,
     String? image,
+    String? price,
     @JsonKey(name: 'min_price') String? minPrice,
     @JsonKey(name: 'max_price') String? maxPrice,
     @JsonKey(name: 'average_price') String? averagePrice,

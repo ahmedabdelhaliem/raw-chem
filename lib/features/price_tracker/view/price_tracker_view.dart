@@ -8,8 +8,12 @@ import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
+import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
+import 'package:raw_chem/common/widgets/empty_state_widget.dart';
+import 'package:raw_chem/common/widgets/default_error_widget.dart';
 import 'package:raw_chem/features/raw_materials/model/raw_material_model.dart';
+
 
 class PriceTrackerView extends StatefulWidget {
   const PriceTrackerView({super.key});
@@ -55,8 +59,12 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
                     state.isPaginationLoading ||
                     state.isPaginationFailure) {
                   if (state.items.isEmpty) {
-                    return Center(child: Text(AppStrings.noData.tr()));
+                    return EmptyStateWidget(
+                      onButtonPressed: () => context.read<PriceTrackerCubit>().fetchSupplierMaterials(),
+                      buttonTitle: AppStrings.retry.tr(),
+                    );
                   }
+
                   return PaginatedListWrapper(
                     scrollController: _scrollController,
                     paginationHandler:
@@ -77,22 +85,16 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
                     ),
                   );
                 } else if (state.isError) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(state.errorMessage ?? AppStrings.unknownError.tr()),
-                        SizedBox(height: 10.h),
-                        ElevatedButton(
-                          onPressed: () => context
-                              .read<PriceTrackerCubit>()
-                              .fetchSupplierMaterials(),
-                          child: Text(AppStrings.retry.tr()),
-                        ),
-                      ],
-                    ),
+                  final isNoInternet = state.failure is NetworkFailure;
+                  return DefaultErrorWidget(
+                    errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
+                    imagePath: isNoInternet ? ImageAssets.noInternet : null,
+                    isLottie: !isNoInternet,
+                    buttonTitle: AppStrings.retry.tr(),
+                    onPressed: () => context.read<PriceTrackerCubit>().fetchSupplierMaterials(),
                   );
                 }
+
                 return const SizedBox.shrink();
               },
             ),
@@ -276,13 +278,14 @@ class PriceTrackerCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        "${AppStrings.egp.tr()}${model.averagePrice ?? ''}",
+                        "${AppStrings.egp.tr()}${model.price ?? model.averagePrice ?? ''}",
                         style: TextStyle(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w900,
                           color: Colors.black,
                         ),
                       ),
+
                     ],
                   ),
                 ],

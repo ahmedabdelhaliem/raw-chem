@@ -11,11 +11,12 @@ class AppStrings {
   //=noDataFound
   static const String noDataFound = "No data found";
   //noInternetError
-  static const String noInternetError = "No internet connection";
+  static const String noInternetError = "noInternetError";
   //noInternetMessage
-  static const String noInternetMessage = "Please check your internet connection";
+  static const String noInternetMessage = "noInternetMessage";
   //noInternetTitle
-  static const String noInternetTitle = "No internet connection";
+  static const String noInternetTitle = "noInternetTitle";
+
   //=unKnownError
   static const String unknownError = "Something went wrong";
   //==back
@@ -276,4 +277,9 @@ class AppStrings {
   static const String paymentFailed = "paymentFailed";
   static const String paymentSuccess = "paymentSuccess";
   static const String close = "close";
+  static const String DesignedAndDevelopedBy = "DesignedAndDevelopedBy";
+  static const String copyright = "copyright";
 }
+
+
+

@@ -9,6 +9,10 @@ import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
+import 'package:raw_chem/common/widgets/empty_state_widget.dart';
+import 'package:raw_chem/common/widgets/default_error_widget.dart';
+import 'package:raw_chem/common/resources/assets_manager.dart';
+
 class CategoriesView extends StatelessWidget {
   const CategoriesView({super.key});
 
@@ -35,7 +39,10 @@ class CategoriesView extends StatelessWidget {
                   } else if (state is CategoriesSuccess) {
                     final categories = state.categories;
                     if (categories.isEmpty) {
-                      return Center(child: Text(AppStrings.noData.tr()));
+                      return EmptyStateWidget(
+                        onButtonPressed: () => context.read<CategoriesCubit>().fetchCategories(),
+                        buttonTitle: AppStrings.retry.tr(),
+                      );
                     }
                     return GridView.builder(
                       padding: EdgeInsets.all(20.w),
@@ -54,20 +61,16 @@ class CategoriesView extends StatelessWidget {
                       },
                     );
                   } else if (state is CategoriesError) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(state.failure.message),
-                          SizedBox(height: 10.h),
-                          ElevatedButton(
-                            onPressed: () => context.read<CategoriesCubit>().fetchCategories(),
-                            child: Text(AppStrings.retry.tr()),
-                          ),
-                        ],
-                      ),
+                    final isNoInternet = state.failure is NetworkFailure;
+                    return DefaultErrorWidget(
+                      errorMessage: state.failure.message,
+                      imagePath: isNoInternet ? ImageAssets.noInternet : null,
+                      isLottie: !isNoInternet,
+                      buttonTitle: AppStrings.retry.tr(),
+                      onPressed: () => context.read<CategoriesCubit>().fetchCategories(),
                     );
                   }
+
                   return const SizedBox.shrink();
                 },
               ),

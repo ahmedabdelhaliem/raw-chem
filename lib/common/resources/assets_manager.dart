@@ -48,7 +48,11 @@ class ImageAssets {
   static const String session = '$imagesPath/session.png';
   //==teamwork
   static const String teamwork = '$imagesPath/teamwork.png';
+  static const String emptyState = '$imagesPath/empty_state.png';
+  static const String noInternet = '$imagesPath/no_internet.png';
+  static const String brmjaLogo = '$imagesPath/brmjalogo.png';
 }
+
 
 class IconAssets {
   static const String rightArrow = '$iconsPath/right_arrow.svg';

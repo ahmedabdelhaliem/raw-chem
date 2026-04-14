@@ -11,6 +11,10 @@ import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
+import 'package:raw_chem/common/widgets/empty_state_widget.dart';
+import 'package:raw_chem/common/widgets/default_error_widget.dart';
+import 'package:raw_chem/common/resources/assets_manager.dart';
+
 import 'package:raw_chem/common/widgets/filter_bottom_sheet_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/features/raw_materials/cubit/raw_material_families_cubit.dart';
@@ -94,20 +98,16 @@ class _RawMaterialsViewState extends State<RawMaterialsView> {
                       child: _buildMaterialsGrid(state.items),
                     );
                   } else if (state.isFailure) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(state.errorMessage ?? AppStrings.unknownError.tr()),
-                          SizedBox(height: 10.h),
-                          ElevatedButton(
-                            onPressed: () => context.read<RawMaterialsCubit>().fetchMaterials(),
-                            child: Text(AppStrings.retry.tr()),
-                          ),
-                        ],
-                      ),
+                    final isNoInternet = state.failure is NetworkFailure;
+                    return DefaultErrorWidget(
+                      errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
+                      imagePath: isNoInternet ? ImageAssets.noInternet : null,
+                      isLottie: !isNoInternet,
+                      buttonTitle: AppStrings.retry.tr(),
+                      onPressed: () => context.read<RawMaterialsCubit>().fetchMaterials(),
                     );
                   }
+
                   return const SizedBox.shrink();
                 },
               ),
@@ -214,8 +214,12 @@ class _RawMaterialsViewState extends State<RawMaterialsView> {
 
   Widget _buildMaterialsGrid(List<RawMaterialModel> materials) {
     if (materials.isEmpty) {
-      return Center(child: Text(AppStrings.noData.tr()));
+      return EmptyStateWidget(
+        onButtonPressed: () => context.read<RawMaterialsCubit>().fetchMaterials(),
+        buttonTitle: AppStrings.retry.tr(),
+      );
     }
+
 
     return ListView.builder(
       controller: _scrollController,

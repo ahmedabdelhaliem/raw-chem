@@ -194,5 +194,12 @@
   "quantity": "Quantity",
   "quantityHint": "Enter requested quantity",
   "recipientPhone": "Recipient Phone",
-  "recipientPhoneHint": "Enter phone number"
+  "recipientPhoneHint": "Enter phone number",
+  "chatInbox": "Chat Inbox",
+  "retry": "Retry",
+  "DesignedAndDevelopedBy": "Designed and Developed by",
+  "copyright": "Brmja tech . All Rights Reserved 2026 ©"
 }
+
+
+

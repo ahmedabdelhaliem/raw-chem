@@ -10,7 +10,9 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:raw_chem/common/http/connectivity_service.dart';
 import '../../app/app.dart';
+
 import 'either.dart';
 import 'failure.dart';
 
@@ -138,6 +140,10 @@ final class BaseApiConsumer implements ApiConsumer {
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
+    if (!await instance<ConnectivityService>().hasInternet) {
+      return Left(NetworkFailure(message: AppStrings.noInternetError.tr()));
+    }
+
     apiCall() async {
       try {
         final response = await _dio.get(
@@ -162,6 +168,7 @@ final class BaseApiConsumer implements ApiConsumer {
     return await retryApiCall(apiCall);
   }
 
+
   @override
   Future<Either<Failure, Map<String, dynamic>>> patch(
     String url, {
@@ -172,6 +179,9 @@ final class BaseApiConsumer implements ApiConsumer {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
+    if (!await instance<ConnectivityService>().hasInternet) {
+      return Left(NetworkFailure(message: AppStrings.noInternetError.tr()));
+    }
     try {
       Response response = await _dio.patch(
         url,
@@ -204,6 +214,9 @@ final class BaseApiConsumer implements ApiConsumer {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
+    if (!await instance<ConnectivityService>().hasInternet) {
+      return Left(NetworkFailure(message: AppStrings.noInternetError.tr()));
+    }
     try {
       final requestOptions = Options(headers: Map<String, dynamic>.from(headers ?? {}));
       if (formData != null) {
@@ -240,6 +253,9 @@ final class BaseApiConsumer implements ApiConsumer {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
+    if (!await instance<ConnectivityService>().hasInternet) {
+      return Left(NetworkFailure(message: AppStrings.noInternetError.tr()));
+    }
     try {
       final requestOptions = Options(headers: Map<String, dynamic>.from(headers ?? {}));
       if (formData != null) {
@@ -277,6 +293,9 @@ final class BaseApiConsumer implements ApiConsumer {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
+    if (!await instance<ConnectivityService>().hasInternet) {
+      return Left(NetworkFailure(message: AppStrings.noInternetError.tr()));
+    }
     try {
       Response response = await _dio.delete(
         url,
@@ -305,6 +324,9 @@ final class BaseApiConsumer implements ApiConsumer {
     Options? options,
     CancelToken? cancelToken,
   }) async {
+    if (!await instance<ConnectivityService>().hasInternet) {
+      return Left(NetworkFailure(message: AppStrings.noInternetError.tr()));
+    }
     try {
       await _dio.download(
         url,
@@ -335,6 +357,9 @@ final class BaseApiConsumer implements ApiConsumer {
       CancelToken? cancelToken,
       ProgressCallback? onSendProgress,
       ProgressCallback? onReceiveProgress}) async {
+    if (!await instance<ConnectivityService>().hasInternet) {
+      return Left(NetworkFailure(message: AppStrings.noInternetError.tr()));
+    }
     try {
       final requestOptions = options ?? Options();
       requestOptions.headers = Map<String, dynamic>.from(requestOptions.headers ?? {});

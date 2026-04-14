@@ -7,9 +7,11 @@ import 'package:iconsax/iconsax.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/extensions/context_extension.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
+import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/profile_menu_item_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'widgets/profile_skeleton.dart';
 
@@ -161,25 +163,25 @@ class _ProfileViewState extends State<ProfileView> {
                               children: [
                                 // Account Section
                                 _buildSectionTitle(AppStrings.myPersonalData.tr()),
-                                  _buildMenuCard([
-                                    ProfileMenuItemWidget(
-                                      title: AppStrings.myPersonalData.tr(),
-                                      iconData: Iconsax.user,
-                                      onTap: () => context.push(AppRouters.personalDataView),
-                                    ),
-                                    _buildDivider(),
-                                    ProfileMenuItemWidget(
-                                      title: AppStrings.chatInbox.tr(),
-                                      iconData: Iconsax.message_2,
-                                      onTap: () => context.push(AppRouters.chatInboxView),
-                                    ),
-                                    _buildDivider(),
-                                    ProfileMenuItemWidget(
-                                      title: AppStrings.ordersHistory.tr(),
-                                      iconData: Iconsax.document,
-                                      onTap: () => context.push(AppRouters.ordersHistoryView),
-                                    ),
-                                  ]),
+                                _buildMenuCard([
+                                  ProfileMenuItemWidget(
+                                    title: AppStrings.myPersonalData.tr(),
+                                    iconData: Iconsax.user,
+                                    onTap: () => context.push(AppRouters.personalDataView),
+                                  ),
+                                  _buildDivider(),
+                                  ProfileMenuItemWidget(
+                                    title: AppStrings.chatInbox.tr(),
+                                    iconData: Iconsax.message_2,
+                                    onTap: () => context.push(AppRouters.chatInboxView),
+                                  ),
+                                  _buildDivider(),
+                                  ProfileMenuItemWidget(
+                                    title: AppStrings.ordersHistory.tr(),
+                                    iconData: Iconsax.document,
+                                    onTap: () => context.push(AppRouters.ordersHistoryView),
+                                  ),
+                                ]),
 
                                 SizedBox(height: 24.h),
 
@@ -246,7 +248,55 @@ class _ProfileViewState extends State<ProfileView> {
                                     onTap: () => context.read<ProfileCubit>().logout(),
                                   ),
                                 ),
-                                SizedBox(height: 40.h),
+                                SizedBox(height: 10.h),
+                                // Copyright Section
+                                GestureDetector(
+                                  onTap: () async {
+                                    final Uri url = Uri.parse('https://brmja.tech/');
+                                    if (await canLaunchUrl(url)) {
+                                      await launchUrl(url, mode: LaunchMode.externalApplication);
+                                    } else {
+                                      throw 'Could not launch $url';
+                                    }
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          AppStrings.DesignedAndDevelopedBy.tr(),
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: ColorManager.greyTextColor.withOpacity(0.6),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      Center(
+                                        child: SizedBox(
+                                          height: 30.h,
+                                          width: 150.w,
+                                          child: Image.asset(ImageAssets.brmjaLogo),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          AppStrings.copyright.tr(),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: ColorManager.greyTextColor.withOpacity(0.5),
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                SizedBox(height: 10.h),
                               ],
                             ),
                           ),

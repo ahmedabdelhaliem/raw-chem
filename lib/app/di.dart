@@ -11,9 +11,14 @@ Future<void> initAppModule() async {
 
   // 2. CurrentUser (مع تحميل النوع فورًا)
   
-  // // internet connection checker
-  // instance.registerLazySingleton<InternetConnectionChecker>(
-  //     () => InternetConnectionChecker());
+  // internet connection checker
+  instance.registerLazySingleton<InternetConnection>(
+      () => InternetConnection());
+
+  instance.registerLazySingleton<ConnectivityService>(
+      () => ConnectivityService(Connectivity(), instance<InternetConnection>()));
+
+
 
   // app preferences
   instance

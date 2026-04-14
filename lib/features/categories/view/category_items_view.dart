@@ -12,8 +12,12 @@ import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
+import 'package:raw_chem/common/widgets/empty_state_widget.dart';
+import 'package:raw_chem/common/widgets/default_error_widget.dart';
+import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/features/categories/cubit/category_materials_cubit.dart';
 import 'package:raw_chem/features/categories/cubit/category_recipes_cubit.dart';
+
 
 class CategoryItemsView extends StatefulWidget {
   final CategoryModel category;
@@ -161,11 +165,16 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
             child: _buildMaterialsGrid(state.items),
           );
         } else if (state.isFailure) {
-          return _buildErrorState(
-            state.errorMessage ?? AppStrings.unknownError.tr(),
-            () => context.read<CategoryMaterialsCubit>().fetchItems(widget.category.id!),
+          final isNoInternet = state.failure is NetworkFailure;
+          return DefaultErrorWidget(
+            errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
+            imagePath: isNoInternet ? ImageAssets.noInternet : null,
+            isLottie: !isNoInternet,
+            buttonTitle: AppStrings.retry.tr(),
+            onPressed: () => context.read<CategoryMaterialsCubit>().fetchItems(widget.category.id!),
           );
         }
+
         return const SizedBox.shrink();
       },
     );
@@ -188,11 +197,16 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
             child: _buildRecipesGrid(state.items),
           );
         } else if (state.isFailure) {
-          return _buildErrorState(
-            state.errorMessage ?? AppStrings.unknownError.tr(),
-            () => context.read<CategoryRecipesCubit>().fetchItems(widget.category.id!),
+          final isNoInternet = state.failure is NetworkFailure;
+          return DefaultErrorWidget(
+            errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
+            imagePath: isNoInternet ? ImageAssets.noInternet : null,
+            isLottie: !isNoInternet,
+            buttonTitle: AppStrings.retry.tr(),
+            onPressed: () => context.read<CategoryRecipesCubit>().fetchItems(widget.category.id!),
           );
         }
+
         return const SizedBox.shrink();
       },
     );
@@ -200,8 +214,12 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
 
   Widget _buildMaterialsGrid(List<RawMaterialModel> materials) {
     if (materials.isEmpty) {
-      return _buildEmptyState();
+      return EmptyStateWidget(
+        onButtonPressed: () => context.read<CategoryMaterialsCubit>().fetchItems(widget.category.id!),
+        buttonTitle: AppStrings.retry.tr(),
+      );
     }
+
 
     return ListView.builder(
       controller: _materialsScrollController,
@@ -247,8 +265,12 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
 
   Widget _buildRecipesGrid(List<RecipeModel> recipes) {
     if (recipes.isEmpty) {
-      return _buildEmptyState();
+      return EmptyStateWidget(
+        onButtonPressed: () => context.read<CategoryRecipesCubit>().fetchItems(widget.category.id!),
+        buttonTitle: AppStrings.retry.tr(),
+      );
     }
+
 
     return ListView.builder(
       controller: _recipesScrollController,
@@ -294,77 +316,7 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
     ).animate().fadeIn(delay: (50 * (index % 10)).ms).scale(begin: const Offset(0.95, 0.95));
   }
 
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              color: ColorManager.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: ColorManager.black.withOpacity(0.05),
-                  blurRadius: 15,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Icon(Iconsax.box_add, size: 50.sp, color: ColorManager.primary.withOpacity(0.5)),
-          ),
-          SizedBox(height: 16.h),
-          Text(
-            AppStrings.noData.tr(),
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: ColorManager.blackText,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            AppStrings.noItemsToDisplay.tr(),
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: ColorManager.greyTextColor,
-            ),
-          ),
-        ],
-      ).animate().fadeIn(duration: 500.ms).scale(begin: const Offset(0.9, 0.9)),
-    );
-  }
 
-  Widget _buildErrorState(String message, VoidCallback onRetry) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Iconsax.warning_2, size: 60.sp, color: Colors.orangeAccent),
-          SizedBox(height: 16.h),
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.sp, color: ColorManager.blackText, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 24.h),
-          ElevatedButton.icon(
-            onPressed: onRetry,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ColorManager.primary,
-              foregroundColor: ColorManager.white,
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-              elevation: 0,
-            ),
-            icon: Icon(Iconsax.refresh, size: 20.sp),
-            label: Text(AppStrings.retry.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
-          ),
-        ],
-      ).animate().fadeIn().scale(),
-    );
-  }
 }
 
 class _SkeletonGrid extends StatelessWidget {

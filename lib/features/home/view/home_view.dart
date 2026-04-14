@@ -12,6 +12,9 @@ import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_banner_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
+import 'package:raw_chem/common/widgets/default_error_widget.dart';
+import 'package:raw_chem/common/widgets/empty_state_widget.dart';
+
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -28,46 +31,67 @@ class HomeView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: ColorManager.bg,
         appBar: AppBar(backgroundColor: ColorManager.bg, elevation: 0, toolbarHeight: 00.h),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 10.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: _buildHeader(context),
+        body: BlocBuilder<BannersCubit, BaseState<BannerModel>>(
+          builder: (context, bannerState) {
+            // we use BannersCubit as a primary indicator for home connectivity
+            if (bannerState.isFailure && bannerState.failure is NetworkFailure) {
+              return DefaultErrorWidget(
+                errorMessage: bannerState.errorMessage ?? AppStrings.noInternetError.tr(),
+                imagePath: ImageAssets.noInternet,
+                isLottie: false,
+                buttonTitle: AppStrings.retry.tr(),
+                onPressed: () => _refreshAll(context),
+              );
+            }
+
+            return RefreshIndicator(
+              onRefresh: () => _refreshAll(context),
+              color: ColorManager.primary,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 10.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: _buildHeader(context),
+                    ),
+                    SizedBox(height: 10.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: _buildBanner(bannerState),
+                    ),
+                    SizedBox(height: 10.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: _buildSectionHeader(context, AppStrings.priceTracker.tr(), () {
+                        context.push(AppRouters.priceTrackerView);
+                      }),
+                    ),
+                    _buildPriceTrackerList(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: _buildSectionHeader(context, AppStrings.rawMaterials.tr(), () {
+                        context.push(AppRouters.rawMaterialsView);
+                      }),
+                    ),
+                    _buildRawMaterialsList(context),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: _buildSectionHeader(context, AppStrings.recipes.tr(), () {
+                        context.push(AppRouters.recipesView);
+                      }),
+                    ),
+                    _buildRecipesList(context),
+                    SizedBox(height: 20.h),
+                  ],
+                ),
               ),
-              SizedBox(height: 10.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: _buildBanner(),
-              ),
-              SizedBox(height: 10.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: _buildSectionHeader(context, AppStrings.priceTracker.tr(), () {
-                  context.push(AppRouters.priceTrackerView);
-                }),
-              ),
-              _buildPriceTrackerList(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: _buildSectionHeader(context, AppStrings.rawMaterials.tr(), () {
-                  context.push(AppRouters.rawMaterialsView);
-                }),
-              ),
-              _buildRawMaterialsList(context),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: _buildSectionHeader(context, AppStrings.recipes.tr(), () {
-                  context.push(AppRouters.recipesView);
-                }),
-              ),
-              _buildRecipesList(context),
-              SizedBox(height: 20.h),
-            ],
-          ),
+            );
+          },
         ),
+
       ),
     );
   }
@@ -85,30 +109,34 @@ class HomeView extends StatelessWidget {
     ).animate().fadeIn(duration: 600.ms).slideY(begin: -0.2); // Slide down for header
   }
 
-  Widget _buildBanner() {
-    return BlocBuilder<BannersCubit, BaseState<BannerModel>>(
-      builder: (context, state) {
-        if (state.isLoading) {
-          return DefaultBannerWidget<BannerModel>(
-            images: const [],
-            imageUrl: (image) => '',
-            isLoading: true,
-            aspectRatio: 16 / 7,
-          );
-        }
-        if (state.isSuccess) {
-          final banners = state.items;
-          if (banners.isEmpty) return const SizedBox.shrink();
-          return DefaultBannerWidget<BannerModel>(
-            images: banners,
-            imageUrl: (image) => image.banner ?? '',
-            aspectRatio: 16 / 7,
-          ).animate().fadeIn(delay: 400.ms, duration: 600.ms).scale(begin: const Offset(0.9, 0.9));
-        }
-        return const SizedBox.shrink();
-      },
-    );
+  Widget _buildBanner(BaseState<BannerModel> state) {
+    if (state.isLoading) {
+      return DefaultBannerWidget<BannerModel>(
+        images: const [],
+        imageUrl: (image) => '',
+        isLoading: true,
+        aspectRatio: 16 / 7,
+      );
+    }
+    if (state.isSuccess) {
+      final banners = state.items;
+      if (banners.isEmpty) return const SizedBox.shrink();
+      return DefaultBannerWidget<BannerModel>(
+        images: banners,
+        imageUrl: (image) => image.banner ?? '',
+        aspectRatio: 16 / 7,
+      ).animate().fadeIn(delay: 400.ms, duration: 600.ms).scale(begin: const Offset(0.9, 0.9));
+    }
+    return const SizedBox.shrink();
   }
+
+  Future<void> _refreshAll(BuildContext context) async {
+    context.read<BannersCubit>().fetchBanners();
+    context.read<RecipesCubit>().fetchRecipes();
+    context.read<RawMaterialsCubit>().fetchMaterials();
+    context.read<PriceTrackerCubit>().fetchSupplierMaterials();
+  }
+
 
   Widget _buildSectionHeader(BuildContext context, String title, VoidCallback onMoreTap) {
     return Row(
