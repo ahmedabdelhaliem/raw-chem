@@ -1,9 +1,6 @@
 import 'package:raw_chem/app/imports.dart';
-import 'package:raw_chem/common/data_source/generic_data_source.dart';
 import 'package:raw_chem/common/http/either.dart';
-import 'package:raw_chem/common/http/failure.dart';
-import 'package:raw_chem/features/price_tracker/model/price_tracker_model.dart';
-import 'package:raw_chem/common/model/paginated_response.dart';
+import 'package:raw_chem/common/data_source/generic_data_source.dart';
 import 'package:raw_chem/common/http/params.dart';
 
 class PriceTrackerRepo {
@@ -11,10 +8,28 @@ class PriceTrackerRepo {
 
   PriceTrackerRepo(this._dataSource);
 
-  Future<Either<Failure, PaginatedResponse<PriceTrackerModel>>> getSupplierMaterials({int page = 1}) async {
+  Future<Either<Failure, PaginatedResponse<PriceTrackerModel>>> getSupplierMaterials({
+    int page = 1,
+    String? q,
+    String? casNumber,
+    List<int>? materialFamilyIds,
+    int? supplierId,
+  }) async {
+    final Map<String, dynamic> queryParams = {};
+    if (q != null && q.isNotEmpty) queryParams['q'] = q;
+    if (casNumber != null && casNumber.isNotEmpty) queryParams['cas_number'] = casNumber;
+    if (materialFamilyIds != null && materialFamilyIds.isNotEmpty) {
+      queryParams['material_family_ids'] = materialFamilyIds.join(',');
+    }
+    if (supplierId != null) queryParams['supplier_id'] = supplierId;
+
     return await _dataSource.fetchPaginatedData<PriceTrackerModel>(
       endpoint: EndPoints.supplierMaterials,
-      params: PaginationParams(page: page, limit: 10),
+      params: PaginationParams(
+        page: page,
+        limit: 10,
+      ),
+      queryParameters: queryParams,
       fromJson: (json) => PriceTrackerModel.fromJson(json),
     );
   }

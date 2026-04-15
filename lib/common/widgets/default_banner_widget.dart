@@ -118,8 +118,13 @@ class _DefaultBannerWidgetState<T> extends State<DefaultBannerWidget<T>> {
              width: double.infinity,
             placeholder: (context, url) => const ShimmerContainerWidget(height: double.infinity),
             errorWidget: (context, url, error) => Container(
-              color: Colors.grey.shade200,
-              child: const Icon(Icons.broken_image, color: Colors.grey),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Center(
+                child: Icon(Icons.image_outlined, color: Colors.grey.shade400, size: 40),
+              ),
             ),
           ),
         ),

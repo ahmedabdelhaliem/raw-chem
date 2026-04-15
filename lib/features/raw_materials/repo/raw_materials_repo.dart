@@ -74,5 +74,26 @@ class RawMaterialsRepo {
       fromJson: (json) => json, // Returning the raw response data
     );
   }
+
+  Future<Either<Failure, PurchaseOrderModel>> getPurchaseOrderDetails(int id) async {
+    return await _dataSource.fetchResult<PurchaseOrderModel>(
+      endpoint: '${EndPoints.createPurchaseOrder}/$id',
+      fromJson: (json) => PurchaseOrderModel.fromJson(json),
+    );
+  }
+
+  Future<Either<Failure, PaginatedResponse<PurchaseOrderModel>>> getPurchaseOrders({
+    int page = 1,
+    dynamic status,
+  }) async {
+    return await _dataSource.fetchPaginatedData<PurchaseOrderModel>(
+      endpoint: EndPoints.createPurchaseOrder,
+      params: PaginationParams(page: page, limit: 10),
+      queryParameters: {
+        if (status != null) 'status': status,
+      },
+      fromJson: (json) => PurchaseOrderModel.fromJson(json),
+    );
+  }
 }
 

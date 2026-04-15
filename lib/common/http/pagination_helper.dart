@@ -52,8 +52,11 @@ class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
 
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       if (!bloc.isClosed) {
-        bloc.emit(bloc.state
-            .copyWith(status: Status.success, items: List<T>.from(items)));
+        bloc.emit(bloc.state.copyWith(
+          status: Status.success,
+          items: List<T>.from(items),
+          hasMore: hasMoreData,
+        ));
       }
     });
   }
@@ -95,8 +98,11 @@ class PaginationHandler<T, B extends BlocBase<BaseState<T>>> {
         isLoadingMore = false;
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         if (!bloc.isClosed) {
-          bloc.emit(bloc.state
-              .copyWith(status: Status.success, items: List<T>.from(items)));
+          bloc.emit(bloc.state.copyWith(
+            status: Status.success,
+            items: List<T>.from(items),
+            hasMore: hasMoreData,
+          ));
         }
       },
     );

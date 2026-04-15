@@ -34,23 +34,26 @@ class SignupFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final prefixIconColor = ColorManager.primary.withValues(alpha: 0.6);
+    const prefixIconSize = 20.0;
+
     return Column(
       children: [
         // Name Field
         DefaultFormField(
           controller: nameController,
           hintText: AppStrings.name.tr(),
-          prefixWidget: const Icon(Icons.person_outline, color: ColorManager.greyTextColor),
+          prefixWidget: Icon(Icons.person_rounded, color: prefixIconColor, size: prefixIconSize.sp),
         ),
-        SizedBox(height: 15.h),
+        SizedBox(height: 10.h),
         // Company Field
         DefaultFormField(
           controller: companyController,
           hintText: AppStrings.companyName.tr(),
-          withValidate: false, // Optional for now
-          prefixWidget: const Icon(Icons.business_outlined, color: ColorManager.greyTextColor),
+          withValidate: false,
+          prefixWidget: Icon(Icons.business_rounded, color: prefixIconColor, size: prefixIconSize.sp),
         ),
-        SizedBox(height: 15.h),
+        SizedBox(height: 10.h),
         // Category Dropdown
         BlocBuilder<CategoriesCubit, CategoriesState>(
           builder: (context, state) {
@@ -69,7 +72,7 @@ class SignupFormWidget extends StatelessWidget {
               controller: TextEditingController(text: selectedNames),
               hintText: AppStrings.field.tr(),
               readOnly: true,
-              prefixWidget: const Icon(Icons.grid_view_outlined, color: ColorManager.greyTextColor),
+              prefixWidget: Icon(Icons.grid_view_rounded, color: prefixIconColor, size: prefixIconSize.sp),
               onTap: () async {
                 List<FilterItem> items = categories
                     .where((cat) => cat.id != null && cat.name != null)
@@ -91,19 +94,31 @@ class SignupFormWidget extends StatelessWidget {
             );
           },
         ),
-        SizedBox(height: 15.h),
+        SizedBox(height: 10.h),
         // Birth Date Field
         DefaultFormField(
           controller: birthDateController,
           hintText: AppStrings.dateOfBirth.tr(),
           readOnly: true,
-          prefixWidget: const Icon(Icons.calendar_today_outlined, color: ColorManager.greyTextColor),
+          prefixWidget: Icon(Icons.calendar_today_rounded, color: prefixIconColor, size: prefixIconSize.sp),
           onTap: () async {
             DateTime? pickedDate = await showDatePicker(
               context: context,
-              initialDate: DateTime.now(),
+              initialDate: DateTime.now().subtract(const Duration(days: 365 * 18)),
               firstDate: DateTime(1900),
               lastDate: DateTime.now(),
+              builder: (context, child) {
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    colorScheme: const ColorScheme.light(
+                      primary: ColorManager.primary,
+                      onPrimary: Colors.white,
+                      onSurface: ColorManager.textColor,
+                    ),
+                  ),
+                  child: child!,
+                );
+              },
             );
             if (pickedDate != null) {
               String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
@@ -111,31 +126,31 @@ class SignupFormWidget extends StatelessWidget {
             }
           },
         ),
-        SizedBox(height: 15.h),
+        SizedBox(height: 10.h),
         // Phone Field
         DefaultFormField(
           controller: phoneController,
           hintText: AppStrings.phoneNumber.tr(),
           keyboardType: TextInputType.phone,
-          prefixWidget: const Icon(Icons.phone_outlined, color: ColorManager.greyTextColor),
+          prefixWidget: Icon(Icons.phone_iphone_rounded, color: prefixIconColor, size: prefixIconSize.sp),
         ),
-        SizedBox(height: 15.h),
+        SizedBox(height: 10.h),
         // Email Field
         DefaultFormField(
           controller: emailController,
           hintText: AppStrings.email.tr(),
           keyboardType: TextInputType.emailAddress,
-          prefixWidget: const Icon(Icons.email_outlined, color: ColorManager.greyTextColor),
+          prefixWidget: Icon(Icons.email_rounded, color: prefixIconColor, size: prefixIconSize.sp),
         ),
-        SizedBox(height: 15.h),
+        SizedBox(height: 10.h),
         // Password Field
         DefaultFormField(
           controller: passwordController,
           hintText: AppStrings.password.tr(),
           obscureText: true,
-          prefixWidget: const Icon(Icons.lock_outline, color: ColorManager.greyTextColor),
+          prefixWidget: Icon(Icons.lock_person_rounded, color: prefixIconColor, size: prefixIconSize.sp),
         ),
-        SizedBox(height: 15.h),
+        SizedBox(height: 10.h),
         // Confirm Password Field
         DefaultFormField(
           controller: confirmPasswordController,
@@ -147,7 +162,7 @@ class SignupFormWidget extends StatelessWidget {
             }
             return null;
           },
-          prefixWidget: const Icon(Icons.lock_outline, color: ColorManager.greyTextColor),
+          prefixWidget: Icon(Icons.lock_person_rounded, color: prefixIconColor, size: prefixIconSize.sp),
         ),
       ],
     );

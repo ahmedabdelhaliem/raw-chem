@@ -15,7 +15,26 @@ class PriceTrackerCubit extends Cubit<BaseState<PriceTrackerModel>> {
     );
   }
 
-  Future<void> fetchSupplierMaterials() async {
-    await paginationHandler.loadFirstPage((page, limit, [params]) => _priceTrackerRepo.getSupplierMaterials(page: page));
+  String searchQuery = '';
+  String casNumberString = '';
+  List<int> selectedFamilyIds = [];
+
+  Future<void> fetchSupplierMaterials({
+    String? query,
+    String? casNumber,
+    List<int>? familyIds,
+  }) async {
+    if (query != null) searchQuery = query;
+    if (casNumber != null) casNumberString = casNumber;
+    if (familyIds != null) selectedFamilyIds = familyIds;
+
+    await paginationHandler.loadFirstPage(
+      (page, limit, [params]) => _priceTrackerRepo.getSupplierMaterials(
+        page: page,
+        q: searchQuery,
+        casNumber: casNumberString,
+        materialFamilyIds: selectedFamilyIds,
+      ),
+    );
   }
 }

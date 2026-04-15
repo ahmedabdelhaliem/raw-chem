@@ -15,14 +15,12 @@ class LocationsRepo {
       fromJson: (json) => CountryModel.fromJson(json),
     );
   }
-
   Future<Either<Failure, List<GovernorateModel>>> getGovernorates(int countryId) async {
     return await _dataSource.fetchData<GovernorateModel>(
       endpoint: EndPoints.governorates(countryId),
       fromJson: (json) => GovernorateModel.fromJson(json),
     );
   }
-
   Future<Either<Failure, List<CityModel>>> getCities(int governorateId) async {
     return await _dataSource.fetchData<CityModel>(
       endpoint: EndPoints.cities(governorateId),

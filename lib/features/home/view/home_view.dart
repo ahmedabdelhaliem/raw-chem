@@ -10,11 +10,9 @@ import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_banner_widget.dart';
+import 'package:raw_chem/common/widgets/default_error_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
-import 'package:raw_chem/common/widgets/default_error_widget.dart';
-import 'package:raw_chem/common/widgets/empty_state_widget.dart';
-
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -91,21 +89,47 @@ class HomeView extends StatelessWidget {
             );
           },
         ),
-
       ),
     );
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: 80.h),
-        child: Image.asset(
-          ImageAssets.logoBlack,
-          fit: BoxFit.contain,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Notification Icon with Premium look
+        GestureDetector(
+          onTap: () => context.push(AppRouters.notificationsSettingsView),
+          child: Container(
+            padding: EdgeInsets.all(10.w),
+            decoration: BoxDecoration(
+              color: ColorManager.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Icon(
+              Icons.notifications_outlined,
+              color: ColorManager.primary,
+              size: 24.sp,
+            ),
+          ),
         ),
-      ),
+
+        // Logo
+        Align(
+          alignment: Alignment.centerRight,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: 80.h),
+            child: Image.asset(ImageAssets.logoBlack, fit: BoxFit.contain),
+          ),
+        ),
+      ],
     ).animate().fadeIn(duration: 600.ms).slideY(begin: -0.2); // Slide down for header
   }
 
@@ -120,7 +144,22 @@ class HomeView extends StatelessWidget {
     }
     if (state.isSuccess) {
       final banners = state.items;
-      if (banners.isEmpty) return const SizedBox.shrink();
+      if (banners.isEmpty) {
+        // Show an empty placeholder banner area
+        return AspectRatio(
+          aspectRatio: 16 / 7,
+          child: Container(
+            decoration: BoxDecoration(
+              color: ColorManager.bg,
+              borderRadius: BorderRadius.circular(16.r),
+              border: Border.all(color: ColorManager.greyBorder.withValues(alpha: 0.3)),
+            ),
+            child: Center(
+              child: Icon(Icons.image_outlined, size: 40.sp, color: ColorManager.greyTextColor),
+            ),
+          ),
+        ).animate().fadeIn(delay: 400.ms, duration: 600.ms);
+      }
       return DefaultBannerWidget<BannerModel>(
         images: banners,
         imageUrl: (image) => image.banner ?? '',
@@ -136,7 +175,6 @@ class HomeView extends StatelessWidget {
     context.read<RawMaterialsCubit>().fetchMaterials();
     context.read<PriceTrackerCubit>().fetchSupplierMaterials();
   }
-
 
   Widget _buildSectionHeader(BuildContext context, String title, VoidCallback onMoreTap) {
     return Row(

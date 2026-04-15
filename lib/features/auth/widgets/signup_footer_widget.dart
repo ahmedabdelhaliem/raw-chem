@@ -16,7 +16,7 @@ class SignupFooterWidget extends StatelessWidget {
       children: [
         Text(
           AppStrings.alreadyHaveAccount.tr(),
-          style: getRegularStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
+          style: getMediumStyle(color: ColorManager.greyTextColor, fontSize: 14.sp),
         ),
         TextButton(
           onPressed: () {
@@ -24,7 +24,7 @@ class SignupFooterWidget extends StatelessWidget {
           },
           child: Text(
             AppStrings.login.tr(),
-            style: getBoldStyle(color: ColorManager.primary, fontSize: 14.sp),
+            style: getBoldStyle(color: ColorManager.primary, fontSize: 15.sp),
           ),
         ),
       ],

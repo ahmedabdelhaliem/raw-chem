@@ -205,7 +205,18 @@
   "phone": "رقم الهاتف",
   "noDescription": "لا يوجد وصف متاح",
   "contactDetails": "تفاصيل الاتصال",
-  "suppliedMaterials": "المواد المتوفرة"
+  "suppliedMaterials": "المواد المتوفرة",
+  "subtotal": "الإجمالي الفرعي",
+  "discount": "الخصم",
+  "grandTotal": "إجمالي المبلغ",
+  "invoiceNumber": "رقم الفاتورة",
+  "payNow": "ادفع الآن",
+  "selectPaymentMethod": "اختر طريقة الدفع",
+  "statusAccepted": "تم القبول",
+  "statusRejected": "مرفوض",
+  "statusPending": "بانتظار الرد",
+  "statusAwaitingPayment": "بانتظار الدفع",
+  "statusPaid": "تم الدفع"
 }
 
 

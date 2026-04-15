@@ -207,7 +207,18 @@
   "phone": "Phone",
   "noDescription": "No description available",
   "contactDetails": "Contact Details",
-  "suppliedMaterials": "Supplied Materials"
+  "suppliedMaterials": "Supplied Materials",
+  "subtotal": "Subtotal",
+  "discount": "Discount",
+  "grandTotal": "Grand Total",
+  "invoiceNumber": "Invoice Number",
+  "payNow": "Pay Now",
+  "selectPaymentMethod": "Select Payment Method",
+  "statusAccepted": "Accepted",
+  "statusRejected": "Rejected",
+  "statusPending": "Pending Response",
+  "statusAwaitingPayment": "Awaiting Payment",
+  "statusPaid": "Paid"
 }
 
 

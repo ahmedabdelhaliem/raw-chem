@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -12,7 +13,8 @@ import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/empty_state_widget.dart';
 import 'package:raw_chem/common/widgets/default_error_widget.dart';
-import 'package:raw_chem/features/raw_materials/model/raw_material_model.dart';
+import 'package:raw_chem/common/widgets/filter_bottom_sheet_widget.dart';
+import 'package:raw_chem/features/raw_materials/cubit/raw_material_families_cubit.dart';
 
 
 class PriceTrackerView extends StatefulWidget {
@@ -25,6 +27,8 @@ class PriceTrackerView extends StatefulWidget {
 class _PriceTrackerViewState extends State<PriceTrackerView> {
   final ScrollController _scrollController = ScrollController();
 
+  Timer? _debounce;
+
   @override
   void initState() {
     super.initState();
@@ -34,72 +38,85 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorManager.bg,
-      appBar: DefaultAppBar(
-        text: AppStrings.priceTracker.tr(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => instance<RawMaterialFamiliesCubit>()),
+      ],
+      child: Scaffold(
         backgroundColor: ColorManager.bg,
-        titleColor: ColorManager.black,
-        withLeading: false, // In MainView, so no leading usually
-      ),
-      body: Column(
-        children: [
-          _buildSearchSection(context),
-          Expanded(
-            child: BlocBuilder<PriceTrackerCubit, BaseState<PriceTrackerModel>>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const _PriceTrackerSkeleton();
-                } else if (state.isSuccess ||
-                    state.isPaginationLoading ||
-                    state.isPaginationFailure) {
-                  if (state.items.isEmpty) {
-                    return EmptyStateWidget(
-                      onButtonPressed: () => context.read<PriceTrackerCubit>().fetchSupplierMaterials(),
+        appBar: DefaultAppBar(
+          text: AppStrings.priceTracker.tr(),
+          backgroundColor: ColorManager.bg,
+          titleColor: ColorManager.black,
+          withLeading: false, // In MainView, so no leading usually
+        ),
+        body: Column(
+          children: [
+            Builder(builder: (context) => _buildSearchSection(context)),
+            Expanded(
+              child: BlocBuilder<PriceTrackerCubit, BaseState<PriceTrackerModel>>(
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return const _PriceTrackerSkeleton();
+                  } else if (state.isSuccess ||
+                      state.isPaginationLoading ||
+                      state.isPaginationFailure) {
+                    if (state.items.isEmpty) {
+                      return EmptyStateWidget(
+                        onButtonPressed: () =>
+                            context.read<PriceTrackerCubit>().fetchSupplierMaterials(),
+                        buttonTitle: AppStrings.retry.tr(),
+                      );
+                    }
+
+                    final cubit = context.read<PriceTrackerCubit>();
+
+                    return PaginatedListWrapper(
+                      scrollController: _scrollController,
+                      paginationHandler: cubit.paginationHandler,
+                      fetchFunction: (page, limit, [params]) =>
+                          instance<PriceTrackerRepo>().getSupplierMaterials(
+                        page: page,
+                        q: cubit.searchQuery,
+                        casNumber: cubit.casNumberString,
+                        materialFamilyIds: cubit.selectedFamilyIds,
+                      ),
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                        itemCount: state.items.length,
+                        itemBuilder: (context, index) {
+                          return PriceTrackerCard(model: state.items[index])
+                              .animate()
+                              .fadeIn(
+                                  delay: (index > 4 ? 50 : index * 50).ms, duration: 400.ms)
+                              .slideX(begin: 0.1);
+                        },
+                      ),
+                    );
+                  } else if (state.isError) {
+                    final isNoInternet = state.failure is NetworkFailure;
+                    return DefaultErrorWidget(
+                      errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
+                      imagePath: isNoInternet ? ImageAssets.noInternet : null,
+                      isLottie: !isNoInternet,
                       buttonTitle: AppStrings.retry.tr(),
+                      onPressed: () => context.read<PriceTrackerCubit>().fetchSupplierMaterials(),
                     );
                   }
 
-                  return PaginatedListWrapper(
-                    scrollController: _scrollController,
-                    paginationHandler:
-                        context.read<PriceTrackerCubit>().paginationHandler,
-                    fetchFunction: (page, limit, [params]) => instance<PriceTrackerRepo>()
-                        .getSupplierMaterials(page: page),
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                      itemCount: state.items.length,
-                      itemBuilder: (context, index) {
-                        return PriceTrackerCard(model: state.items[index])
-                            .animate()
-                            .fadeIn(
-                                delay: (index > 4 ? 50 : index * 50).ms, duration: 400.ms)
-                            .slideX(begin: 0.1);
-                      },
-                    ),
-                  );
-                } else if (state.isError) {
-                  final isNoInternet = state.failure is NetworkFailure;
-                  return DefaultErrorWidget(
-                    errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
-                    imagePath: isNoInternet ? ImageAssets.noInternet : null,
-                    isLottie: !isNoInternet,
-                    buttonTitle: AppStrings.retry.tr(),
-                    onPressed: () => context.read<PriceTrackerCubit>().fetchSupplierMaterials(),
-                  );
-                }
-
-                return const SizedBox.shrink();
-              },
+                  return const SizedBox.shrink();
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -109,6 +126,48 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Row(
         children: [
+          // Filter Icon
+          BlocBuilder<RawMaterialFamiliesCubit, BaseState<MaterialFamilyModel>>(
+            builder: (context, familiesState) {
+              return GestureDetector(
+                onTap: () async {
+                  List<FilterItem> items = [];
+                  if (familiesState.isSuccess) {
+                    items = familiesState.items
+                        .map((family) => FilterItem(id: family.id, title: family.name))
+                        .toList();
+                  }
+
+                  final result = await FilterBottomSheetWidget.show(
+                    context: context,
+                    items: items,
+                    initialSelectedIds: context.read<PriceTrackerCubit>().selectedFamilyIds,
+                  );
+                  if (!context.mounted) return;
+                  if (result != null) {
+                    context.read<PriceTrackerCubit>().fetchSupplierMaterials(familyIds: result);
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: ColorManager.white,
+                    borderRadius: BorderRadius.circular(12.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorManager.black.withOpacity(0.03),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Icon(Icons.tune_rounded, color: ColorManager.black, size: 24.sp),
+                ),
+              );
+            },
+          ),
+          SizedBox(width: 10.w),
+          // Search Bar
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -125,6 +184,20 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
               child: TextField(
                 textAlign:
                     context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+                onChanged: (value) {
+                  if (_debounce?.isActive ?? false) _debounce?.cancel();
+                  _debounce = Timer(const Duration(seconds: 2), () {
+                    final text = value.trim();
+                    // Check if the input is only digits and/or hyphens (valid CAS number pattern)
+                    final isCasNumber = RegExp(r'^[\d-]+$').hasMatch(text) && text.isNotEmpty;
+
+                    if (isCasNumber) {
+                      context.read<PriceTrackerCubit>().fetchSupplierMaterials(query: '', casNumber: text);
+                    } else {
+                      context.read<PriceTrackerCubit>().fetchSupplierMaterials(query: text, casNumber: '');
+                    }
+                  });
+                },
                 decoration: InputDecoration(
                   hintText: '${AppStrings.search.tr()}...',
                   hintStyle: TextStyle(color: ColorManager.grey, fontSize: 14.sp),
@@ -134,22 +207,6 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
                 ),
               ),
             ),
-          ),
-          SizedBox(width: 10.w),
-          Container(
-            padding: EdgeInsets.all(12.w),
-            decoration: BoxDecoration(
-              color: ColorManager.white,
-              borderRadius: BorderRadius.circular(12.r),
-              boxShadow: [
-                BoxShadow(
-                  color: ColorManager.black.withOpacity(0.03),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Icon(Icons.tune_rounded, color: ColorManager.black, size: 24.sp),
           ),
         ],
       ).animate().fadeIn(duration: 500.ms).slideY(begin: -0.2),
@@ -232,63 +289,97 @@ class PriceTrackerCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 6.h),
-          if (model.family != null)
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE2F9D1),
-                borderRadius: BorderRadius.circular(6.r),
-              ),
-              child: Text(
-                model.family?.name ?? '',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF4A7D2C),
+          SizedBox(height: 8.h),
+          Wrap(
+            spacing: 8.w,
+            runSpacing: 8.h,
+            children: [
+              if (model.family != null)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE2F9D1),
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                  child: Text(
+                    model.family?.name ?? '',
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF4A7D2C),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          SizedBox(height: 10.h),
+              if (model.casNumber != null && model.casNumber!.isNotEmpty)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: ColorManager.greyTextColor.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                  child: Text(
+                    "${AppStrings.casNumber.tr()}: ${model.casNumber}",
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      fontWeight: FontWeight.w600,
+                      color: ColorManager.greyTextColor,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          SizedBox(height: 12.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Flexible(
-                child: Text(
-                  "${AppStrings.source.tr()}: ${model.supplier?.name ?? ''}",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 11.sp,
-                    color: const Color(0xFF4A7D2C),
-                    fontWeight: FontWeight.bold,
-                  ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppStrings.source.tr(),
+                      style: TextStyle(fontSize: 10.sp, color: const Color(0xFFB4B4CC)),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      model.supplier?.name ?? '',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: const Color(0xFF4A7D2C),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Row(
-                children: [
-                  // Removed Price Trend
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppStrings.currentPrice.tr(),
-                        style: TextStyle(fontSize: 10.sp, color: const Color(0xFFB4B4CC)),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
+              SizedBox(width: 8.w),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      AppStrings.currentPrice.tr(),
+                      style: TextStyle(fontSize: 10.sp, color: const Color(0xFFB4B4CC)),
+                    ),
+                    SizedBox(height: 4.h),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
                         "${AppStrings.egp.tr()}${model.price ?? model.averagePrice ?? ''}",
                         style: TextStyle(
-                          fontSize: 13.sp,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w900,
                           color: Colors.black,
                         ),
                       ),
-
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

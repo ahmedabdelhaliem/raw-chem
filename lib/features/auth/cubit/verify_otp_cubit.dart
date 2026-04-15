@@ -20,7 +20,9 @@ class VerifyOtpCubit extends Cubit<BaseState<VerifyOtpResponse>> {
 
   Future<void> verifyOtp(VerifyOtpRequest request) async {
     emit(state.copyWith(status: Status.loading));
-    final result = await _authRepo.verifyOtp(request);
+    final fcmToken = _appPrefs.getFcmToken();
+    final updatedRequest = request.copyWith(fcmToken: fcmToken);
+    final result = await _authRepo.verifyOtp(updatedRequest);
     result.fold(
       (failure) => emit(state.copyWith(status: Status.error, errorMessage: failure.message)),
       (response) async {

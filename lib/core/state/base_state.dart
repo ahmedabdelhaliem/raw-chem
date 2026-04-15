@@ -38,6 +38,7 @@ class BaseState<T> extends Equatable {
   final String? errorMessage;
   final String? message;
   final Failure? failure;
+  final bool hasMore;
 
   const BaseState({
     this.status = Status.initial,
@@ -47,6 +48,7 @@ class BaseState<T> extends Equatable {
     this.errorMessage,
     this.message,
     this.failure,
+    this.hasMore = false,
   });
 
   BaseState<T> copyWith({
@@ -57,6 +59,7 @@ class BaseState<T> extends Equatable {
     String? errorMessage,
     String? message,
     Failure? failure,
+    bool? hasMore,
   }) {
     return BaseState<T>(
       status: status ?? this.status,
@@ -66,9 +69,10 @@ class BaseState<T> extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       message: message ?? this.message,
       failure: failure ?? this.failure,
+      hasMore: hasMore ?? this.hasMore,
     );
   }
 
   @override
-  List<Object?> get props => [status, data, items, metadata, errorMessage, message, failure];
+  List<Object?> get props => [status, data, items, metadata, errorMessage, message, failure, hasMore];
 }

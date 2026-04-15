@@ -85,46 +85,51 @@ class MessagingConfig {
       await appPreferences.saveFcmToken(token!);
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
-      log("message received");
+      log("message received: ${event.data}");
       try {
         RemoteNotification? notification = event.notification;
-        log(notification!.body.toString());
-        log(notification.title.toString());
+        String? title = notification?.title ?? event.data['title'];
+        String? body = notification?.body ?? event.data['body'];
 
-        await flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'high_importance_channel',
-              'High Importance Notifications',
-              channelDescription:
-                  'This channel is used for important notifications.',
-              icon: '@mipmap/ic_launcher',
+        if (title != null || body != null) {
+          await flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            title,
+            body,
+            const NotificationDetails(
+              android: AndroidNotificationDetails(
+                'high_importance_channel',
+                'High Importance Notifications',
+                channelDescription:
+                    'This channel is used for important notifications.',
+                icon: '@mipmap/ic_launcher',
+                importance: Importance.max,
+                priority: Priority.high,
+              ),
+              iOS: DarwinNotificationDetails(
+                presentAlert: true,
+                presentBadge: true,
+                presentSound: true,
+              ),
             ),
-            iOS: DarwinNotificationDetails(
-              presentAlert: true,
-              presentBadge: true,
-              presentSound: true,
-            ),
-          ),
-          payload: jsonEncode(event.data),
-        );
+            payload: jsonEncode(event.data),
+          );
+        }
       } catch (err) {
-        log(err.toString());
+        log("Error handling foreground message: $err");
       }
     });
+
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? message) {
       if (message != null) {
-        // handleNotification(navigatorKey.currentContext!, message.data);
+        log("Initial message: ${message.data}");
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // handleNotification(navigatorKey.currentContext!, message.data);
+      log("On message opened app: ${message.data}");
     });
   }
 

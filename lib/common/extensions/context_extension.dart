@@ -38,11 +38,11 @@ extension ContextExtensions on BuildContext {
 
   void goWithReplacement(Widget widget, {Object? result}) => AppFunctions.navigateToAndReplacement(this, widget);
 
-  void pop([Object? object]) => navigatorKey.currentState?.pop(object);
+  void navigatorPop([Object? object]) => navigatorKey.currentState?.pop(object);
 
-  bool canPop() => navigatorKey.currentState?.canPop() ?? false;
+  bool navigatorCanPop() => navigatorKey.currentState?.canPop() ?? false;
 
-  void popUntil(int count, [bool Function(Route<dynamic>)? predicate]) =>
+  void navigatorPopUntil(int count, [bool Function(Route<dynamic>)? predicate]) =>
       navigatorKey.currentState?.popUntil((route) => route.isFirst || (predicate != null && predicate(route)));
 
   void showErrorMessage(String message) {

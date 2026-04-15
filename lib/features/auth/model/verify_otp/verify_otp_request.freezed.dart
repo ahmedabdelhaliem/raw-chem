@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$VerifyOtpRequest {
   String get phone => throw _privateConstructorUsedError;
   String get token => throw _privateConstructorUsedError;
+  @JsonKey(name: 'fcm_token')
+  String? get fcmToken => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $VerifyOtpRequestCopyWith<VerifyOtpRequest> get copyWith =>
@@ -30,7 +32,10 @@ abstract class $VerifyOtpRequestCopyWith<$Res> {
           VerifyOtpRequest value, $Res Function(VerifyOtpRequest) then) =
       _$VerifyOtpRequestCopyWithImpl<$Res, VerifyOtpRequest>;
   @useResult
-  $Res call({String phone, String token});
+  $Res call(
+      {String phone,
+      String token,
+      @JsonKey(name: 'fcm_token') String? fcmToken});
 }
 
 /// @nodoc
@@ -48,6 +53,7 @@ class _$VerifyOtpRequestCopyWithImpl<$Res, $Val extends VerifyOtpRequest>
   $Res call({
     Object? phone = null,
     Object? token = null,
+    Object? fcmToken = freezed,
   }) {
     return _then(_value.copyWith(
       phone: null == phone
@@ -58,6 +64,10 @@ class _$VerifyOtpRequestCopyWithImpl<$Res, $Val extends VerifyOtpRequest>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -70,7 +80,10 @@ abstract class _$$VerifyOtpRequestImplCopyWith<$Res>
       __$$VerifyOtpRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String phone, String token});
+  $Res call(
+      {String phone,
+      String token,
+      @JsonKey(name: 'fcm_token') String? fcmToken});
 }
 
 /// @nodoc
@@ -86,6 +99,7 @@ class __$$VerifyOtpRequestImplCopyWithImpl<$Res>
   $Res call({
     Object? phone = null,
     Object? token = null,
+    Object? fcmToken = freezed,
   }) {
     return _then(_$VerifyOtpRequestImpl(
       phone: null == phone
@@ -96,6 +110,10 @@ class __$$VerifyOtpRequestImplCopyWithImpl<$Res>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -103,17 +121,23 @@ class __$$VerifyOtpRequestImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$VerifyOtpRequestImpl extends _VerifyOtpRequest {
-  const _$VerifyOtpRequestImpl({required this.phone, required this.token})
+  const _$VerifyOtpRequestImpl(
+      {required this.phone,
+      required this.token,
+      @JsonKey(name: 'fcm_token') this.fcmToken})
       : super._();
 
   @override
   final String phone;
   @override
   final String token;
+  @override
+  @JsonKey(name: 'fcm_token')
+  final String? fcmToken;
 
   @override
   String toString() {
-    return 'VerifyOtpRequest(phone: $phone, token: $token)';
+    return 'VerifyOtpRequest(phone: $phone, token: $token, fcmToken: $fcmToken)';
   }
 
   @override
@@ -122,11 +146,13 @@ class _$VerifyOtpRequestImpl extends _VerifyOtpRequest {
         (other.runtimeType == runtimeType &&
             other is _$VerifyOtpRequestImpl &&
             (identical(other.phone, phone) || other.phone == phone) &&
-            (identical(other.token, token) || other.token == token));
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.fcmToken, fcmToken) ||
+                other.fcmToken == fcmToken));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, phone, token);
+  int get hashCode => Object.hash(runtimeType, phone, token, fcmToken);
 
   @JsonKey(ignore: true)
   @override
@@ -138,14 +164,19 @@ class _$VerifyOtpRequestImpl extends _VerifyOtpRequest {
 
 abstract class _VerifyOtpRequest extends VerifyOtpRequest {
   const factory _VerifyOtpRequest(
-      {required final String phone,
-      required final String token}) = _$VerifyOtpRequestImpl;
+          {required final String phone,
+          required final String token,
+          @JsonKey(name: 'fcm_token') final String? fcmToken}) =
+      _$VerifyOtpRequestImpl;
   const _VerifyOtpRequest._() : super._();
 
   @override
   String get phone;
   @override
   String get token;
+  @override
+  @JsonKey(name: 'fcm_token')
+  String? get fcmToken;
   @override
   @JsonKey(ignore: true)
   _$$VerifyOtpRequestImplCopyWith<_$VerifyOtpRequestImpl> get copyWith =>

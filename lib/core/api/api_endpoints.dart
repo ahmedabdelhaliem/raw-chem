@@ -35,4 +35,5 @@ class EndPoints {
 
   static const String createPurchaseOrder = "/supplier-materials/purchase-orders";
   static String fawaterakInit(int orderId) => "/supplier-materials/purchase-orders/$orderId/fawaterak/init";
+  static const String notifications = "/notifications";
 }

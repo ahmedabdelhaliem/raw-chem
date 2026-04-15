@@ -27,7 +27,10 @@ class ProfileCubit extends Cubit<BaseState<ProfileUser>> {
   Future<void> updateProfile(UpdateProfileRequest request) async {
     emit(state.copyWith(status: Status.loading));
 
-    final result = await _authRepo.updateProfile(request);
+    final fcmToken = _appPreferences.getFcmToken();
+    final updatedRequest = request.copyWith(fcmToken: fcmToken);
+
+    final result = await _authRepo.updateProfile(updatedRequest);
 
     result.fold(
       (failure) => emit(state.copyWith(status: Status.error, errorMessage: failure.message)),

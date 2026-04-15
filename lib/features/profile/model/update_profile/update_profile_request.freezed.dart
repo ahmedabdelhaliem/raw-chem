@@ -27,6 +27,8 @@ mixin _$UpdateProfileRequest {
   String get companyName => throw _privateConstructorUsedError;
   @JsonKey(name: 'category_ids')
   List<int> get categoryIds => throw _privateConstructorUsedError;
+  @JsonKey(name: 'fcm_token')
+  String? get fcmToken => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   XFile? get image => throw _privateConstructorUsedError;
 
@@ -48,6 +50,7 @@ abstract class $UpdateProfileRequestCopyWith<$Res> {
       String phone,
       @JsonKey(name: 'company_name') String companyName,
       @JsonKey(name: 'category_ids') List<int> categoryIds,
+      @JsonKey(name: 'fcm_token') String? fcmToken,
       @JsonKey(includeFromJson: false, includeToJson: false) XFile? image});
 }
 
@@ -70,6 +73,7 @@ class _$UpdateProfileRequestCopyWithImpl<$Res,
     Object? phone = null,
     Object? companyName = null,
     Object? categoryIds = null,
+    Object? fcmToken = freezed,
     Object? image = freezed,
   }) {
     return _then(_value.copyWith(
@@ -93,6 +97,10 @@ class _$UpdateProfileRequestCopyWithImpl<$Res,
           ? _value.categoryIds
           : categoryIds // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -115,6 +123,7 @@ abstract class _$$UpdateProfileRequestImplCopyWith<$Res>
       String phone,
       @JsonKey(name: 'company_name') String companyName,
       @JsonKey(name: 'category_ids') List<int> categoryIds,
+      @JsonKey(name: 'fcm_token') String? fcmToken,
       @JsonKey(includeFromJson: false, includeToJson: false) XFile? image});
 }
 
@@ -134,6 +143,7 @@ class __$$UpdateProfileRequestImplCopyWithImpl<$Res>
     Object? phone = null,
     Object? companyName = null,
     Object? categoryIds = null,
+    Object? fcmToken = freezed,
     Object? image = freezed,
   }) {
     return _then(_$UpdateProfileRequestImpl(
@@ -157,6 +167,10 @@ class __$$UpdateProfileRequestImplCopyWithImpl<$Res>
           ? _value._categoryIds
           : categoryIds // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -174,6 +188,7 @@ class _$UpdateProfileRequestImpl extends _UpdateProfileRequest {
       required this.phone,
       @JsonKey(name: 'company_name') required this.companyName,
       @JsonKey(name: 'category_ids') required final List<int> categoryIds,
+      @JsonKey(name: 'fcm_token') this.fcmToken,
       @JsonKey(includeFromJson: false, includeToJson: false) this.image})
       : _categoryIds = categoryIds,
         super._();
@@ -200,12 +215,15 @@ class _$UpdateProfileRequestImpl extends _UpdateProfileRequest {
   }
 
   @override
+  @JsonKey(name: 'fcm_token')
+  final String? fcmToken;
+  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   final XFile? image;
 
   @override
   String toString() {
-    return 'UpdateProfileRequest(name: $name, email: $email, phone: $phone, companyName: $companyName, categoryIds: $categoryIds, image: $image)';
+    return 'UpdateProfileRequest(name: $name, email: $email, phone: $phone, companyName: $companyName, categoryIds: $categoryIds, fcmToken: $fcmToken, image: $image)';
   }
 
   @override
@@ -220,13 +238,15 @@ class _$UpdateProfileRequestImpl extends _UpdateProfileRequest {
                 other.companyName == companyName) &&
             const DeepCollectionEquality()
                 .equals(other._categoryIds, _categoryIds) &&
+            (identical(other.fcmToken, fcmToken) ||
+                other.fcmToken == fcmToken) &&
             (identical(other.image, image) || other.image == image));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, name, email, phone, companyName,
-      const DeepCollectionEquality().hash(_categoryIds), image);
+      const DeepCollectionEquality().hash(_categoryIds), fcmToken, image);
 
   @JsonKey(ignore: true)
   @override
@@ -251,6 +271,7 @@ abstract class _UpdateProfileRequest extends UpdateProfileRequest {
       required final String phone,
       @JsonKey(name: 'company_name') required final String companyName,
       @JsonKey(name: 'category_ids') required final List<int> categoryIds,
+      @JsonKey(name: 'fcm_token') final String? fcmToken,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final XFile? image}) = _$UpdateProfileRequestImpl;
   const _UpdateProfileRequest._() : super._();
@@ -270,6 +291,9 @@ abstract class _UpdateProfileRequest extends UpdateProfileRequest {
   @override
   @JsonKey(name: 'category_ids')
   List<int> get categoryIds;
+  @override
+  @JsonKey(name: 'fcm_token')
+  String? get fcmToken;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   XFile? get image;

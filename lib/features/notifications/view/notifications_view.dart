@@ -10,17 +10,15 @@ import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/shimmer_container_widget.dart';
-import 'package:raw_chem/features/notifications/cubit/notifications_cubit.dart';
-import 'package:raw_chem/features/notifications/model/notification_model.dart';
 
-class NotificationsSettingsView extends StatefulWidget {
-  const NotificationsSettingsView({super.key});
+class NotificationsView extends StatefulWidget {
+  const NotificationsView({super.key});
 
   @override
-  State<NotificationsSettingsView> createState() => _NotificationsSettingsViewState();
+  State<NotificationsView> createState() => _NotificationsViewState();
 }
 
-class _NotificationsSettingsViewState extends State<NotificationsSettingsView> {
+class _NotificationsViewState extends State<NotificationsView> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -72,7 +70,7 @@ class _NotificationsSettingsViewState extends State<NotificationsSettingsView> {
             color: ColorManager.primary,
             child: ListView.separated(
               controller: _scrollController,
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               itemCount: notifications.length + (state.hasMore ? 1 : 0),
               separatorBuilder: (context, index) => SizedBox(height: 12.h),
               itemBuilder: (context, index) {
@@ -107,7 +105,7 @@ class _NotificationsSettingsViewState extends State<NotificationsSettingsView> {
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -119,7 +117,7 @@ class _NotificationsSettingsViewState extends State<NotificationsSettingsView> {
             Container(
               padding: EdgeInsets.all(10.w),
               decoration: BoxDecoration(
-                color: ColorManager.primary.withOpacity(0.1),
+                color: ColorManager.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -177,15 +175,22 @@ class _NotificationsSettingsViewState extends State<NotificationsSettingsView> {
     final metadata = notification.metadata;
     if (metadata == null) return;
 
-    if (metadata.type == 'supplier_material_purchase_order' && metadata.purchaseOrderId != null) {
-      final skeletonOrder = PurchaseOrderModel(
-        id: metadata.purchaseOrderId!,
-        status: metadata.status ?? 'pending',
-        quantity: 0,
-        listedUnitPrice: '0.0',
-        estimatedSubtotal: '0.0',
-      );
-      context.push(AppRouters.orderDetailsView, extra: skeletonOrder);
+    if (metadata.type == 'supplier_material_purchase_order') {
+       // If we have an order ID, we can try to navigate.
+       if (metadata.purchaseOrderId != null) {
+         // Create a skeleton PurchaseOrderModel to pass, or fetch it.
+         // For now, based on current AppRouter, it expects a full model.
+         // We might need to modify the router to accept ID and fetch, but here is a workaround:
+         final skeletonOrder = PurchaseOrderModel(
+           id: metadata.purchaseOrderId!,
+           status: metadata.status ?? 'pending',
+           quantity: 0,
+           listedUnitPrice: '0.0',
+           estimatedSubtotal: '0.0',
+           supplierMaterial: null, // This might cause issues if view uses it immediately
+         );
+         context.push(AppRouters.orderDetailsView, extra: skeletonOrder);
+       }
     }
   }
 

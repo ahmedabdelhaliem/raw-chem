@@ -163,6 +163,7 @@ class AppStrings {
   static const String termsAndConditions = "termsAndConditions";
   static const String logout = "logout";
   static const String settings = "settings";
+  static const String noNotifications = "noNotifications";
 
   // Personal Data
   static const String fullName = "fullName";
@@ -288,6 +289,17 @@ class AppStrings {
   static const String noDescription = "noDescription";
   static const String contactDetails = "contactDetails";
   static const String suppliedMaterials = "suppliedMaterials";
+  static const String subtotal = "subtotal";
+  static const String discount = "discount";
+  static const String grandTotal = "grandTotal";
+  static const String invoiceNumber = "invoiceNumber";
+  static const String payNow = "payNow";
+  static const String selectPaymentMethod = "selectPaymentMethod";
+  static const String statusAccepted = "statusAccepted";
+  static const String statusRejected = "statusRejected";
+  static const String statusPending = "statusPending";
+  static const String statusAwaitingPayment = "statusAwaitingPayment";
+  static const String statusPaid = "statusPaid";
 }
 
 

@@ -16,6 +16,7 @@ _$UpdateProfileRequestImpl _$$UpdateProfileRequestImplFromJson(
       categoryIds: (json['category_ids'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),
+      fcmToken: json['fcm_token'] as String?,
     );
 
 Map<String, dynamic> _$$UpdateProfileRequestImplToJson(
@@ -26,4 +27,5 @@ Map<String, dynamic> _$$UpdateProfileRequestImplToJson(
       'phone': instance.phone,
       'company_name': instance.companyName,
       'category_ids': instance.categoryIds,
+      'fcm_token': instance.fcmToken,
     };

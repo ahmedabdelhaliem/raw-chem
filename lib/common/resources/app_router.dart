@@ -22,7 +22,6 @@ import 'package:raw_chem/features/profile/view/about_us_view.dart';
 import 'package:raw_chem/features/profile/view/help_support_view.dart';
 import 'package:raw_chem/features/profile/view/language_view.dart';
 import 'package:raw_chem/features/profile/view/notifications_settings_view.dart';
-import 'package:raw_chem/features/profile/view/order_details_view.dart';
 import 'package:raw_chem/features/profile/view/orders_history_view.dart';
 import 'package:raw_chem/features/profile/view/personal_data_view.dart';
 import 'package:raw_chem/features/profile/view/profile_view.dart';
@@ -141,7 +140,10 @@ abstract class AppRouters {
       ),
       GoRoute(
         path: AppRouters.notificationsSettingsView,
-        builder: (context, state) => const NotificationsSettingsView(),
+        builder: (context, state) => BlocProvider(
+          create: (context) => instance<NotificationsCubit>()..fetchNotifications(),
+          child: const NotificationsSettingsView(),
+        ),
       ),
       GoRoute(
         path: AppRouters.helpSupportView,
@@ -212,11 +214,17 @@ abstract class AppRouters {
       ),
       GoRoute(
         path: AppRouters.orderDetailsView,
-        builder: (context, state) => const OrderDetailsView(),
+        builder: (context, state) {
+          final order = state.extra as PurchaseOrderModel;
+          return ConnectSupplierView(order: order);
+        },
       ),
       GoRoute(
         path: AppRouters.connectSupplierView,
         builder: (context, state) {
+          if (state.extra is PurchaseOrderModel) {
+            return ConnectSupplierView(order: state.extra as PurchaseOrderModel);
+          }
           final materialId = state.extra as int;
           return ConnectSupplierView(materialId: materialId);
         },

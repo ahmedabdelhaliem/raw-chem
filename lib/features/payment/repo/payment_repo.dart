@@ -1,6 +1,7 @@
 import 'package:raw_chem/common/data_source/generic_data_source.dart';
 import 'package:raw_chem/common/http/either.dart';
 import 'package:raw_chem/common/http/failure.dart';
+import 'package:raw_chem/features/payment/model/payment_method_model.dart';
 
 class PaymentRepo {
   final GenericDataSource _dataSource;
@@ -18,6 +19,13 @@ class PaymentRepo {
         'payment_method_id': paymentMethodId,
       },
       fromJson: (json) => json,
+    );
+  }
+
+  Future<Either<Failure, List<PaymentMethodModel>>> getPaymentMethods() async {
+    return await _dataSource.fetchData<PaymentMethodModel>(
+      endpoint: "/fawaterak/payment-methods",
+      fromJson: (json) => PaymentMethodModel.fromJson(json),
     );
   }
 }
