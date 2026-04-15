@@ -34,4 +34,5 @@ class EndPoints {
   static String cities(int governorateId) => "/cities/$governorateId";
 
   static const String createPurchaseOrder = "/supplier-materials/purchase-orders";
+  static String fawaterakInit(int orderId) => "/supplier-materials/purchase-orders/$orderId/fawaterak/init";
 }

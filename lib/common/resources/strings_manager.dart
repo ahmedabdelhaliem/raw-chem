@@ -279,6 +279,15 @@ class AppStrings {
   static const String close = "close";
   static const String DesignedAndDevelopedBy = "DesignedAndDevelopedBy";
   static const String copyright = "copyright";
+  static const String enterValidNumber = "enterValidNumber";
+  static const String invalidPhone = "invalidPhone";
+  static const String fillAllDetails = "fillAllDetails";
+  static const String address = "address";
+  static const String notProvided = "notProvided";
+  static const String phone = "phone";
+  static const String noDescription = "noDescription";
+  static const String contactDetails = "contactDetails";
+  static const String suppliedMaterials = "suppliedMaterials";
 }
 
 

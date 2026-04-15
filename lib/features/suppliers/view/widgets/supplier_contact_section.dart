@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/features/suppliers/model/supplier_model.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SupplierContactSection extends StatelessWidget {
@@ -17,21 +19,21 @@ class SupplierContactSection extends StatelessWidget {
       children: [
         _ModernContactCard(
           icon: Iconsax.location,
-          title: 'Address',
-          value: supplier.address ?? 'Not provided',
+          title: AppStrings.address.tr(),
+          value: supplier.address ?? AppStrings.notProvided.tr(),
           color: const Color(0xFF6366F1), // Indigo
         ),
         _ModernContactCard(
           icon: Iconsax.call,
-          title: 'Phone',
-          value: supplier.phone ?? 'Not provided',
+          title: AppStrings.phone.tr(),
+          value: supplier.phone ?? AppStrings.notProvided.tr(),
           color: const Color(0xFF10B981), // Emerald
           onTap: supplier.phone != null ? () => _makeCall(supplier.phone!) : null,
         ),
         _ModernContactCard(
           icon: Iconsax.sms,
-          title: 'Email',
-          value: supplier.email ?? 'Not provided',
+          title: AppStrings.email.tr(),
+          value: supplier.email ?? AppStrings.notProvided.tr(),
           color: const Color(0xFFF59E0B), // Amber
           onTap: supplier.email != null ? () => _sendEmail(supplier.email!) : null,
         ),

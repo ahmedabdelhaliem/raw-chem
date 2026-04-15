@@ -198,7 +198,16 @@
   "chatInbox": "Chat Inbox",
   "retry": "Retry",
   "DesignedAndDevelopedBy": "Designed and Developed by",
-  "copyright": "Brmja tech . All Rights Reserved 2026 ©"
+  "copyright": "Brmja tech . All Rights Reserved 2026 ©",
+  "enterValidNumber": "Please enter a valid number",
+  "invalidPhone": "Invalid phone number",
+  "fillAllDetails": "Please ensure all fields are filled and location is selected",
+  "address": "Address",
+  "notProvided": "Not provided",
+  "phone": "Phone",
+  "noDescription": "No description available",
+  "contactDetails": "Contact Details",
+  "suppliedMaterials": "Supplied Materials"
 }
 
 

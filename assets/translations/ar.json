@@ -196,7 +196,16 @@
   "chatInbox": "صندوق الوارد",
   "retry": "إعادة المحاولة",
   "DesignedAndDevelopedBy": "تم التصميم والتطوير بواسطة",
-  "copyright": "2026 برمجة تك – جميع الحقوق محفوظة©"
+  "copyright": "2026 برمجة تك – جميع الحقوق محفوظة©",
+  "enterValidNumber": "يرجى إدخال رقم صحيح",
+  "invalidPhone": "رقم الهاتف غير صحيح",
+  "fillAllDetails": "يرجى التأكد من ملء جميع الحقول واختيار الموقع بالكامل",
+  "address": "العنوان",
+  "notProvided": "غير متوفر",
+  "phone": "رقم الهاتف",
+  "noDescription": "لا يوجد وصف متاح",
+  "contactDetails": "تفاصيل الاتصال",
+  "suppliedMaterials": "المواد المتوفرة"
 }
 
 

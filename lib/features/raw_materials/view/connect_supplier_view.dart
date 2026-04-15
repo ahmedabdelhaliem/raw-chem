@@ -57,7 +57,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(AppStrings.requestSentSuccess.tr())),
                   );
-                  context.pop();
+                  context.pushReplacement(AppRouters.orderDetailsView);
                 }
               } else if (state.isError) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -159,7 +159,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                               return AppStrings.quantityHint.tr();
                             }
                             if (double.tryParse(val) == null) {
-                              return "يرجى إدخال رقم صحيح";
+                              return AppStrings.enterValidNumber.tr();
                             }
                             return null;
                           },
@@ -176,7 +176,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                               return AppStrings.recipientPhoneHint.tr();
                             }
                             if (val.length < 10) {
-                              return "رقم الهاتف غير صحيح";
+                              return AppStrings.invalidPhone.tr();
                             }
                             return null;
                           },
@@ -226,8 +226,8 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                                 if (!isFormValid || !isLocationValid) {
                                   debugPrint("Validation Failed: Form($isFormValid), Location($isLocationValid)");
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('يرجى التأكد من ملء جميع الحقول واختيار الموقع بالكامل'),
+                                    SnackBar(
+                                      content: Text(AppStrings.fillAllDetails.tr()),
                                       backgroundColor: Colors.orange,
                                     ),
                                   );

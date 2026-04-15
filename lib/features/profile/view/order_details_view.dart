@@ -3,14 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/common/widgets/default_button_widget.dart';
+import 'package:raw_chem/common/resources/app_router.dart';
+import 'package:go_router/go_router.dart';
 
 class OrderDetailsView extends StatelessWidget {
   const OrderDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorManager.bg,
+    return BlocProvider(
+      create: (context) => instance<ConfirmPaymentCubit>(),
+      child: Scaffold(
+        backgroundColor: ColorManager.bg,
       appBar: AppBar(
         title: Text(
           AppStrings.orderDetails.tr(),
@@ -136,9 +143,64 @@ class OrderDetailsView extends StatelessWidget {
                 },
               ),
             ),
+            
+            SizedBox(height: 32.h),
+            // Payment Button
+            BlocConsumer<ConfirmPaymentCubit, BaseState<dynamic>>(
+              listener: (context, state) {
+                if (state.isSuccess) {
+                  final response = state.data;
+                  final paymentData = response?['payment_data'];
+                  final paymentUrl = paymentData?['redirectTo'];
+
+                  if (paymentUrl != null) {
+                    context.push(AppRouters.fawaterkWebView, extra: {'url': paymentUrl});
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(AppStrings.requestSentSuccess.tr())),
+                    );
+                  }
+                } else if (state.isError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.errorMessage ?? AppStrings.unknownError.tr()),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return DefaultButtonWidget(
+                  text: 'الدفع المباشر',
+                  isLoading: state.isLoading,
+                  onPressed: () {
+                    // For now, using mocked ID 2 based on postman example and payment_method_id 2
+                    context.read<ConfirmPaymentCubit>().confirmPayment(
+                          orderId: 2,
+                          paymentMethodId: 2,
+                        );
+                  },
+                  color: const Color(0xFF006B3E),
+                  textColor: Colors.white,
+                  radius: 12.r,
+                  height: 54.h,
+                  isIcon: true,
+                  textFirst: true,
+                  iconBuilder: Container(
+                    padding: EdgeInsets.all(5.w),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.payment, color: const Color(0xFF006B3E), size: 14.sp),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
+    ),
     );
   }
 

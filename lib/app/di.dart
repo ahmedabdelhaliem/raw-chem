@@ -82,6 +82,7 @@ Future<void> initAppModule() async {
   instance.registerLazySingleton<ChatRepo>(
       () => ChatRepoImpl(ChatApiDataSourceImpl(instance()), ChatSocketServiceImpl()));
   instance.registerLazySingleton<LocationsRepo>(() => LocationsRepo(instance()));
+  instance.registerLazySingleton<PaymentRepo>(() => PaymentRepo(instance()));
 
   // Register Cubits
   instance.registerFactory<SignupCubit>(() => SignupCubit(instance(), instance()));
@@ -109,4 +110,5 @@ Future<void> initAppModule() async {
   instance.registerFactory<ChatInboxCubit>(() => ChatInboxCubit(instance()));
   instance.registerFactory<LocationsCubit>(() => LocationsCubit(instance()));
   instance.registerFactory<CreatePurchaseOrderCubit>(() => CreatePurchaseOrderCubit(instance()));
+  instance.registerFactory<ConfirmPaymentCubit>(() => ConfirmPaymentCubit(instance()));
 }

@@ -33,7 +33,7 @@ class SupplierDetailsView extends StatelessWidget {
                   _buildSectionTitle(AppStrings.aboutUs.tr()),
                   SizedBox(height: 12.h),
                   Text(
-                    supplier.desc ?? 'No description available',
+                    supplier.desc ?? AppStrings.noDescription.tr(),
                     style: TextStyle(
                       fontSize: 14.sp,
                       color: ColorManager.greyTextColor.withOpacity(0.8),
@@ -41,11 +41,11 @@ class SupplierDetailsView extends StatelessWidget {
                     ),
                   ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.1),
                   SizedBox(height: 30.h),
-                  _buildSectionTitle('Contact Details'),
+                  _buildSectionTitle(AppStrings.contactDetails.tr()),
                   SizedBox(height: 16.h),
                   SupplierContactSection(supplier: supplier),
                   SizedBox(height: 32.h),
-                  _buildSectionTitle('Supplied Materials'),
+                  _buildSectionTitle(AppStrings.suppliedMaterials.tr()),
                   SizedBox(height: 16.h),
                 ],
               ),

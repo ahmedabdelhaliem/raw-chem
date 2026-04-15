@@ -54,6 +54,8 @@ import 'package:raw_chem/features/chat/data/data_source/chat_api_data_source.dar
 import 'package:raw_chem/features/chat/data/data_source/chat_socket_service.dart';
 import 'package:raw_chem/features/chat/data/repo_impl/chat_repo_impl.dart';
 import 'package:raw_chem/features/chat/domain/model/message_model.dart';
+import 'package:raw_chem/features/payment/repo/payment_repo.dart';
+import 'package:raw_chem/features/payment/cubit/confirm_payment_cubit.dart';
 
 export 'package:get_it/get_it.dart';
 export 'package:dio/dio.dart';
@@ -113,6 +115,8 @@ export '../features/chat/presentation/cubit/chat_cubit.dart';
 export '../features/chat/presentation/cubit/chat_inbox_cubit.dart';
 export '../features/chat/domain/model/message_model.dart';
 export '../common/http/failure.dart';
+export '../features/payment/repo/payment_repo.dart';
+export '../features/payment/cubit/confirm_payment_cubit.dart';
 
 
 import 'app_constants.dart';
