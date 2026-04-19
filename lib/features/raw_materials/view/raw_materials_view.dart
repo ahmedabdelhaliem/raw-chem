@@ -17,6 +17,7 @@ import 'package:raw_chem/common/resources/assets_manager.dart';
 
 import 'package:raw_chem/common/widgets/filter_bottom_sheet_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
+import 'package:raw_chem/common/widgets/raw_material_skeleton.dart';
 import 'package:raw_chem/features/raw_materials/cubit/raw_material_families_cubit.dart';
 
 class RawMaterialsView extends StatefulWidget {
@@ -151,7 +152,7 @@ class _RawMaterialsViewState extends State<RawMaterialsView> {
                     borderRadius: BorderRadius.circular(12.r),
                     boxShadow: [
                       BoxShadow(
-                        color: ColorManager.black.withOpacity(0.03),
+                        color: ColorManager.black.withValues(alpha: 0.03),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -172,7 +173,7 @@ class _RawMaterialsViewState extends State<RawMaterialsView> {
                 borderRadius: BorderRadius.circular(15.r),
                 boxShadow: [
                   BoxShadow(
-                    color: ColorManager.black.withOpacity(0.03),
+                    color: ColorManager.black.withValues(alpha: 0.03),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -197,7 +198,7 @@ class _RawMaterialsViewState extends State<RawMaterialsView> {
                 decoration: InputDecoration(
                   hintText: AppStrings.searchMaterialsHint.tr(),
                   hintStyle: TextStyle(
-                    color: ColorManager.greyTextColor.withOpacity(0.5),
+                    color: ColorManager.greyTextColor.withValues(alpha: 0.5),
                     fontSize: 14.sp,
                   ),
                   suffixIcon: const Icon(Icons.search, color: ColorManager.black),
@@ -287,9 +288,9 @@ class _RawMaterialsSkeleton extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Expanded(child: SkeletonCard(radius: 12)),
+                const Expanded(child: RawMaterialSkeleton()),
                 SizedBox(width: 12.w),
-                const Expanded(child: SkeletonCard(radius: 12)),
+                const Expanded(child: RawMaterialSkeleton()),
               ],
             ),
           ),

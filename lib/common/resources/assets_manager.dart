@@ -24,7 +24,7 @@ class ImageAssets {
   static const String dividerLeft = '$imagesPath/divider_left.png';
   static const String nassan = '$imagesPath/nassan.png';
   static const String star = "$imagesPath/Star1.png";
-  static const String cart = "$imagesPath/cart.png";
+
   static const String logo = "$imagesPath/2020.png";
   //===assets\images\undraw_traveling_yhxq.png
   static const String onBoarding1 = "$imagesPath/undraw_traveling_yhxq.png";
@@ -112,7 +112,7 @@ class IconAssets {
   static const String terms = '$iconsPath/Group 1410103794.svg';
   static const String occazuon = '$iconsPath/occazuon.svg';
   static const String box = '$iconsPath/box.svg';
-  static const String cart = '$iconsPath/cart.svg';
+
   static const String carIcon = '$iconsPath/car.svg';
   static const String fill = '$iconsPath/fill.svg';
   static const String chip = '$iconsPath/Chip.svg';

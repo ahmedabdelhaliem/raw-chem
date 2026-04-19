@@ -17,7 +17,11 @@ class SignupCubit extends Cubit<BaseState<RegisterResponse>> {
     final updatedRequest = request.copyWith(fcmToken: fcmToken);
     final result = await _authRepo.register(updatedRequest);
     result.fold(
-      (failure) => emit(state.copyWith(status: Status.error, errorMessage: failure.message)),
+      (failure) => emit(state.copyWith(
+        status: Status.error,
+        errorMessage: failure.message,
+        failure: failure,
+      )),
       (response) => emit(state.copyWith(status: Status.success, data: response)),
     );
   }

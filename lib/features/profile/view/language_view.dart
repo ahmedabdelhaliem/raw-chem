@@ -63,7 +63,7 @@ class _LanguageViewState extends State<LanguageView> {
                 SizedBox(height: 24.h),
                 _buildLanguageCard(
                   title: AppStrings.arabic.tr(),
-                  subtitle: 'Arabic',
+                  subtitle: AppStrings.arabicSubtitle.tr(),
                   flag: '🇸🇦',
                   locale: ARABIC_LOCALE,
                   isSelected: _selectedLanguageCode == ARABIC,
@@ -71,7 +71,7 @@ class _LanguageViewState extends State<LanguageView> {
                 SizedBox(height: 16.h),
                 _buildLanguageCard(
                   title: AppStrings.english.tr(),
-                  subtitle: 'الأنجليزية',
+                  subtitle: AppStrings.englishSubtitle.tr(),
                   flag: '🇺🇸',
                   locale: ENGLISH_LOCALE,
                   isSelected: _selectedLanguageCode == ENGLISH,
@@ -81,7 +81,7 @@ class _LanguageViewState extends State<LanguageView> {
           ),
           if (_isLoading)
             Container(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               child: const Center(
                 child: CircularProgressIndicator(color: ColorManager.primary),
               ),
@@ -110,8 +110,8 @@ class _LanguageViewState extends State<LanguageView> {
         boxShadow: [
           BoxShadow(
             color: isSelected
-                ? ColorManager.primary.withOpacity(0.1)
-                : Colors.black.withOpacity(0.05),
+                ? ColorManager.primary.withValues(alpha: 0.1)
+                : Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -148,7 +148,7 @@ class _LanguageViewState extends State<LanguageView> {
                 height: 45.w,
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? ColorManager.primary.withOpacity(0.1)
+                      ? ColorManager.primary.withValues(alpha: 0.1)
                       : ColorManager.bg,
                   shape: BoxShape.circle,
                 ),

@@ -26,7 +26,7 @@ class SupplierMaterialCard extends StatelessWidget {
           border: Border.all(color: const Color(0xFFE2F9D1), width: 1),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF1B3D2F).withOpacity(0.02),
+              color: const Color(0xFF1B3D2F).withValues(alpha: 0.02),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -48,15 +48,15 @@ class SupplierMaterialCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (model.averagePrice != null)
+                if (model.price != null || model.averagePrice != null)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                     decoration: BoxDecoration(
-                      color: ColorManager.primary.withOpacity(0.1),
+                      color: ColorManager.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
-                      "${model.averagePrice} ${AppStrings.egp.tr()}",
+                      "${model.price ?? model.averagePrice ?? ''} ${AppStrings.egp.tr()}",
                       style: TextStyle(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w900,
@@ -70,13 +70,13 @@ class SupplierMaterialCard extends StatelessWidget {
             if (model.family != null)
               Row(
                 children: [
-                  Icon(Iconsax.category, size: 14.sp, color: ColorManager.greyTextColor.withOpacity(0.5)),
+                  Icon(Iconsax.category, size: 14.sp, color: ColorManager.greyTextColor.withValues(alpha: 0.5)),
                   SizedBox(width: 6.w),
                   Text(
                     model.family?.name ?? '',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: ColorManager.greyTextColor.withOpacity(0.7),
+                      color: ColorManager.greyTextColor.withValues(alpha: 0.7),
                     ),
                   ),
                 ],

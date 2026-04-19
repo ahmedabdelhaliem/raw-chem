@@ -1,10 +1,12 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
+import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,10 +28,10 @@ class _SupplierBottomActionsState extends State<SupplierBottomActions> {
     return Container(
       height: 90.h,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.8),
+        color: Colors.white.withValues(alpha: 0.8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 15,
             offset: const Offset(0, -5),
           ),
@@ -50,7 +52,7 @@ class _SupplierBottomActionsState extends State<SupplierBottomActions> {
                         : _ActionButton(
                             onPressed: () => _handleStartChat(context),
                             icon: Icons.link_rounded,
-                            label: 'اتصال بمورد',
+                            label: AppStrings.contactSupplier.tr(),
                             color: ColorManager.primary,
                           ),
                   )
@@ -68,7 +70,7 @@ class _SupplierBottomActionsState extends State<SupplierBottomActions> {
                   child: _ActionButton(
                     onPressed: widget.supplier.phone != null ? () => _makeCall(widget.supplier.phone!) : null,
                     icon: Iconsax.call,
-                    label: 'Call Now',
+                    label: AppStrings.callUsAt.tr(),
                     color: const Color(0xFF1B3D2F),
                   ),
                 ),
@@ -141,7 +143,7 @@ class _ActionButton extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3),
+            color: color.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

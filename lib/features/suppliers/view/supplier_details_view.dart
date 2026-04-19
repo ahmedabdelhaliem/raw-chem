@@ -36,7 +36,7 @@ class SupplierDetailsView extends StatelessWidget {
                     supplier.desc ?? AppStrings.noDescription.tr(),
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: ColorManager.greyTextColor.withOpacity(0.8),
+                      color: ColorManager.greyTextColor.withValues(alpha: 0.8),
                       height: 1.6,
                     ),
                   ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.1),

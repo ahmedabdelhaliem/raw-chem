@@ -70,7 +70,7 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: ColorManager.black.withOpacity(0.04),
+                      color: ColorManager.black.withValues(alpha: 0.04),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -82,7 +82,7 @@ class _CategoryItemsViewState extends State<CategoryItemsView> {
                     borderRadius: BorderRadius.circular(12.r),
                     boxShadow: [
                       BoxShadow(
-                        color: ColorManager.primary.withOpacity(0.2),
+                        color: ColorManager.primary.withValues(alpha: 0.2),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),

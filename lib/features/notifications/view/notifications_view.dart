@@ -10,6 +10,7 @@ import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/shimmer_container_widget.dart';
+import 'package:raw_chem/common/widgets/default_error_widget.dart';
 
 class NotificationsView extends StatefulWidget {
   const NotificationsView({super.key});
@@ -20,18 +21,6 @@ class NotificationsView extends StatefulWidget {
 
 class _NotificationsViewState extends State<NotificationsView> {
   final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.8) {
-      context.read<NotificationsCubit>().loadMoreNotifications();
-    }
-  }
 
   @override
   void dispose() {
@@ -56,7 +45,10 @@ class _NotificationsViewState extends State<NotificationsView> {
           }
 
           if (state.isFailure && state.items.isEmpty) {
-            return _buildErrorState(context, state.errorMessage);
+            return DefaultErrorWidget(
+              errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
+              onPressed: () => context.read<NotificationsCubit>().fetchNotifications(isReload: true),
+            );
           }
 
           final notifications = state.items;
@@ -68,23 +60,19 @@ class _NotificationsViewState extends State<NotificationsView> {
           return RefreshIndicator(
             onRefresh: () => context.read<NotificationsCubit>().fetchNotifications(isReload: true),
             color: ColorManager.primary,
-            child: ListView.separated(
-              controller: _scrollController,
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-              itemCount: notifications.length + (state.hasMore ? 1 : 0),
-              separatorBuilder: (context, index) => SizedBox(height: 12.h),
-              itemBuilder: (context, index) {
-                if (index < notifications.length) {
+            child: PaginatedListWrapper(
+              scrollController: _scrollController,
+              paginationHandler: context.read<NotificationsCubit>().paginationHandler,
+              fetchFunction: (page, limit, [params]) => instance<NotificationsRepo>().getNotifications(page: page),
+              child: ListView.separated(
+                controller: _scrollController,
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                itemCount: notifications.length,
+                separatorBuilder: (context, index) => SizedBox(height: 12.h),
+                itemBuilder: (context, index) {
                   return _buildNotificationCard(context, notifications[index]);
-                } else {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-              },
+                },
+              ),
             ),
           );
         },
@@ -233,22 +221,4 @@ class _NotificationsViewState extends State<NotificationsView> {
     ).animate().fadeIn();
   }
 
-  Widget _buildErrorState(BuildContext context, String? message) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(20.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(message ?? AppStrings.unknownError.tr(), textAlign: TextAlign.center),
-            SizedBox(height: 16.h),
-            ElevatedButton(
-              onPressed: () => context.read<NotificationsCubit>().fetchNotifications(isReload: true),
-              child: Text(AppStrings.retry.tr()),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

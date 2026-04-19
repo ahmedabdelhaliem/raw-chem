@@ -30,7 +30,7 @@ class SupplierCardWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFFF0F7e9), // Light greenish background as in the image
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: ColorManager.primary.withOpacity(0.1), width: 1),
+          border: Border.all(color: ColorManager.primary.withValues(alpha: 0.1), width: 1),
         ),
         child: Row(
           children: [
@@ -40,7 +40,7 @@ class SupplierCardWidget extends StatelessWidget {
                   ? Container(
                       width: .18.sw,
                       height: .18.sw,
-                      color: ColorManager.primary.withOpacity(0.1),
+                      color: ColorManager.primary.withValues(alpha: 0.1),
                       child: Icon(Icons.storefront_rounded, color: ColorManager.primary, size: 24.sp),
                     )
                   : Image.network(
@@ -51,7 +51,7 @@ class SupplierCardWidget extends StatelessWidget {
                       errorBuilder: (context, error, stackTrace) => Container(
                         width: .18.sw,
                         height: .18.sw,
-                        color: ColorManager.primary.withOpacity(0.1),
+                        color: ColorManager.primary.withValues(alpha: 0.1),
                         child: Icon(Icons.storefront_rounded, color: ColorManager.primary, size: 24.sp),
                       ),
                     ),
@@ -71,7 +71,7 @@ class SupplierCardWidget extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: const Color(0xFF0D1B2A), // Dark blueish text
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 6.h),

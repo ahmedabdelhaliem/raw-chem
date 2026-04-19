@@ -76,7 +76,7 @@ class _ModernContactCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.08),
+            color: color.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -94,7 +94,7 @@ class _ModernContactCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(10.w),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Icon(icon, size: 22.sp, color: color),
@@ -109,7 +109,7 @@ class _ModernContactCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w500,
-                          color: ColorManager.greyTextColor.withOpacity(0.6),
+                          color: ColorManager.greyTextColor.withValues(alpha: 0.6),
                         ),
                       ),
                       SizedBox(height: 2.h),
@@ -125,7 +125,7 @@ class _ModernContactCard extends StatelessWidget {
                   ),
                 ),
                 if (onTap != null)
-                  Icon(Iconsax.arrow_right_3, size: 18.sp, color: color.withOpacity(0.5)),
+                  Icon(Iconsax.arrow_right_3, size: 18.sp, color: color.withValues(alpha: 0.5)),
               ],
             ),
           ),

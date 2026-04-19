@@ -74,7 +74,7 @@ class _DefaultListTileState extends State<DefaultListTile> {
           style: widget.textStyle ??
               getRegularStyle(
                 fontSize: 12.sp,
-                color: widget.itemsColor ?? ColorManager.black.withOpacity(.7),
+                color: widget.itemsColor ?? ColorManager.black.withValues(alpha: .7),
               ),
         ),
         trailing: _getTrailingWidget(),
@@ -90,7 +90,7 @@ class _DefaultListTileState extends State<DefaultListTile> {
       return Icon(
         widget.icon,
         size: widget.iconSize ?? 22.sp,
-        color: widget.iconColor ?? widget.itemsColor ?? ColorManager.black.withOpacity(.7),
+        color: widget.iconColor ?? widget.itemsColor ?? ColorManager.black.withValues(alpha: .7),
       );
     }
 
@@ -105,7 +105,7 @@ class _DefaultListTileState extends State<DefaultListTile> {
           height: widget.iconSize ?? 25.h,
           width: widget.iconSize ?? 24.w,
           errorBuilder: (context, error, stackTrace) => CircleAvatar(
-            backgroundColor: ColorManager.green.withOpacity(.3),
+            backgroundColor: ColorManager.green.withValues(alpha: .3),
             radius: 15.sp,
           ),
         ),
@@ -115,7 +115,7 @@ class _DefaultListTileState extends State<DefaultListTile> {
         widget.iconPath ?? '',
         height: widget.iconSize ?? 25.w,
         width: widget.iconSize ?? 25.w,
-        color: widget.iconColor ?? widget.itemsColor ?? ColorManager.black.withOpacity(.7),
+        color: widget.iconColor ?? widget.itemsColor ?? ColorManager.black.withValues(alpha: .7),
       );
     }
   }

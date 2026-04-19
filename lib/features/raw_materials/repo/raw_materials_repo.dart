@@ -89,9 +89,6 @@ class RawMaterialsRepo {
     return await _dataSource.fetchPaginatedData<PurchaseOrderModel>(
       endpoint: EndPoints.createPurchaseOrder,
       params: PaginationParams(page: page, limit: 10),
-      queryParameters: {
-        if (status != null) 'status': status,
-      },
       fromJson: (json) => PurchaseOrderModel.fromJson(json),
     );
   }

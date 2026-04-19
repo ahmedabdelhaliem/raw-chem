@@ -141,8 +141,8 @@ class DefaultButtonWidget extends StatelessWidget {
           overlayColor: WidgetStatePropertyAll(
             overlayColor ??
                 (withBorder
-                    ? ColorManager.primary.withOpacity(.1)
-                    : ColorManager.white.withOpacity(.3)),
+                    ? ColorManager.primary.withValues(alpha: .1)
+                    : ColorManager.white.withValues(alpha: .3)),
           ),
           backgroundColor: WidgetStateProperty.all(color ?? Colors.transparent),
           shadowColor: WidgetStateProperty.all(Colors.grey.shade100),

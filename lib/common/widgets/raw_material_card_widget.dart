@@ -43,7 +43,7 @@ class RawMaterialCardWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
-              color: ColorManager.black.withOpacity(0.04),
+              color: ColorManager.black.withValues(alpha: 0.04),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
@@ -147,7 +147,7 @@ class RawMaterialCardWidget extends StatelessWidget {
           ? Icon(
               Icons.image_not_supported_outlined,
               size: 28.sp,
-              color: ColorManager.greyTextColor.withOpacity(0.3),
+              color: ColorManager.greyTextColor.withValues(alpha: 0.3),
             )
           : CachedNetworkImage(
               imageUrl: imageUrl,
@@ -157,12 +157,12 @@ class RawMaterialCardWidget extends StatelessWidget {
               placeholder: (context, url) => Shimmer.fromColors(
                 baseColor: Colors.grey[300]!,
                 highlightColor: Colors.grey[100]!,
-                child: Container(color: Colors.white, width: 80.w, height: 72.h),
+                child: Container(color: Colors.white, width: double.infinity, height: double.infinity),
               ),
               errorWidget: (context, url, error) => Icon(
                 Icons.image_not_supported_outlined,
                 size: 28.sp,
-                color: ColorManager.greyTextColor.withOpacity(0.3),
+                color: ColorManager.greyTextColor.withValues(alpha: 0.3),
               ),
             ),
     );

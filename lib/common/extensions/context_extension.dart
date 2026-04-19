@@ -55,7 +55,7 @@ extension ContextExtensions on BuildContext {
           borderRadius: BorderRadius.circular(40),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFE53935).withOpacity(0.15),
+              color: const Color(0xFFE53935).withValues(alpha: 0.15),
               blurRadius: 20,
               spreadRadius: 2,
               offset: const Offset(0, 8),
@@ -68,7 +68,7 @@ extension ContextExtensions on BuildContext {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFFE53935).withOpacity(0.1),
+                color: const Color(0xFFE53935).withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.error_outline, color: Color(0xFFE53935), size: 24),
@@ -116,7 +116,7 @@ extension ContextExtensions on BuildContext {
           borderRadius: BorderRadius.circular(40),
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
               blurRadius: 20,
               spreadRadius: 2,
               offset: const Offset(0, 8),
@@ -129,7 +129,7 @@ extension ContextExtensions on BuildContext {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: color, size: 24),

@@ -36,7 +36,7 @@ class CoachCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -52,7 +52,7 @@ class CoachCard extends StatelessWidget {
                 width: 100.w,
                 height: 100.h,
                 decoration: BoxDecoration(
-                  color: statusColor.withOpacity(0.03),
+                  color: statusColor.withValues(alpha: 0.03),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -70,8 +70,8 @@ class CoachCard extends StatelessWidget {
                           shape: BoxShape.circle,
                           gradient: LinearGradient(
                             colors: [
-                              statusColor.withOpacity(0.4),
-                              statusColor.withOpacity(0.05),
+                              statusColor.withValues(alpha: 0.4),
+                              statusColor.withValues(alpha: 0.05),
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -98,7 +98,7 @@ class CoachCard extends StatelessWidget {
                               border: Border.all(color: Colors.white, width: 2),
                               boxShadow: [
                                 BoxShadow(
-                                  color: statusColor.withOpacity(0.3),
+                                  color: statusColor.withValues(alpha: 0.3),
                                   blurRadius: 4,
                                 ),
                               ],
@@ -137,7 +137,7 @@ class CoachCard extends StatelessWidget {
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                                 decoration: BoxDecoration(
-                                  color: ColorManager.primary.withOpacity(0.05),
+                                  color: ColorManager.primary.withValues(alpha: 0.05),
                                   borderRadius: BorderRadius.circular(6.r),
                                 ),
                                 child: Text(
@@ -145,7 +145,7 @@ class CoachCard extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w700,
-                                    color: ColorManager.primary.withOpacity(0.7),
+                                    color: ColorManager.primary.withValues(alpha: 0.7),
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -159,7 +159,7 @@ class CoachCard extends StatelessWidget {
                           Row(
                             children: [
                               Icon(Icons.groups,
-                                  size: 14.sp, color: ColorManager.primary.withOpacity(0.5)),
+                                  size: 14.sp, color: ColorManager.primary.withValues(alpha: 0.5)),
                               SizedBox(width: 4.w),
                               Expanded(
                                 child: Text(

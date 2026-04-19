@@ -22,7 +22,7 @@ class ChatInboxItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -35,7 +35,7 @@ class ChatInboxItem extends StatelessWidget {
           width: 50.r,
           height: 50.r,
           decoration: BoxDecoration(
-            color: ColorManager.lightGrey.withOpacity(0.5),
+            color: ColorManager.lightGrey.withValues(alpha: 0.5),
             shape: BoxShape.circle,
             image: chat.supplier.image != null && chat.supplier.image!.isNotEmpty
                 ? DecorationImage(
@@ -75,7 +75,7 @@ class ChatInboxItem extends StatelessWidget {
                 chat.lastMessageTime!,
                 style: TextStyle(
                   fontSize: 11.sp,
-                  color: ColorManager.greyTextColor.withOpacity(0.6),
+                  color: ColorManager.greyTextColor.withValues(alpha: 0.6),
                 ),
               ),
             ],

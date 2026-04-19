@@ -182,6 +182,8 @@ mixin _$RawMaterialModel {
   String? get casNumber => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
+  String? get price => throw _privateConstructorUsedError;
+  String? get date => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -201,7 +203,9 @@ abstract class $RawMaterialModelCopyWith<$Res> {
       String? name,
       @JsonKey(name: 'cas_number') String? casNumber,
       String? description,
-      String? image});
+      String? image,
+      String? price,
+      String? date});
 
   $MaterialFamilyModelCopyWith<$Res>? get family;
 }
@@ -225,6 +229,8 @@ class _$RawMaterialModelCopyWithImpl<$Res, $Val extends RawMaterialModel>
     Object? casNumber = freezed,
     Object? description = freezed,
     Object? image = freezed,
+    Object? price = freezed,
+    Object? date = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -250,6 +256,14 @@ class _$RawMaterialModelCopyWithImpl<$Res, $Val extends RawMaterialModel>
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
+              as String?,
+      price: freezed == price
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as String?,
+      date: freezed == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -281,7 +295,9 @@ abstract class _$$RawMaterialModelImplCopyWith<$Res>
       String? name,
       @JsonKey(name: 'cas_number') String? casNumber,
       String? description,
-      String? image});
+      String? image,
+      String? price,
+      String? date});
 
   @override
   $MaterialFamilyModelCopyWith<$Res>? get family;
@@ -304,6 +320,8 @@ class __$$RawMaterialModelImplCopyWithImpl<$Res>
     Object? casNumber = freezed,
     Object? description = freezed,
     Object? image = freezed,
+    Object? price = freezed,
+    Object? date = freezed,
   }) {
     return _then(_$RawMaterialModelImpl(
       id: null == id
@@ -330,6 +348,14 @@ class __$$RawMaterialModelImplCopyWithImpl<$Res>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as String?,
+      price: freezed == price
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as String?,
+      date: freezed == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -343,7 +369,9 @@ class _$RawMaterialModelImpl implements _RawMaterialModel {
       this.name,
       @JsonKey(name: 'cas_number') this.casNumber,
       this.description,
-      this.image});
+      this.image,
+      this.price,
+      this.date});
 
   factory _$RawMaterialModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$RawMaterialModelImplFromJson(json);
@@ -361,10 +389,14 @@ class _$RawMaterialModelImpl implements _RawMaterialModel {
   final String? description;
   @override
   final String? image;
+  @override
+  final String? price;
+  @override
+  final String? date;
 
   @override
   String toString() {
-    return 'RawMaterialModel(id: $id, family: $family, name: $name, casNumber: $casNumber, description: $description, image: $image)';
+    return 'RawMaterialModel(id: $id, family: $family, name: $name, casNumber: $casNumber, description: $description, image: $image, price: $price, date: $date)';
   }
 
   @override
@@ -379,13 +411,15 @@ class _$RawMaterialModelImpl implements _RawMaterialModel {
                 other.casNumber == casNumber) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.image, image) || other.image == image));
+            (identical(other.image, image) || other.image == image) &&
+            (identical(other.price, price) || other.price == price) &&
+            (identical(other.date, date) || other.date == date));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, family, name, casNumber, description, image);
+  int get hashCode => Object.hash(runtimeType, id, family, name, casNumber,
+      description, image, price, date);
 
   @JsonKey(ignore: true)
   @override
@@ -409,7 +443,9 @@ abstract class _RawMaterialModel implements RawMaterialModel {
       final String? name,
       @JsonKey(name: 'cas_number') final String? casNumber,
       final String? description,
-      final String? image}) = _$RawMaterialModelImpl;
+      final String? image,
+      final String? price,
+      final String? date}) = _$RawMaterialModelImpl;
 
   factory _RawMaterialModel.fromJson(Map<String, dynamic> json) =
       _$RawMaterialModelImpl.fromJson;
@@ -427,6 +463,10 @@ abstract class _RawMaterialModel implements RawMaterialModel {
   String? get description;
   @override
   String? get image;
+  @override
+  String? get price;
+  @override
+  String? get date;
   @override
   @JsonKey(ignore: true)
   _$$RawMaterialModelImplCopyWith<_$RawMaterialModelImpl> get copyWith =>

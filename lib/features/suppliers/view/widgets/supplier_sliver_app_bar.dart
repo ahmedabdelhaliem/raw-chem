@@ -20,7 +20,7 @@ class SupplierSliverAppBar extends StatelessWidget {
       leading: Container(
         margin: EdgeInsets.all(8.w),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
           shape: BoxShape.circle,
         ),
         child: IconButton(
@@ -39,7 +39,7 @@ class SupplierSliverAppBar extends StatelessWidget {
             color: Colors.white,
             shadows: [
               Shadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 offset: const Offset(0, 2),
                 blurRadius: 4,
               ),
@@ -57,7 +57,7 @@ class SupplierSliverAppBar extends StatelessWidget {
                   )
                 : Container(
                     color: ColorManager.primary,
-                    child: Icon(Iconsax.shop, color: Colors.white.withOpacity(0.3), size: 100.sp),
+                    child: Icon(Iconsax.shop, color: Colors.white.withValues(alpha: 0.3), size: 100.sp),
                   ),
             const DecoratedBox(
               decoration: BoxDecoration(

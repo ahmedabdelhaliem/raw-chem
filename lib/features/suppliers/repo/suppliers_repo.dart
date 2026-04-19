@@ -11,9 +11,10 @@ class SuppliersRepo {
 
   SuppliersRepo(this._dataSource);
 
-  Future<Either<Failure, PaginatedResponse<SupplierModel>>> getSuppliers({int page = 1}) async {
+  Future<Either<Failure, PaginatedResponse<SupplierModel>>> getSuppliers({int page = 1, String? q}) async {
     return await _dataSource.fetchPaginatedData<SupplierModel>(
       endpoint: EndPoints.suppliers,
+      queryParameters: q != null && q.isNotEmpty ? {'q': q} : null,
       params: PaginationParams(page: page, limit: 10),
       fromJson: (json) => SupplierModel.fromJson(json),
     );

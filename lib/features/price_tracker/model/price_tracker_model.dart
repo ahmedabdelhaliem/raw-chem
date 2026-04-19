@@ -35,6 +35,8 @@ class PriceTrackerModel with _$PriceTrackerModel {
       casNumber: casNumber,
       image: image,
       family: family,
+      price: price,
+      date: date,
     );
   }
 }

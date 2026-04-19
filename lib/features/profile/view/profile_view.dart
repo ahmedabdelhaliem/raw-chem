@@ -1,17 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:raw_chem/app/imports.dart';
-import 'package:raw_chem/common/extensions/context_extension.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
-import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
+import 'package:raw_chem/common/widgets/copyright_widget.dart';
 import 'package:raw_chem/common/widgets/profile_menu_item_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'widgets/profile_skeleton.dart';
 
@@ -35,11 +31,14 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, BaseState<ProfileUser>>(
       listener: (context, state) {
-        if (state.isSuccess && state.data == null) {
-          // Success with null data means logout was successful
+        if (state.isSuccess && state.metadata['isLogout'] == true) {
           context.go(AppRouters.loginView);
         } else if (state.isError) {
-          context.showErrorMessage(state.errorMessage ?? "Operation failed");
+          if (state.failure is NetworkFailure) {
+            context.showToast(text: AppStrings.noInternetError.tr(), color: Colors.red);
+          } else {
+            context.showErrorMessage(state.errorMessage ?? "Operation failed");
+          }
         }
       },
       builder: (context, state) {
@@ -98,7 +97,7 @@ class _ProfileViewState extends State<ProfileView> {
                                   ),
                                   child: CircleAvatar(
                                     radius: 50.r,
-                                    backgroundColor: ColorManager.lightGrey.withOpacity(0.5),
+                                    backgroundColor: ColorManager.lightGrey.withValues(alpha: 0.5),
                                     backgroundImage: user.image != null && user.image!.isNotEmpty
                                         ? NetworkImage(user.image!)
                                         : null,
@@ -140,7 +139,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                                   decoration: BoxDecoration(
-                                    color: ColorManager.primary.withOpacity(0.1),
+                                    color: ColorManager.primary.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(20.r),
                                   ),
                                   child: Text(
@@ -234,7 +233,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     borderRadius: BorderRadius.circular(16.r),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
+                                        color: Colors.black.withValues(alpha: 0.05),
                                         blurRadius: 10,
                                         offset: const Offset(0, 4),
                                       ),
@@ -250,53 +249,9 @@ class _ProfileViewState extends State<ProfileView> {
                                 ),
                                 SizedBox(height: 10.h),
                                 // Copyright Section
-                                GestureDetector(
-                                  onTap: () async {
-                                    final Uri url = Uri.parse('https://brmja.tech/');
-                                    if (await canLaunchUrl(url)) {
-                                      await launchUrl(url, mode: LaunchMode.externalApplication);
-                                    } else {
-                                      throw 'Could not launch $url';
-                                    }
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: Text(
-                                          AppStrings.DesignedAndDevelopedBy.tr(),
-                                          style: TextStyle(
-                                            fontSize: 12.sp,
-                                            color: ColorManager.greyTextColor.withOpacity(0.6),
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 8.h),
-                                      Center(
-                                        child: SizedBox(
-                                          height: 30.h,
-                                          width: 150.w,
-                                          child: Image.asset(ImageAssets.brmjaLogo),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Text(
-                                          AppStrings.copyright.tr(),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 12.sp,
-                                            color: ColorManager.greyTextColor.withOpacity(0.5),
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                const Center(child: CopyrightWidget()),
 
-                                SizedBox(height: 10.h),
+                                SizedBox(height: 80.h),
                               ],
                             ),
                           ),
@@ -327,7 +282,7 @@ class _ProfileViewState extends State<ProfileView> {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -342,7 +297,7 @@ class _ProfileViewState extends State<ProfileView> {
       height: 1,
       indent: 50.w,
       endIndent: 16.w,
-      color: ColorManager.lightGrey2.withOpacity(0.5),
+      color: ColorManager.lightGrey2.withValues(alpha: 0.5),
     );
   }
 }

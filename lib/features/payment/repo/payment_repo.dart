@@ -10,7 +10,7 @@ class PaymentRepo {
 
   Future<Either<Failure, dynamic>> initFawaterkPayment({
     required int orderId,
-    required int paymentMethodId,
+    int paymentMethodId = 0,
   }) async {
     return await _dataSource.fetchResult<dynamic>(
       endpoint: "/supplier-materials/purchase-orders/$orderId/fawaterak/init",
@@ -22,10 +22,4 @@ class PaymentRepo {
     );
   }
 
-  Future<Either<Failure, List<PaymentMethodModel>>> getPaymentMethods() async {
-    return await _dataSource.fetchData<PaymentMethodModel>(
-      endpoint: "/fawaterak/payment-methods",
-      fromJson: (json) => PaymentMethodModel.fromJson(json),
-    );
-  }
 }

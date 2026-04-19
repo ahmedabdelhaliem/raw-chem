@@ -1,35 +1,26 @@
 import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/common/http/pagination_helper.dart';
 
-class PurchaseOrdersHistoryCubit extends Cubit<BaseState<PaginatedResponse<PurchaseOrderModel>>> {
+class PurchaseOrdersHistoryCubit extends Cubit<BaseState<PurchaseOrderModel>> {
   final RawMaterialsRepo _repo;
+  late final PaginationHandler<PurchaseOrderModel, PurchaseOrdersHistoryCubit> paginationHandler;
+  dynamic _currentStatus;
 
-  PurchaseOrdersHistoryCubit(this._repo) : super(const BaseState<PaginatedResponse<PurchaseOrderModel>>());
-
-  Future<void> getPurchaseOrders({required dynamic status, int page = 1}) async {
-    if (page == 1) {
-      emit(state.copyWith(status: Status.loading));
-    }
-
-    final result = await _repo.getPurchaseOrders(page: page, status: status);
-
-    result.fold(
-      (failure) => emit(state.copyWith(status: Status.error, errorMessage: failure.message)),
-      (response) {
-        if (page == 1) {
-          emit(state.copyWith(status: Status.success, data: response));
-        } else {
-          // Append data for pagination
-          final currentData = state.data?.data ?? [];
-          final newData = response.data;
-          emit(state.copyWith(
-            status: Status.success,
-            data: PaginatedResponse(
-              data: [...currentData, ...newData],
-              pagination: response.pagination,
-            ),
-          ));
-        }
-      },
+  PurchaseOrdersHistoryCubit(this._repo) : super(const BaseState<PurchaseOrderModel>()) {
+    paginationHandler = PaginationHandler<PurchaseOrderModel, PurchaseOrdersHistoryCubit>(
+      bloc: this,
+      pageSize: 10,
     );
+  }
+
+  Future<void> getPurchaseOrders({required dynamic status}) async {
+    _currentStatus = status;
+    await paginationHandler.loadFirstPage((page, limit, [params]) => 
+      _repo.getPurchaseOrders(page: page, status: _currentStatus));
+  }
+
+  Future<void> loadMore() async {
+    await paginationHandler.fetchData((page, limit, [params]) => 
+      _repo.getPurchaseOrders(page: page, status: _currentStatus));
   }
 }

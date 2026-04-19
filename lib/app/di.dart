@@ -113,7 +113,6 @@ Future<void> initAppModule() async {
   instance.registerFactory<CreatePurchaseOrderCubit>(() => CreatePurchaseOrderCubit(instance()));
   instance.registerFactory<PurchaseOrderDetailsCubit>(() => PurchaseOrderDetailsCubit(instance()));
   instance.registerFactory<ConfirmPaymentCubit>(() => ConfirmPaymentCubit(instance()));
-  instance.registerFactory<PaymentMethodsCubit>(() => PaymentMethodsCubit(instance()));
   instance.registerFactory<NotificationsCubit>(() => NotificationsCubit(instance()));
   instance.registerFactory<PurchaseOrdersHistoryCubit>(() => PurchaseOrdersHistoryCubit(instance()));
 }

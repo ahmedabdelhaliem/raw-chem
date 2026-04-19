@@ -17,6 +17,7 @@ import 'package:raw_chem/features/home/view/widgets/supplier_card_widget.dart';
 import 'package:raw_chem/features/suppliers/cubit/suppliers_cubit.dart';
 import 'package:raw_chem/features/suppliers/model/supplier_model.dart';
 import 'package:raw_chem/features/suppliers/repo/suppliers_repo.dart';
+import 'dart:async';
 
 class SuppliersView extends StatefulWidget {
   const SuppliersView({super.key});
@@ -27,9 +28,11 @@ class SuppliersView extends StatefulWidget {
 
 class _SuppliersViewState extends State<SuppliersView> {
   final ScrollController _scrollController = ScrollController();
+  Timer? _debounce;
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _scrollController.dispose();
     super.dispose();
   }
@@ -70,7 +73,10 @@ class _SuppliersViewState extends State<SuppliersView> {
                   return PaginatedListWrapper(
                     scrollController: _scrollController,
                     paginationHandler: context.read<SuppliersCubit>().paginationHandler,
-                    fetchFunction: (page, limit, [params]) => instance<SuppliersRepo>().getSuppliers(page: page),
+                    fetchFunction: (page, limit, [params]) => instance<SuppliersRepo>().getSuppliers(
+                      page: page,
+                      q: context.read<SuppliersCubit>().searchQuery,
+                    ),
                     child: ListView.builder(
                       controller: _scrollController,
                       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -123,7 +129,7 @@ class _SuppliersViewState extends State<SuppliersView> {
                 borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
                   BoxShadow(
-                    color: ColorManager.black.withOpacity(0.03),
+                    color: ColorManager.black.withValues(alpha: 0.03),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -131,6 +137,12 @@ class _SuppliersViewState extends State<SuppliersView> {
               ),
               child: TextField(
                 textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+                onChanged: (value) {
+                  if (_debounce?.isActive ?? false) _debounce?.cancel();
+                  _debounce = Timer(const Duration(milliseconds: 500), () {
+                    context.read<SuppliersCubit>().fetchSuppliers(query: value.trim());
+                  });
+                },
                 decoration: InputDecoration(
                   hintText: '${AppStrings.search.tr()}...',
                   hintStyle: TextStyle(color: ColorManager.grey, fontSize: 14.sp),

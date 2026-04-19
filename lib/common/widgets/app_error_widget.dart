@@ -26,7 +26,7 @@ class AppErrorWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(24.r),
               decoration: BoxDecoration(
-                color: ColorManager.primary.withOpacity(0.05),
+                color: ColorManager.primary.withValues(alpha: 0.05),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -41,7 +41,7 @@ class AppErrorWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
-                color: ColorManager.black.withOpacity(0.8),
+                color: ColorManager.black.withValues(alpha: 0.8),
               ),
               textAlign: TextAlign.center,
             ),
@@ -50,7 +50,7 @@ class AppErrorWidget extends StatelessWidget {
               "حدث خطأ ما أثناء الاتصال بالخادم. يرجى المحاولة مرة أخرى.",
               style: TextStyle(
                 fontSize: 13.sp,
-                color: ColorManager.greyTextColor.withOpacity(0.6),
+                color: ColorManager.greyTextColor.withValues(alpha: 0.6),
               ),
               textAlign: TextAlign.center,
             ),

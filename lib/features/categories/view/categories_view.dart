@@ -45,7 +45,7 @@ class CategoriesView extends StatelessWidget {
                       );
                     }
                     return GridView.builder(
-                      padding: EdgeInsets.all(20.w),
+                      padding: EdgeInsets.fromLTRB(20.w, 20.w, 20.w, 80.h),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         crossAxisSpacing: 15.w,
@@ -103,7 +103,7 @@ class _CategoryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            color: ColorManager.black.withOpacity(0.02),
+            color: ColorManager.black.withValues(alpha: 0.02),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -125,7 +125,7 @@ class _CategoryCard extends StatelessWidget {
                 child: Icon(
                   _getIconForCategory(category.name ?? ''),
                   size: 40.sp,
-                  color: ColorManager.black.withOpacity(0.8),
+                  color: ColorManager.black.withValues(alpha: 0.8),
                 ),
               ),
               SizedBox(height: 12.h),

@@ -9,7 +9,7 @@ class ConfirmPaymentCubit extends Cubit<BaseState<dynamic>> {
 
   Future<void> confirmPayment({
     required int orderId,
-    required int paymentMethodId,
+    int paymentMethodId = 0,
   }) async {
     emit(state.copyWith(status: Status.loading));
 

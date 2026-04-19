@@ -23,6 +23,8 @@ class RawMaterialModel with _$RawMaterialModel {
     @JsonKey(name: 'cas_number') String? casNumber,
     String? description,
     String? image,
+    String? price,
+    String? date,
   }) = _RawMaterialModel;
 
   factory RawMaterialModel.fromJson(Map<String, dynamic> json) =>

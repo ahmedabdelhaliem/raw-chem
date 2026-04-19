@@ -44,7 +44,7 @@ class DefaultErrorWidget extends StatelessWidget {
               padding: EdgeInsets.all(isNoInternet ? 24.w : 0),
               decoration: isNoInternet
                   ? BoxDecoration(
-                      color: ColorManager.greyBorder.withOpacity(0.3),
+                      color: ColorManager.greyBorder.withValues(alpha: 0.3),
                       shape: BoxShape.circle,
                     )
                   : null,
@@ -83,7 +83,7 @@ class DefaultErrorWidget extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 24.w),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      side: BorderSide(color: ColorManager.primary.withOpacity(0.2), width: 1.5),
+                      side: BorderSide(color: ColorManager.primary.withValues(alpha: 0.2), width: 1.5),
                     ),
                   ),
                   icon: Icon(Iconsax.refresh, size: 18.sp),

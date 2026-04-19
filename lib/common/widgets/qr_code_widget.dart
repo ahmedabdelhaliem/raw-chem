@@ -30,15 +30,15 @@ class QrCodeWidget extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            ColorManager.primary.withOpacity(0.1),
-            ColorManager.primary.withOpacity(0.05),
+            ColorManager.primary.withValues(alpha: 0.1),
+            ColorManager.primary.withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24.r),
         border: Border.all(
-          color: ColorManager.primary.withOpacity(0.3),
+          color: ColorManager.primary.withValues(alpha: 0.3),
           width: 2,
         ),
       ),
@@ -75,7 +75,7 @@ class QrCodeWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(16.r),
               boxShadow: [
                 BoxShadow(
-                  color: ColorManager.primary.withOpacity(0.1),
+                  color: ColorManager.primary.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -101,7 +101,7 @@ class QrCodeWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               decoration: BoxDecoration(
-                color: ColorManager.primary.withOpacity(0.1),
+                color: ColorManager.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Row(

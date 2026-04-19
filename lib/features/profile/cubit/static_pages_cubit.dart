@@ -13,6 +13,7 @@ class StaticPagesCubit extends Cubit<BaseState<StaticPageData>> {
 
     final result = await _authRepo.getTerms();
 
+    if (isClosed) return;
     result.fold(
       (failure) => emit(state.copyWith(
         status: Status.error,
@@ -30,6 +31,7 @@ class StaticPagesCubit extends Cubit<BaseState<StaticPageData>> {
 
     final result = await _authRepo.getAboutUs();
 
+    if (isClosed) return;
     result.fold(
       (failure) => emit(state.copyWith(
         status: Status.error,

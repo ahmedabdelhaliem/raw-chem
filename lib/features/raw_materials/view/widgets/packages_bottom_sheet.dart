@@ -118,7 +118,7 @@ class PackagesBottomSheet extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -140,7 +140,7 @@ class PackagesBottomSheet extends StatelessWidget {
           SizedBox(height: 5.h),
           Text(
             duration,
-            style: TextStyle(fontSize: 8.sp, color: textColor.withOpacity(0.8)),
+            style: TextStyle(fontSize: 8.sp, color: textColor.withValues(alpha: 0.8)),
             textAlign: TextAlign.center,
           ),
         ],

@@ -8,7 +8,7 @@ import 'package:raw_chem/features/auth/view/signup_success_view.dart';
 import 'package:raw_chem/features/auth/view/signup_view.dart';
 import 'package:raw_chem/features/auth/view/success_view.dart';
 import 'package:raw_chem/features/auth/view/verify_otp_view.dart';
-import 'package:raw_chem/features/cart/view/order_success_view.dart';
+
 import 'package:raw_chem/features/categories/view/category_items_view.dart';
 import 'package:raw_chem/features/chat/presentation/view/chat_inbox_view.dart';
 import 'package:raw_chem/features/chat/presentation/cubit/chat_inbox_cubit.dart';
@@ -56,8 +56,7 @@ abstract class AppRouters {
   static const String helpSupportView = '/helpSupport';
   static const String aboutUsView = '/aboutUs';
   static const String termsConditionsView = '/termsConditions';
-  static const String cartView = '/cart';
-  static const String orderSuccessView = '/orderSuccess';
+
   static const String rawMaterialsView = '/rawMaterials';
   static const String rawMaterialDetailsView = '/rawMaterialDetails';
   static const String recipesView = '/recipes';
@@ -163,11 +162,6 @@ abstract class AppRouters {
           create: (context) => instance<StaticPagesCubit>(),
           child: const TermsConditionsView(),
         ),
-      ),
-      // GoRoute(path: AppRouters.cartView, builder: (context, state) => const CartView()),
-      GoRoute(
-        path: AppRouters.orderSuccessView,
-        builder: (context, state) => const OrderSuccessView(),
       ),
       GoRoute(
         path: AppRouters.rawMaterialsView,

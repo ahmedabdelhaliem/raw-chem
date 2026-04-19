@@ -97,9 +97,9 @@ class SignupSuccessView extends StatelessWidget {
           begin: Alignment.bottomLeft,
           end: Alignment.topRight,
           colors: [
-            ColorManager.primary.withOpacity(0.06),
+            ColorManager.primary.withValues(alpha: 0.06),
             ColorManager.white,
-            ColorManager.primary.withOpacity(0.06),
+            ColorManager.primary.withValues(alpha: 0.06),
           ],
         ),
       ),
@@ -114,7 +114,7 @@ class SignupSuccessView extends StatelessWidget {
                       width: (30 + random.nextInt(50)).w,
                       height: (30 + random.nextInt(50)).w,
                       decoration: BoxDecoration(
-                        color: ColorManager.primary.withOpacity(0.04),
+                        color: ColorManager.primary.withValues(alpha: 0.04),
                         shape: BoxShape.circle,
                       ),
                     )
@@ -139,12 +139,12 @@ class SignupSuccessView extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 48.h),
           decoration: BoxDecoration(
-            color: ColorManager.white.withOpacity(0.6),
+            color: ColorManager.white.withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(32.r),
-            border: Border.all(color: ColorManager.white.withOpacity(0.4)),
+            border: Border.all(color: ColorManager.white.withValues(alpha: 0.4)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.04),
+                color: Colors.black.withValues(alpha: 0.04),
                 blurRadius: 30,
                 offset: const Offset(0, 15),
               ),
@@ -171,7 +171,7 @@ class SignupSuccessView extends StatelessWidget {
                 width: (110 + (index * 30)).w,
                 height: (110 + (index * 30)).w,
                 decoration: BoxDecoration(
-                  color: ColorManager.primary.withOpacity(0.08 - (index * 0.03)),
+                  color: ColorManager.primary.withValues(alpha: 0.08 - (index * 0.03)),
                   shape: BoxShape.circle,
                 ),
               )
@@ -225,7 +225,7 @@ class SignupSuccessView extends StatelessWidget {
                   width: size,
                   height: size,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.9),
+                    color: color.withValues(alpha: 0.9),
                     borderRadius: BorderRadius.circular(random.nextBool() ? 2 : 10),
                   ),
                 )

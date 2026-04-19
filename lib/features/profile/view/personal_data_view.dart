@@ -190,7 +190,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                           ),
                                           child: CircleAvatar(
                                             radius: 60.r,
-                                            backgroundColor: ColorManager.lightGrey.withOpacity(0.5),
+                                            backgroundColor: ColorManager.lightGrey.withValues(alpha: 0.5),
                                             backgroundImage: _pickedImage != null
                                                 ? FileImage(File(_pickedImage!.path)) as ImageProvider
                                                 : (state.data?.image != null && state.data!.image!.isNotEmpty
@@ -241,7 +241,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                 borderRadius: BorderRadius.circular(24.r),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
+                                    color: Colors.black.withValues(alpha: 0.05),
                                     blurRadius: 15,
                                     offset: const Offset(0, 5),
                                   ),
@@ -340,7 +340,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: ColorManager.primary, size: 20.sp),
             filled: true,
-            fillColor: ColorManager.bg.withOpacity(0.5),
+            fillColor: ColorManager.bg.withValues(alpha: 0.5),
             contentPadding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
@@ -417,7 +417,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 hintStyle: const TextStyle(color: ColorManager.greyTextColor),
                 prefixIcon: Icon(Iconsax.grid_5, color: ColorManager.primary, size: 20.sp),
                 filled: true,
-                fillColor: ColorManager.bg.withOpacity(0.5),
+                fillColor: ColorManager.bg.withValues(alpha: 0.5),
                 contentPadding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16.r),
@@ -432,7 +432,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                   borderSide: const BorderSide(color: ColorManager.primary, width: 1.5),
                 ),
               ),
-              validator: (value) => _selectedCategoryIds.isEmpty ? 'يرجى اختيار مجال' : null,
+              validator: (value) => _selectedCategoryIds.isEmpty ? AppStrings.pleaseSelectField.tr() : null,
             );
           },
         ),

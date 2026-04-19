@@ -138,7 +138,7 @@ class _DefaultExpansionTileState extends State<DefaultExpansionTile> {
               padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
               margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
               decoration: BoxDecoration(
-                border: Border.all(color: ColorManager.grey.withOpacity(.5)),
+                border: Border.all(color: ColorManager.grey.withValues(alpha: .5)),
               ),
               child: Text(
                 (widget.options ?? [])[index],

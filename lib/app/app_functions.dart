@@ -201,7 +201,7 @@ class AppFunctions {
             width: 50.w,
             height: 5.h,
             decoration: BoxDecoration(
-              color: ColorManager.black.withOpacity(.5),
+              color: ColorManager.black.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(10.r),
             ),
           ),

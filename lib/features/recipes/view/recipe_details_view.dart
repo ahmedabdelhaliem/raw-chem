@@ -121,7 +121,7 @@ class RecipeDetailsView extends StatelessWidget {
                     color: ColorManager.bg,
                     boxShadow: [
                       BoxShadow(
-                        color: ColorManager.bg.withOpacity(0.8),
+                        color: ColorManager.bg.withValues(alpha: 0.8),
                         blurRadius: 10,
                         offset: const Offset(0, -10),
                       ),

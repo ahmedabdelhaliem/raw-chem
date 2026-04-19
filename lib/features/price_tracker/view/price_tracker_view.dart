@@ -89,7 +89,7 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
                       ),
                       child: ListView.builder(
                         controller: _scrollController,
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                        padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 80.h),
                         itemCount: state.items.length,
                         itemBuilder: (context, index) {
                           return PriceTrackerCard(model: state.items[index])
@@ -155,7 +155,7 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
                     borderRadius: BorderRadius.circular(12.r),
                     boxShadow: [
                       BoxShadow(
-                        color: ColorManager.black.withOpacity(0.03),
+                        color: ColorManager.black.withValues(alpha: 0.03),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -175,7 +175,7 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
                 borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
                   BoxShadow(
-                    color: ColorManager.black.withOpacity(0.03),
+                    color: ColorManager.black.withValues(alpha: 0.03),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -252,7 +252,7 @@ class PriceTrackerCard extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE2F9D1), width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -314,7 +314,7 @@ class PriceTrackerCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                   decoration: BoxDecoration(
-                    color: ColorManager.greyTextColor.withOpacity(0.05),
+                    color: ColorManager.greyTextColor.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(6.r),
                   ),
                   child: Text(
@@ -370,11 +370,11 @@ class PriceTrackerCard extends StatelessWidget {
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        "${AppStrings.egp.tr()}${model.price ?? model.averagePrice ?? ''}",
+                        "${model.price ?? model.averagePrice ?? ''} ${AppStrings.egp.tr()}",
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w900,
-                          color: Colors.black,
+                          color: ColorManager.primary,
                         ),
                       ),
                     ),

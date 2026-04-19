@@ -107,7 +107,7 @@ class _NotificationsSettingsViewState extends State<NotificationsSettingsView> {
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -119,7 +119,7 @@ class _NotificationsSettingsViewState extends State<NotificationsSettingsView> {
             Container(
               padding: EdgeInsets.all(10.w),
               decoration: BoxDecoration(
-                color: ColorManager.primary.withOpacity(0.1),
+                color: ColorManager.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(

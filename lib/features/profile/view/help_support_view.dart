@@ -1,8 +1,10 @@
 import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/core/state/base_state.dart';
@@ -25,6 +27,13 @@ class _HelpSupportViewState extends State<HelpSupportView> {
     context.read<FaqCubit>().getFaqs();
   }
 
+  Future<void> _launchUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +48,7 @@ class _HelpSupportViewState extends State<HelpSupportView> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: ColorManager.white,
+        backgroundColor: ColorManager.bg,
         elevation: 0,
         iconTheme: const IconThemeData(color: ColorManager.blackText),
       ),
@@ -52,67 +61,177 @@ class _HelpSupportViewState extends State<HelpSupportView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(state.errorMessage ?? "An error occurred"),
-                  TextButton(
-                    onPressed: () => context.read<FaqCubit>().getFaqs(),
-                    child: const Text("Retry"),
-                  ),
+                   Icon(Icons.help_center_outlined, size: 60.sp, color: ColorManager.greyTextColor.withValues(alpha: 0.3)),
+                   SizedBox(height: 16.h),
+                   Text(state.errorMessage ?? AppStrings.unknownError.tr(), style: TextStyle(fontSize: 14.sp)),
+                   TextButton(
+                     onPressed: () => context.read<FaqCubit>().getFaqs(),
+                     child: Text(AppStrings.retry.tr()),
+                   ),
                 ],
               ),
             );
           }
 
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+            padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 100.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // FAQ Section
-                Text(
-                  'الأسئلة الشائعة',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: ColorManager.blackText,
-                  ),
+                // Quick Contact Section
+                _buildContactHeader(),
+                SizedBox(height: 32.h),
+
+                // FAQ Header
+                Row(
+                  children: [
+                    Container(
+                      width: 4.w,
+                      height: 18.h,
+                      decoration: BoxDecoration(
+                        color: ColorManager.primary,
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    Text(
+                      AppStrings.faqs.tr(),
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: ColorManager.blackText,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 12.h),
+                SizedBox(height: 16.h),
+
+                // FAQ List
                 Container(
                   decoration: BoxDecoration(
                     color: ColorManager.white,
-                    borderRadius: BorderRadius.circular(16.r),
+                    borderRadius: BorderRadius.circular(20.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorManager.black.withValues(alpha: 0.02),
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
                   ),
                   child: state.isLoading && faqs.isEmpty
                       ? _buildSkeletonList()
                       : faqs.isEmpty
                       ? Padding(
-                          padding: EdgeInsets.all(20.w),
-                          child: const Center(child: Text("No questions available")),
+                          padding: EdgeInsets.all(30.w),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Icon(Icons.info_outline, color: ColorManager.greyTextColor.withValues(alpha: 0.4)),
+                                SizedBox(height: 8.h),
+                                Text(AppStrings.noDataFound.tr(), style: TextStyle(color: ColorManager.greyTextColor)),
+                              ],
+                            ),
+                          ),
                         )
                       : Column(
                           children: List.generate(
                             faqs.length,
-                            (index) => Column(
-                              children: [
-                                _buildFaqItem(
-                                  question: faqs[index].question,
-                                  answer: faqs[index].answer,
-                                ),
-                                if (index != faqs.length - 1)
-                                  Divider(
-                                    height: 1,
-                                    color: ColorManager.lightGrey2.withOpacity(0.5),
-                                  ),
-                              ],
+                            (index) => _buildFaqItem(
+                              question: faqs[index].question,
+                              answer: faqs[index].answer,
+                              isLast: index == faqs.length - 1,
                             ),
                           ),
                         ),
-                ),
+                ).animate().fadeIn(delay: 400.ms, duration: 600.ms).slideY(begin: 0.1),
               ],
             ),
           );
         },
       ),
+    );
+  }
+
+  Widget _buildContactHeader() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(24.w),
+      decoration: BoxDecoration(
+        color: ColorManager.primary,
+        borderRadius: BorderRadius.circular(24.r),
+        boxShadow: [
+          BoxShadow(
+            color: ColorManager.primary.withValues(alpha: 0.2),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            AppStrings.howCanWeHelp.tr(),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            AppStrings.reachOutToUs.tr(),
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.8),
+              fontSize: 12.sp,
+            ),
+          ),
+          SizedBox(height: 24.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildContactButton(
+                icon: Icons.chat_bubble_rounded,
+                label: AppStrings.whatsApp.tr(),
+                onTap: () => _launchUrl("https://wa.me/201014013440"), // Placeholder contact
+              ),
+              _buildContactButton(
+                icon: Icons.email_rounded,
+                label: AppStrings.email.tr(),
+                onTap: () => _launchUrl("mailto:support@rowchem.com"),
+              ),
+              _buildContactButton(
+                icon: Icons.phone_rounded,
+                label: AppStrings.phone.tr(),
+                onTap: () => _launchUrl("tel:+201014013440"),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ).animate().fadeIn(duration: 600.ms).scale(begin: const Offset(0.95, 0.95));
+  }
+
+  Widget _buildContactButton({required IconData icon, required String label, required VoidCallback onTap}) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.all(12.r),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: Colors.white, size: 24.sp),
+          ),
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          label,
+          style: TextStyle(color: Colors.white, fontSize: 11.sp, fontWeight: FontWeight.w500),
+        ),
+      ],
     );
   }
 
@@ -134,7 +253,7 @@ class _HelpSupportViewState extends State<HelpSupportView> {
                   ],
                 ),
               ),
-              if (index != 4) Divider(height: 1, color: ColorManager.lightGrey2.withOpacity(0.5)),
+              if (index != 4) Divider(height: 1, color: ColorManager.lightGrey2.withValues(alpha: 0.5)),
             ],
           ),
         ),
@@ -142,34 +261,47 @@ class _HelpSupportViewState extends State<HelpSupportView> {
     );
   }
 
-  Widget _buildFaqItem({required String question, required String answer}) {
-    return Directionality(
-      textDirection: ui.TextDirection.rtl,
-      child: ExpansionTile(
-        title: Text(
-          question,
-          textAlign: TextAlign.right,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.bold,
-            color: ColorManager.blackText,
+  Widget _buildFaqItem({required String question, required String answer, bool isLast = false}) {
+    return Column(
+      children: [
+        Theme(
+          data: ThemeData().copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            title: Text(
+              question,
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+                color: ColorManager.blackText,
+              ),
+            ),
+            iconColor: ColorManager.primary,
+            collapsedIconColor: ColorManager.greyTextColor,
+            expandedAlignment: Alignment.centerLeft,
+            childrenPadding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 16.h),
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  answer,
+                  style: TextStyle(
+                    fontSize: 13.sp, 
+                    color: ColorManager.greyTextColor.withValues(alpha: 0.8), 
+                    height: 1.6
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        iconColor: ColorManager.primary,
-        collapsedIconColor: ColorManager.greyTextColor,
-        expandedAlignment: Alignment.centerRight,
-        childrenPadding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 16.h),
-        children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              answer,
-              style: TextStyle(fontSize: 13.sp, color: ColorManager.greyTextColor, height: 1.6),
-              textAlign: TextAlign.right,
-            ),
+        if (!isLast)
+          Divider(
+            height: 1,
+            indent: 16.w,
+            endIndent: 16.w,
+            color: ColorManager.lightGrey2.withValues(alpha: 0.5),
           ),
-        ],
-      ),
+      ],
     );
   }
 }

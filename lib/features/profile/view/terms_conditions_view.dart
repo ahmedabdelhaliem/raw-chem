@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
@@ -37,7 +38,7 @@ class _TermsConditionsViewState extends State<TermsConditionsView> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: ColorManager.white,
+        backgroundColor: ColorManager.bg,
         elevation: 0,
         iconTheme: const IconThemeData(color: ColorManager.blackText),
       ),
@@ -50,11 +51,13 @@ class _TermsConditionsViewState extends State<TermsConditionsView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                   Text(state.errorMessage ?? "An error occurred"),
+                   Icon(Icons.gavel_rounded, size: 60.sp, color: ColorManager.greyTextColor.withValues(alpha: 0.3)),
+                   SizedBox(height: 16.h),
+                   Text(state.errorMessage ?? AppStrings.unknownError.tr(), style: TextStyle(fontSize: 14.sp)),
                    TextButton(
                      onPressed: () => context.read<StaticPagesCubit>().getTerms(),
-                     child: const Text("Retry"),
-                   )
+                     child: Text(AppStrings.retry.tr()),
+                   ),
                 ],
               ),
             );
@@ -63,69 +66,146 @@ class _TermsConditionsViewState extends State<TermsConditionsView> {
           return SkeletonWidget(
             isLoading: state.isLoading,
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+              padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 100.h),
               child: Column(
                 children: [
-                  if (data?.banner != null) ...[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16.r),
-                      child: Image.network(
-                        data!.banner!,
-                        width: double.infinity,
-                        height: 150.h,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          height: 150.h,
-                          color: ColorManager.lightGrey,
-                          child: const Icon(Icons.image_not_supported),
+                  // Primary Branding Header (Dynamic from API)
+                  if (data?.banner != null || data?.image != null) 
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(vertical: 24.h),
+                      child: Center(
+                        child: Container(
+                          padding: EdgeInsets.all(10.r),
+                          decoration: BoxDecoration(
+                            color: ColorManager.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: ColorManager.primary.withValues(alpha: 0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: ClipOval(
+                            child: Image.network(
+                              data?.banner ?? data!.image!,
+                              height: 70.h,
+                              width: 70.h,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) => Icon(Icons.gavel_rounded, size: 40.sp, color: ColorManager.primary),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 24.h),
-                  ],
+                    ).animate().fadeIn(duration: 600.ms).scale(begin: const Offset(0.9, 0.9))
+                  else
+                    SizedBox(height: 20.h),
+
+                  // Terms Content Card
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: ColorManager.white,
-                      borderRadius: BorderRadius.circular(16.r),
+                      borderRadius: BorderRadius.circular(28.r),
+                      border: Border.all(color: ColorManager.primary.withValues(alpha: 0.05)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: ColorManager.black.withValues(alpha: 0.03),
+                          blurRadius: 18,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
-                    padding: EdgeInsets.all(20.w),
+                    padding: EdgeInsets.all(26.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          data?.title ?? 'الشروط والأحكام',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                            color: ColorManager.primary,
-                          ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 5.w,
+                              height: 22.h,
+                              decoration: BoxDecoration(
+                                color: ColorManager.primary,
+                                borderRadius: BorderRadius.circular(2.r),
+                                gradient: LinearGradient(
+                                  colors: [ColorManager.primary, ColorManager.primary.withValues(alpha: 0.6)],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 12.w),
+                            Expanded(
+                              child: Text(
+                                data?.title ?? AppStrings.termsAndConditions.tr(),
+                                style: TextStyle(
+                                  fontSize: 19.sp,
+                                  fontWeight: FontWeight.w800,
+                                  color: ColorManager.blackText,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 12.h),
+                        SizedBox(height: 20.h),
+                        Divider(color: ColorManager.lightGrey2.withValues(alpha: 0.5), thickness: 0.8),
+                        SizedBox(height: 20.h),
                         Text(
                           data?.description ?? '',
                           style: TextStyle(
-                            fontSize: 14.sp,
-                            color: ColorManager.greyTextColor,
-                            height: 1.5,
+                            fontSize: 15.sp,
+                            color: ColorManager.blackText.withValues(alpha: 0.7),
+                            height: 1.8,
                           ),
                         ),
+                        
                         if (data?.updatedAt != null) ...[
-                          SizedBox(height: 24.h),
-                          Divider(color: ColorManager.lightGrey2.withOpacity(0.5)),
-                          SizedBox(height: 12.h),
-                          Text(
-                            "${"Last updated"}: ${data!.updatedAt}",
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: ColorManager.greyTextColor,
-                              fontStyle: FontStyle.italic,
+                          SizedBox(height: 40.h),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+                              decoration: BoxDecoration(
+                                color: ColorManager.bg,
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.verified_rounded, size: 14.sp, color: ColorManager.primary),
+                                  SizedBox(width: 8.w),
+                                  Text(
+                                    "${AppStrings.lastUpdated.tr()}: ${data!.updatedAt}",
+                                    style: TextStyle(
+                                      fontSize: 11.sp,
+                                      color: ColorManager.greyTextColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ],
                     ),
-                  ),
+                  ).animate().fadeIn(delay: 300.ms, duration: 600.ms).slideY(begin: 0.05),
+
+                  // Footer Notes
+                  SizedBox(height: 50.h),
+                  Text(
+                    "LEGAL DEPARTMENT • ROW CHEM",
+                    style: TextStyle(
+                      fontSize: 9.sp,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
+                      color: ColorManager.greyTextColor.withValues(alpha: 0.3),
+                    ),
+                  ).animate().fadeIn(delay: 700.ms),
+                  SizedBox(height: 10.h),
                 ],
               ),
             ),

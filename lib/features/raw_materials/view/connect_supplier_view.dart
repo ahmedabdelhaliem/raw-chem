@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/core/constants/order_statuses.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
@@ -11,6 +12,8 @@ import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 import 'package:raw_chem/common/widgets/default_dropdown_menu_widget.dart';
 import 'package:raw_chem/common/widgets/default_form_field.dart';
+import 'package:raw_chem/common/widgets/default_error_widget.dart';
+import 'package:raw_chem/features/chat/presentation/view/widgets/chat_shimmer.dart';
 
 class ConnectSupplierView extends StatefulWidget {
   final int? materialId;
@@ -65,7 +68,21 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                 final paymentUrl = response?['payment_url'] ?? response?['invoice_url'];
 
                 if (paymentUrl != null) {
-                  context.push(AppRouters.fawaterkWebView, extra: {'url': paymentUrl});
+                  context.push(
+                    AppRouters.fawaterkWebView, 
+                    extra: {
+                      'url': paymentUrl,
+                      'successUrl': 'payments/fawaterak/success',
+                      'failureUrl': 'payments/fawaterak/failure',
+                    }
+                  ).then((result) {
+                    if (result == true) {
+                      context.showSuccessMessage(AppStrings.paymentSuccess.tr());
+                      context.pop(); // Go back
+                    } else if (result == false) {
+                      context.showErrorMessage(AppStrings.paymentFailed.tr());
+                    }
+                  });
                 } else {
                   context.showSuccessMessage(AppStrings.requestSentSuccess.tr());
                   context.pop();
@@ -256,7 +273,6 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => instance<ConfirmPaymentCubit>()),
-        BlocProvider(create: (context) => instance<PaymentMethodsCubit>()..fetchPaymentMethods()),
         BlocProvider(
           create: (context) {
             final cubit = instance<PurchaseOrderDetailsCubit>();
@@ -290,23 +306,15 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
             return Scaffold(
               backgroundColor: const Color(0xFFF8F9FE),
               appBar: DefaultAppBar(
-                text: 'خطأ',
+                text: AppStrings.orderDetails.tr(),
                 backgroundColor: ColorManager.white,
                 titleColor: ColorManager.black,
                 withLeading: true,
               ),
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(state.errorMessage ?? 'حدث خطأ ما'),
-                    SizedBox(height: 16.h),
-                    ElevatedButton(
-                      onPressed: () => context.read<PurchaseOrderDetailsCubit>().getPurchaseOrderDetails(order.id),
-                      child: const Text('إعادة المحاولة'),
-                    ),
-                  ],
-                ),
+              body: DefaultErrorWidget(
+                errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
+                buttonTitle: AppStrings.retry.tr(),
+                onPressed: () => context.read<PurchaseOrderDetailsCubit>().getPurchaseOrderDetails(order.id),
               ),
             );
           }
@@ -316,9 +324,9 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
           return Scaffold(
             backgroundColor: const Color(0xFFF8F9FE),
             appBar: DefaultAppBar(
-              text: currentOrder.status == 'accepted' 
+              text: currentOrder.status == OrderStatuses.accepted 
                   ? AppStrings.orderDetails.tr() 
-                  : currentOrder.status == 'rejected' 
+                  : currentOrder.status == OrderStatuses.rejected 
                     ? AppStrings.orderDetails.tr()
                     : AppStrings.orderDetails.tr(),
               backgroundColor: ColorManager.white,
@@ -334,7 +342,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildPremiumOrderInfoCard(currentOrder),
-                    if (currentOrder.status == 'rejected' && currentOrder.rejectionReason != null) ...[
+                    if (currentOrder.status == OrderStatuses.rejected && currentOrder.rejectionReason != null) ...[
                       SizedBox(height: 24.h),
                       _buildRejectionCard(currentOrder.rejectionReason!),
                     ],
@@ -346,7 +354,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                     SizedBox(height: 16.h),
                     _buildOrderItemsSummary(currentOrder),
                     SizedBox(height: 24.h),
-                    if (currentOrder.status == 'accepted' && currentOrder.supplierQuote != null) ...[
+                    if (currentOrder.status == OrderStatuses.accepted && currentOrder.supplierQuote != null) ...[
                       _buildPriceSummaryCard(currentOrder),
                       SizedBox(height: 20.h),
                     ],
@@ -354,7 +362,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                 ),
               ),
             ),
-            bottomNavigationBar: currentOrder.status == 'accepted' 
+            bottomNavigationBar: currentOrder.status == OrderStatuses.accepted 
                 ? (currentOrder.isPaid 
                     ? _buildGeneralChatBottomBar(context, currentOrder) 
                     : _buildBottomPaymentBar(context, currentOrder))
@@ -366,30 +374,6 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
   }
 
   Widget _buildPremiumOrderInfoCard(PurchaseOrderModel order) {
-    String statusText = '';
-    Color statusColor = Colors.grey;
-    Color statusBgColor = Colors.grey.withValues(alpha: 0.15);
-    
-    if (order.status == 'accepted' || order.status == 'awaiting_payment') {
-      if (order.isPaid) {
-          statusText = AppStrings.statusPaid.tr();
-          statusColor = const Color(0xFF19B273);
-          statusBgColor = const Color(0xFF19B273).withValues(alpha: 0.15);
-      } else {
-          statusText = AppStrings.statusAwaitingPayment.tr();
-          statusColor = ColorManager.primary;
-          statusBgColor = ColorManager.primary.withValues(alpha: 0.15);
-      }
-    } else if (order.status == 'rejected') {
-      statusText = AppStrings.statusRejected.tr();
-      statusColor = Colors.red;
-      statusBgColor = Colors.red.withValues(alpha: 0.15);
-    } else {
-      statusText = AppStrings.statusPending.tr();
-      statusColor = Colors.amber.shade900;
-      statusBgColor = Colors.amber.withValues(alpha: 0.15);
-    }
-
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -411,20 +395,16 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(AppStrings.invoiceNumber.tr(), style: TextStyle(fontSize: 12.sp, color: ColorManager.greyTextColor)),
+                    Text(AppStrings.orderNumber.tr(), style: TextStyle(fontSize: 12.sp, color: ColorManager.greyTextColor)),
                     SizedBox(height: 4.h),
                     Text(order.invoice?.invoiceNumber ?? '#PO-${order.id}', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: ColorManager.blackText)),
                   ],
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
-                decoration: BoxDecoration(color: statusBgColor, borderRadius: BorderRadius.circular(20.r)),
-                child: Text(statusText, style: TextStyle(color: statusColor, fontSize: 12.sp, fontWeight: FontWeight.bold)),
-              ),
+              _getStatusBadge(order),
             ],
           ),
-          Padding(padding: EdgeInsets.symmetric(vertical: 16.h), child: const Divider(color: Color(0xFFEEEEEE))),
+          Padding(padding: EdgeInsets.symmetric(vertical: 16.h), child: Divider(color: Colors.grey.withValues(alpha: 0.1))),
           _buildInfoRow(Icons.phone_outlined, AppStrings.recipientPhone.tr(), order.recipientPhone ?? AppStrings.notProvided.tr()),
           if (order.location != null) ...[
              SizedBox(height: 12.h),
@@ -479,12 +459,64 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
             children: [
               Icon(Icons.error_outline, color: Colors.red, size: 20.sp),
               SizedBox(width: 8.w),
-              Text('سبب رفض المورد:', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.red.shade900)),
+              Text(
+                '${AppStrings.statusRejected.tr()}:', 
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.red.shade900)
+              ),
             ],
           ),
           SizedBox(height: 8.h),
           Text(reason, style: TextStyle(fontSize: 14.sp, color: Colors.red.shade800)),
         ],
+      ),
+    );
+  }
+
+  Widget _getStatusBadge(PurchaseOrderModel order) {
+    String statusText = '';
+    Color statusColor = Colors.grey;
+    Color statusBgColor = Colors.grey.withValues(alpha: 0.15);
+
+    switch (order.status.toLowerCase()) {
+      case 'accepted':
+      case 'awaiting_payment':
+        if (order.isPaid) {
+          statusText = AppStrings.statusPaid.tr();
+          statusColor = const Color(0xFF19B273);
+          statusBgColor = const Color(0xFF19B273).withValues(alpha: 0.15);
+        } else {
+          statusText = AppStrings.statusAwaitingPayment.tr();
+          statusColor = ColorManager.primary;
+          statusBgColor = ColorManager.primary.withValues(alpha: 0.15);
+        }
+        break;
+      case 'rejected':
+        statusText = AppStrings.statusRejected.tr();
+        statusColor = Colors.red;
+        statusBgColor = Colors.red.withValues(alpha: 0.15);
+        break;
+      case 'completed':
+        statusText = AppStrings.statusCompleted.tr();
+        statusColor = const Color(0xFF2E7D32);
+        statusBgColor = const Color(0xFFE8F5E9);
+        break;
+      case 'cancelled':
+        statusText = AppStrings.cancel.tr();
+        statusColor = Colors.grey.shade700;
+        statusBgColor = Colors.grey.withValues(alpha: 0.1);
+        break;
+      default:
+        statusText = AppStrings.statusPending.tr();
+        statusColor = Colors.amber.shade900;
+        statusBgColor = Colors.amber.withValues(alpha: 0.15);
+    }
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+      decoration: BoxDecoration(color: statusBgColor, borderRadius: BorderRadius.circular(20.r)),
+      child: Text(
+        statusText, 
+        style: TextStyle(color: statusColor, fontSize: 12.sp, fontWeight: FontWeight.bold)
       ),
     );
   }
@@ -629,18 +661,33 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
             // Handle embedded errors from Fawaterk (even if response is 200)
             if (paymentData is Map && paymentData.containsKey('error')) {
               context.showToast(
-                text: 'خطأ في عملية الدفع: ${paymentData['error']}',
+                text: '${AppStrings.paymentError.tr()}: ${paymentData['error']}',
                 color: Colors.red,
               );
               return;
             }
 
-            final url = paymentData?['redirectTo'] ?? paymentData?['url'];
+            final url = paymentData?['redirectTo'] ?? paymentData?['url'] ?? state.data?['checkout_url'];
             if (url != null) {
-              context.push(AppRouters.fawaterkWebView, extra: {'url': url});
+              context.push(
+                AppRouters.fawaterkWebView, 
+                extra: {
+                  'url': url,
+                  'successUrl': 'payments/fawaterak/success',
+                  'failureUrl': 'payments/fawaterak/failure',
+                }
+              ).then((result) {
+                if (result == true) {
+                  context.showSuccessMessage(AppStrings.paymentSuccess.tr());
+                  // Refresh order details to show "Paid" status
+                  context.read<PurchaseOrderDetailsCubit>().getPurchaseOrderDetails(order.id);
+                } else if (result == false) {
+                  context.showErrorMessage(AppStrings.paymentFailed.tr());
+                }
+              });
             } else {
               context.showToast(
-                text: 'فشل في بدء عملية الدفع: لم يتم العثور على رابط التحويل',
+                text: AppStrings.failedToStartPaymentNoUrl.tr(),
                 color: Colors.orange,
               );
             }
@@ -658,7 +705,11 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                 child: DefaultButtonWidget(
                   text: AppStrings.payNow.tr(),
                   isLoading: state.isLoading,
-                  onPressed: () => _showPaymentMethodsBottomSheet(context, order),
+                  onPressed: () {
+                    context.read<ConfirmPaymentCubit>().confirmPayment(
+                      orderId: order.id,
+                    );
+                  },
                   color: ColorManager.primary,
                   textColor: Colors.white,
                   radius: 16.r,
@@ -706,7 +757,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
           decoration: BoxDecoration(
             color: const Color(0xFF25D366),
             borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [BoxShadow(color: const Color(0xFF25D366).withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4))],
+            boxShadow: [BoxShadow(color: const Color(0xFF25D366).withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))],
           ),
           child: Icon(Icons.chat_bubble_outline_rounded, color: Colors.white, size: 24.sp),
         ),
@@ -730,130 +781,160 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
     }
   }
 
-  void _showPaymentMethodsBottomSheet(BuildContext context, PurchaseOrderModel order) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (bottomSheetContext) {
-        return BlocProvider.value(
-          value: context.read<ConfirmPaymentCubit>(),
-          child: BlocProvider.value(
-            value: context.read<PaymentMethodsCubit>(),
-            child: Container(
-              padding: EdgeInsets.all(24.w),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(30.r), topRight: Radius.circular(30.r)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(child: Container(width: 40.w, height: 4.h, decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(10.r)))),
-                  SizedBox(height: 30.h),
-                  Text(AppStrings.selectPaymentMethod.tr(), style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w900, color: ColorManager.blackText)),
-                  SizedBox(height: 30.h),
-                  BlocBuilder<PaymentMethodsCubit, BaseState<List<PaymentMethodModel>>>(
-                    builder: (context, state) {
-                      if (state.isLoading) return const Center(child: CircularProgressIndicator());
-                      if (state.isSuccess) {
-                        final methods = state.data ?? [];
-                        return ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: methods.length,
-                          separatorBuilder: (context, index) => SizedBox(height: 16.h),
-                          itemBuilder: (context, index) {
-                            final method = methods[index];
-                            final iconColor = _getPaymentColor(method.paymentCode);
-                            final iconData = _getPaymentIcon(method.paymentCode);
+  // void _showPaymentMethodsBottomSheet(BuildContext context, PurchaseOrderModel order) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     backgroundColor: Colors.transparent,
+  //     builder: (bottomSheetContext) {
+  //       return BlocProvider.value(
+  //         value: context.read<ConfirmPaymentCubit>(),
+  //         child: BlocProvider.value(
+  //           value: context.read<PaymentMethodsCubit>(),
+  //           child: Container(
+  //             padding: EdgeInsets.all(24.w),
+  //             decoration: BoxDecoration(
+  //               color: Colors.white,
+  //               borderRadius: BorderRadius.only(topLeft: Radius.circular(30.r), topRight: Radius.circular(30.r)),
+  //             ),
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Center(child: Container(width: 40.w, height: 4.h, decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(10.r)))),
+  //                 SizedBox(height: 30.h),
+  //                 Text(AppStrings.selectPaymentMethod.tr(), style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w900, color: ColorManager.blackText)),
+  //                 SizedBox(height: 30.h),
+  //                 BlocBuilder<PaymentMethodsCubit, BaseState<List<PaymentMethodModel>>>(
+  //                   builder: (context, state) {
+  //                     if (state.isLoading) {
+  //                       return Padding(
+  //                         padding: EdgeInsets.symmetric(vertical: 40.h),
+  //                         child: const Center(child: CircularProgressIndicator()),
+  //                       );
+  //                     }
+                      
+  //                     if (state.isError) {
+  //                       return DefaultErrorWidget(
+  //                         errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
+  //                         buttonTitle: AppStrings.retry.tr(),
+  //                         onPressed: () => context.read<PaymentMethodsCubit>().fetchPaymentMethods(),
+  //                       );
+  //                     }
+
+  //                     final methods = state.data ?? [];
+                      
+  //                     if (methods.isEmpty) {
+  //                       return Padding(
+  //                         padding: EdgeInsets.symmetric(vertical: 40.h),
+  //                         child: Column(
+  //                           children: [
+  //                             Icon(Icons.credit_card_off_rounded, size: 64.sp, color: Colors.grey.shade300),
+  //                             SizedBox(height: 16.h),
+  //                             Text(
+  //                               "noPaymentMethodsAvailable".tr(),
+  //                               style: TextStyle(fontSize: 14.sp, color: ColorManager.greyTextColor),
+  //                               textAlign: TextAlign.center,
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       );
+  //                     }
+
+  //                     return ListView.separated(
+  //                       shrinkWrap: true,
+  //                       physics: const NeverScrollableScrollPhysics(),
+  //                       itemCount: methods.length,
+  //                       separatorBuilder: (context, index) => SizedBox(height: 16.h),
+  //                       itemBuilder: (context, index) {
+  //                         final method = methods[index];
+  //                         final iconColor = _getPaymentColor(method.paymentCode);
+  //                         final iconData = _getPaymentIcon(method.paymentCode);
                             
-                            return Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(20.r),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  context.read<ConfirmPaymentCubit>().confirmPayment(
-                                        orderId: order.id, 
-                                        paymentMethodId: method.paymentId,
-                                      );
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: const Color(0xFFF0F0F0), width: 1.5),
-                                    borderRadius: BorderRadius.circular(20.r),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: iconColor.withValues(alpha: 0.05),
-                                        blurRadius: 15,
-                                        offset: const Offset(0, 8),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(12.w),
-                                        decoration: BoxDecoration(
-                                          color: iconColor.withValues(alpha: 0.1),
-                                          borderRadius: BorderRadius.circular(14.r),
-                                        ),
-                                        child: Icon(iconData, color: iconColor, size: 26.sp),
-                                      ),
-                                      SizedBox(width: 16.w),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              method.paymentMethod,
-                                              style: TextStyle(
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: ColorManager.blackText,
-                                              ),
-                                            ),
-                                            if (method.paymentCode.toLowerCase().contains('fawry')) ...[
-                                              SizedBox(height: 4.h),
-                                              Text(
-                                                'ادفع من أي منفذ فوري',
-                                                style: TextStyle(fontSize: 12.sp, color: ColorManager.greyTextColor),
-                                              ),
-                                            ],
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.all(6.w),
-                                        decoration: const BoxDecoration(
-                                          color: Color(0xFFF8F9FE),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(Icons.arrow_back_ios_new_rounded, size: 14.sp, color: ColorManager.primary),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }
-                      return const SizedBox();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+  //                           return Material(
+  //                             color: Colors.transparent,
+  //                             child: InkWell(
+  //                               borderRadius: BorderRadius.circular(20.r),
+  //                               onTap: () {
+  //                                 Navigator.pop(context);
+  //                                 context.read<ConfirmPaymentCubit>().confirmPayment(
+  //                                       orderId: order.id, 
+  //                                       paymentMethodId: method.paymentId,
+  //                                     );
+  //                               },
+  //                               child: Container(
+  //                                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+  //                                 decoration: BoxDecoration(
+  //                                   border: Border.all(color: const Color(0xFFF0F0F0), width: 1.5),
+  //                                   borderRadius: BorderRadius.circular(20.r),
+  //                                   color: Colors.white,
+  //                                   boxShadow: [
+  //                                     BoxShadow(
+  //                                       color: iconColor.withValues(alpha: 0.05),
+  //                                       blurRadius: 15,
+  //                                       offset: const Offset(0, 8),
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                                 child: Row(
+  //                                   children: [
+  //                                     Container(
+  //                                       padding: EdgeInsets.all(12.w),
+  //                                       decoration: BoxDecoration(
+  //                                         color: iconColor.withValues(alpha: 0.1),
+  //                                         borderRadius: BorderRadius.circular(14.r),
+  //                                       ),
+  //                                       child: Icon(iconData, color: iconColor, size: 26.sp),
+  //                                     ),
+  //                                     SizedBox(width: 16.w),
+  //                                     Expanded(
+  //                                       child: Column(
+  //                                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                                         children: [
+  //                                           Text(
+  //                                             method.paymentMethod,
+  //                                             style: TextStyle(
+  //                                               fontSize: 16.sp,
+  //                                               fontWeight: FontWeight.bold,
+  //                                               color: ColorManager.blackText,
+  //                                             ),
+  //                                           ),
+  //                                           if (method.paymentCode.toLowerCase().contains('fawry')) ...[
+  //                                             SizedBox(height: 4.h),
+  //                                             Text(
+  //                                               AppStrings.payFromAnyFawry.tr(),
+  //                                               style: TextStyle(fontSize: 12.sp, color: ColorManager.greyTextColor),
+  //                                             ),
+  //                                           ],
+  //                                         ],
+  //                                       ),
+  //                                     ),
+  //                                     Container(
+  //                                       padding: EdgeInsets.all(6.w),
+  //                                       decoration: const BoxDecoration(
+  //                                         color: Color(0xFFF8F9FE),
+  //                                         shape: BoxShape.circle,
+  //                                       ),
+  //                                       child: Icon(Icons.arrow_back_ios_new_rounded, size: 14.sp, color: ColorManager.primary),
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           );
+  //                         },
+  //                       );
+  //                     return const SizedBox();
+  //                   },
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   IconData _getPaymentIcon(String code) {
     if (code.toLowerCase().contains('fawry')) return Icons.storefront_rounded;

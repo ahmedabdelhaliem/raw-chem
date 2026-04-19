@@ -50,12 +50,12 @@ class CaptainProfileWidget extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: Colors.white.withOpacity(0.4),
+                color: Colors.white.withValues(alpha: 0.4),
                 width: 2.r,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   spreadRadius: 1,
                 ),
@@ -92,7 +92,7 @@ class CaptainProfileWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w400,
-                    color: ColorManager.white.withOpacity(0.9),
+                    color: ColorManager.white.withValues(alpha: 0.9),
                   ),
                 ),
               ],
@@ -116,14 +116,14 @@ class CaptainProfileWidget extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
         decoration: BoxDecoration(
-          color: hasChild ? Colors.white.withOpacity(0.15) : const Color(0xFFCCFF00),
+          color: hasChild ? Colors.white.withValues(alpha: 0.15) : const Color(0xFFCCFF00),
           borderRadius: BorderRadius.circular(20.r),
-          border: hasChild ? Border.all(color: Colors.white.withOpacity(0.3), width: 1) : null,
+          border: hasChild ? Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1) : null,
           boxShadow: hasChild
               ? null
               : [
                   BoxShadow(
-                    color: const Color(0xFFCCFF00).withOpacity(0.3),
+                    color: const Color(0xFFCCFF00).withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),

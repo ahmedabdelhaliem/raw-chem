@@ -1,9 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/assets_manager.dart';
@@ -13,6 +10,7 @@ import 'package:raw_chem/common/widgets/default_banner_widget.dart';
 import 'package:raw_chem/common/widgets/default_error_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
 import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
+import 'package:raw_chem/common/widgets/raw_material_skeleton.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -82,7 +80,7 @@ class HomeView extends StatelessWidget {
                       }),
                     ),
                     _buildRecipesList(context),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 80.h),
                   ],
                 ),
               ),
@@ -113,11 +111,7 @@ class HomeView extends StatelessWidget {
                 ),
               ],
             ),
-            child: Icon(
-              Icons.notifications_outlined,
-              color: ColorManager.primary,
-              size: 24.sp,
-            ),
+            child: Icon(Icons.notifications_outlined, color: ColorManager.primary, size: 24.sp),
           ),
         ),
 
@@ -165,6 +159,27 @@ class HomeView extends StatelessWidget {
         imageUrl: (image) => image.banner ?? '',
         aspectRatio: 16 / 7,
       ).animate().fadeIn(delay: 400.ms, duration: 600.ms).scale(begin: const Offset(0.9, 0.9));
+    }
+    if (state.isFailure) {
+      return Container(
+        height: 140.h,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: ColorManager.red.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, color: ColorManager.red, size: 30.sp),
+            SizedBox(height: 8.h),
+            Text(
+              state.errorMessage ?? AppStrings.unknownError.tr(),
+              style: TextStyle(fontSize: 12.sp),
+            ),
+          ],
+        ),
+      );
     }
     return const SizedBox.shrink();
   }
@@ -225,7 +240,9 @@ class HomeView extends StatelessWidget {
         }
         if (state.isSuccess) {
           final items = state.items;
-          if (items.isEmpty) return const SizedBox.shrink();
+          if (items.isEmpty) {
+            return _buildSectionEmpty(AppStrings.noDataFound.tr());
+          }
 
           final itemCount = items.length > 5 ? 5 : items.length;
 
@@ -266,14 +283,14 @@ class HomeView extends StatelessWidget {
                             );
                           },
                           child: Container(
-                            padding: EdgeInsets.all(12.w),
+                            padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 20.h),
                             decoration: BoxDecoration(
                               color: const Color(0xFFF7FDF5),
                               borderRadius: BorderRadius.circular(12.r),
                               border: Border.all(color: const Color(0xFFE2F9D1), width: 1),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.02),
+                                  color: Colors.black.withValues(alpha: 0.02),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -362,7 +379,7 @@ class HomeView extends StatelessWidget {
                                         ),
                                         SizedBox(height: 4.h),
                                         Text(
-                                          "${AppStrings.egp.tr()}${item.averagePrice ?? ''}",
+                                          "${AppStrings.egp.tr()}${item.price ?? item.averagePrice ?? ''}",
                                           style: TextStyle(
                                             fontSize: 13.sp,
                                             fontWeight: FontWeight.w900,
@@ -383,6 +400,12 @@ class HomeView extends StatelessWidget {
                 ),
               ),
             ),
+          );
+        }
+        if (state.isFailure) {
+          return _buildSectionError(
+            state.errorMessage ?? AppStrings.unknownError.tr(),
+            () => context.read<PriceTrackerCubit>().fetchSupplierMaterials(),
           );
         }
         return const SizedBox.shrink();
@@ -406,7 +429,7 @@ class HomeView extends StatelessWidget {
                   children: List.generate(3, (index) {
                     return Padding(
                       padding: EdgeInsetsDirectional.only(end: 15.w),
-                      child: SizedBox(width: .58.sw, child: const SkeletonCard(radius: 12)),
+                      child: SizedBox(width: .58.sw, child: const RawMaterialSkeleton()),
                     );
                   }),
                 ),
@@ -416,7 +439,9 @@ class HomeView extends StatelessWidget {
         }
         if (state.isSuccess) {
           final materials = state.items;
-          if (materials.isEmpty) return const SizedBox.shrink();
+          if (materials.isEmpty) {
+            return _buildSectionEmpty(AppStrings.noItemsToDisplay.tr());
+          }
 
           final itemCount = materials.length > 5 ? 5 : materials.length;
 
@@ -454,6 +479,12 @@ class HomeView extends StatelessWidget {
             ),
           );
         }
+        if (state.isFailure) {
+          return _buildSectionError(
+            state.errorMessage ?? AppStrings.unknownError.tr(),
+            () => context.read<RawMaterialsCubit>().fetchMaterials(),
+          );
+        }
         return const SizedBox.shrink();
       },
     ).animate().fadeIn(delay: 800.ms, duration: 600.ms).slideY(begin: 0.1);
@@ -485,7 +516,9 @@ class HomeView extends StatelessWidget {
         }
         if (state.isSuccess) {
           final recipes = state.items;
-          if (recipes.isEmpty) return const SizedBox.shrink();
+          if (recipes.isEmpty) {
+            return _buildSectionEmpty(AppStrings.noItemsToDisplay.tr());
+          }
 
           final itemCount = recipes.length > 5 ? 5 : recipes.length;
 
@@ -507,7 +540,7 @@ class HomeView extends StatelessWidget {
                         child: RecipeCardWidget(
                           imageUrl: recipe.image ?? '',
                           title: recipe.name ?? '',
-                          category: 'Default',
+                          category: '',
                           description: recipe.description ?? '',
                           heroTag: 'recipe_home_${recipe.id}',
                           onButtonTap: () {
@@ -525,8 +558,68 @@ class HomeView extends StatelessWidget {
             ),
           );
         }
+        if (state.isFailure) {
+          return _buildSectionError(
+            state.errorMessage ?? AppStrings.unknownError.tr(),
+            () => context.read<RecipesCubit>().fetchRecipes(),
+          );
+        }
         return const SizedBox.shrink();
       },
     ).animate().fadeIn(delay: 1000.ms, duration: 600.ms).slideY(begin: 0.1);
+  }
+
+  Widget _buildSectionError(String message, VoidCallback onRetry) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: ColorManager.red.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: ColorManager.red.withValues(alpha: 0.1)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.error_outline_rounded, color: ColorManager.red, size: 20.sp),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Text(
+              message,
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: ColorManager.blackText,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: onRetry,
+            icon: Icon(Icons.refresh_rounded, color: ColorManager.primary, size: 24.sp),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionEmpty(String message) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 30.h),
+      child: Column(
+        children: [
+          Icon(Icons.inventory_2_outlined, color: ColorManager.lightGreyTextColor2, size: 40.sp),
+          SizedBox(height: 8.h),
+          Text(
+            message,
+            style: TextStyle(
+              fontSize: 13.sp,
+              color: ColorManager.greyTextColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    ).animate().fadeIn();
   }
 }

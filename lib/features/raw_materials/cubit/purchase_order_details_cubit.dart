@@ -13,6 +13,7 @@ class PurchaseOrderDetailsCubit extends Cubit<BaseState<PurchaseOrderModel>> {
 
     final result = await _repo.getPurchaseOrderDetails(id);
 
+    if (isClosed) return;
     result.fold(
       (failure) => emit(state.copyWith(
         status: Status.error,

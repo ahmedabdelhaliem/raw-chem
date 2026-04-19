@@ -88,9 +88,9 @@ class SuccessView extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            ColorManager.primary.withOpacity(0.08),
+            ColorManager.primary.withValues(alpha: 0.08),
             ColorManager.white,
-            ColorManager.primary.withOpacity(0.04),
+            ColorManager.primary.withValues(alpha: 0.04),
           ],
         ),
       ),
@@ -105,7 +105,7 @@ class SuccessView extends StatelessWidget {
                       width: (40 + random.nextInt(60)).w,
                       height: (40 + random.nextInt(60)).w,
                       decoration: BoxDecoration(
-                        color: ColorManager.primary.withOpacity(0.03),
+                        color: ColorManager.primary.withValues(alpha: 0.03),
                         shape: BoxShape.circle,
                       ),
                     )
@@ -130,12 +130,12 @@ class SuccessView extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 40.h),
           decoration: BoxDecoration(
-            color: ColorManager.white.withOpacity(0.7),
+            color: ColorManager.white.withValues(alpha: 0.7),
             borderRadius: BorderRadius.circular(32.r),
-            border: Border.all(color: ColorManager.white.withOpacity(0.5)),
+            border: Border.all(color: ColorManager.white.withValues(alpha: 0.5)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),
@@ -161,7 +161,7 @@ class SuccessView extends StatelessWidget {
               width: 100.w,
               height: 100.w,
               decoration: BoxDecoration(
-                color: ColorManager.primary.withOpacity(0.15),
+                color: ColorManager.primary.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
             )
@@ -210,7 +210,7 @@ class SuccessView extends StatelessWidget {
                   width: size,
                   height: size,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.8),
+                    color: color.withValues(alpha: 0.8),
                     shape: random.nextBool() ? BoxShape.circle : BoxShape.rectangle,
                   ),
                 )

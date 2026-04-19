@@ -13,6 +13,7 @@ class RawMaterialFamiliesCubit extends Cubit<BaseState<MaterialFamilyModel>> {
   Future<void> fetchFamilies() async {
     emit(state.copyWith(status: Status.loading, errorMessage: null));
     final result = await _materialsRepo.getMaterialFamilies();
+    if (isClosed) return;
     result.fold(
       (failure) => emit(state.copyWith(
         status: Status.error,

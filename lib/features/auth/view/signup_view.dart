@@ -62,7 +62,14 @@ class _SignupViewState extends State<SignupView> {
               extra: {'phone': _phoneController.text},
             );
           } else if (state.isError) {
-            context.showErrorMessage(state.errorMessage ?? "Unknown error occurred");
+            if (state.failure is NetworkFailure) {
+              context.showToast(
+                text: AppStrings.noInternetError.tr(), 
+                color: Colors.red
+              );
+            } else {
+              context.showErrorMessage(state.errorMessage ?? "Unknown error occurred");
+            }
           }
         },
         builder: (context, state) {
@@ -207,23 +214,28 @@ class _SignupViewState extends State<SignupView> {
                                     // Signup Button
                                     DefaultButtonWidget(
                                       isLoading: state.isLoading,
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          context.read<SignupCubit>().signup(
-                                            RegisterRequest(
-                                              name: _nameController.text,
-                                              email: _emailController.text,
-                                              phone: _phoneController.text,
-                                              birthDate: _birthDateController.text,
-                                              password: _passwordController.text,
-                                              passwordConfirmation: _confirmPasswordController.text,
-                                              categoryIds: _selectedCategoryIds.isNotEmpty
-                                                  ? _selectedCategoryIds
-                                                  : [1],
-                                            ),
-                                          );
-                                        }
-                                      },
+                                        onPressed: () {
+                                          if (_formKey.currentState!.validate()) {
+                                            if (_selectedCategoryIds.isEmpty) {
+                                              context.showToast(
+                                                text: AppStrings.pleaseSelectOneCategory.tr(),
+                                                color: Colors.orange
+                                              );
+                                              return;
+                                            }
+                                            context.read<SignupCubit>().signup(
+                                              RegisterRequest(
+                                                name: _nameController.text,
+                                                email: _emailController.text,
+                                                phone: _phoneController.text,
+                                                birthDate: _birthDateController.text,
+                                                password: _passwordController.text,
+                                                passwordConfirmation: _confirmPasswordController.text,
+                                                categoryIds: _selectedCategoryIds,
+                                              ),
+                                            );
+                                          }
+                                        },
                                       text: AppStrings.signup.tr(),
                                       color: ColorManager.primary,
                                       textColor: ColorManager.white,

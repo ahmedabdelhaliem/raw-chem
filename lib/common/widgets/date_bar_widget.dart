@@ -108,7 +108,7 @@ class _DateBarWidgetState extends State<DateBarWidget> {
                           ? [
                               BoxShadow(
                                 color:
-                                    (widget.selectedColor ?? ColorManager.yellow).withOpacity(0.3),
+                                    (widget.selectedColor ?? ColorManager.yellow).withValues(alpha: 0.3),
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
                               )

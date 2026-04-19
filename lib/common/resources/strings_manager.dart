@@ -1,6 +1,6 @@
 class AppStrings {
-  static const String appName = "Raw Chem";
-  static const String appSlogan = "Raw Chem";
+  static const String appName = "appName";
+  static const String appSlogan = "appSlogan";
   //search
   static const String search = "Search";
   //textFieldError
@@ -27,6 +27,8 @@ class AppStrings {
   static const String confirm = "Confirm";
   //==cancel
   static const String cancel = "Cancel";
+  static const String yes = "yes";
+  static const String no = "no";
   //==guest
   static const String guest = "Guest";
   //==chooseFile
@@ -74,21 +76,21 @@ class AppStrings {
   //==welcome
   static const String welcome = "Welcome";
   //==welcomeMessage
-  static const String welcomeMessage = "Welcome to Raw Chem";
+  static const String welcomeMessage = "Welcome to Row Chem";
   //==welcomeTitle
-  static const String welcomeTitle = "Welcome to Raw Chem";
+  static const String welcomeTitle = "Welcome to Row Chem";
   //==onBoardingTitle1
-  static const String onBoardingTitle1 = "Welcome to Raw Chem";
+  static const String onBoardingTitle1 = "Welcome to Row Chem";
   //==onBoardingTitle2
-  static const String onBoardingTitle2 = "Welcome to Raw Chem";
+  static const String onBoardingTitle2 = "Welcome to Row Chem";
   //==onBoardingTitle3
-  static const String onBoardingTitle3 = "Welcome to Raw Chem";
+  static const String onBoardingTitle3 = "Welcome to Row Chem";
   //==onBoardingBody1
-  static const String onBoardingBody1 = "Welcome to Raw Chem";
+  static const String onBoardingBody1 = "Welcome to Row Chem";
   //==onBoardingBody2
-  static const String onBoardingBody2 = "Welcome to Raw Chem";
+  static const String onBoardingBody2 = "Welcome to Row Chem";
   //==onBoardingBody3
-  static const String onBoardingBody3 = "Welcome to Raw Chem";
+  static const String onBoardingBody3 = "Welcome to Row Chem";
 
   // Auth
   static const String loginTitle = "loginTitle";
@@ -173,6 +175,7 @@ class AppStrings {
   // Orders
   static const String currentOrders = "currentOrders";
   static const String previousOrders = "previousOrders";
+  static const String ordersEmptyMessage = "ordersEmptyMessage";
   static const String orderNumber = "orderNumber";
   static const String orderDate = "orderDate";
   static const String orderDetails = "orderDetails";
@@ -200,7 +203,7 @@ class AppStrings {
   static const String generalNotifications = "generalNotifications";
   static const String appUpdates = "appUpdates";
   static const String chooseLanguage = "chooseLanguage";
-  static const String addToCart = "addToCart";
+
   static const String contactSupplier = "contactSupplier";
   static const String profileUpdatedSuccessfully = "profileUpdatedSuccessfully";
   static const String retry =
@@ -265,19 +268,31 @@ class AppStrings {
   static const String quantityHint = "quantityHint";
   static const String recipientPhone = "recipientPhone";
   static const String recipientPhoneHint = "recipientPhoneHint";
-  
+
   // Chat
   static const String messages = "messages";
   static const String noMessagesYet = "noMessagesYet";
   static const String typeAMessage = "typeAMessage";
   static const String chatInbox = "chatInbox";
-  
+
   // Payment
   static const String paymentSecure = "paymentSecure";
   static const String paymentProcessing = "paymentProcessing";
+  static const String connectionTimeout = "connectionTimeout";
   static const String paymentFailed = "paymentFailed";
   static const String paymentSuccess = "paymentSuccess";
   static const String close = "close";
+
+  // New keys for hardcoded text
+  static const String pleaseSelectField = "pleaseSelectField";
+  static const String pleaseSelectOneCategory = "pleaseSelectOneCategory";
+  static const String statusCompleted = "statusCompleted";
+  static const String paymentError = "paymentError";
+  static const String failedToStartPaymentNoUrl = "failedToStartPaymentNoUrl";
+  static const String payFromAnyFawry = "payFromAnyFawry";
+  static const String faqs = "faqs";
+  static const String arabicSubtitle = "arabicSubtitle";
+  static const String englishSubtitle = "englishSubtitle";
   static const String DesignedAndDevelopedBy = "DesignedAndDevelopedBy";
   static const String copyright = "copyright";
   static const String enterValidNumber = "enterValidNumber";
@@ -295,12 +310,21 @@ class AppStrings {
   static const String invoiceNumber = "invoiceNumber";
   static const String payNow = "payNow";
   static const String selectPaymentMethod = "selectPaymentMethod";
+  static const String cancelPayment = "cancelPayment";
+  static const String cancelPaymentConfirm = "cancelPaymentConfirm";
+  static const String noPaymentMethodsAvailable = "noPaymentMethodsAvailable";
   static const String statusAccepted = "statusAccepted";
   static const String statusRejected = "statusRejected";
   static const String statusPending = "statusPending";
   static const String statusAwaitingPayment = "statusAwaitingPayment";
   static const String statusPaid = "statusPaid";
+  static const String appDescription = "appDescription";
+  
+  // Static Pages UI
+  static const String lastUpdated = "lastUpdated";
+  static const String howCanWeHelp = "howCanWeHelp";
+  static const String reachOutToUs = "reachOutToUs";
+  static const String whatsApp = "whatsApp";
+  static const String legalDepartment = "legalDepartment";
+  static const String viewDetails = "viewDetails";
 }
-
-
-

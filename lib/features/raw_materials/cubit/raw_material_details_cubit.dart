@@ -18,6 +18,7 @@ class RawMaterialDetailsCubit extends Cubit<BaseState<RawMaterialModel>> {
         ? await _priceTrackerRepo.getSupplierMaterialDetails(id)
         : await _materialsRepo.getMaterialDetails(id);
 
+    if (isClosed) return;
     result.fold(
       (failure) => emit(state.copyWith(
         status: Status.error,

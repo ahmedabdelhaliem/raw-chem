@@ -85,7 +85,7 @@ class RawMaterialDetailsView extends StatelessWidget {
                       borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 15,
                           offset: const Offset(0, -5),
                         ),
@@ -181,6 +181,10 @@ class RawMaterialDetailsView extends StatelessWidget {
                               ),
                               Divider(height: 24.h, color: const Color(0xFFE5E7EB)),
                               _buildInfoRow(AppStrings.casNumber.tr(), casNumber, isLoading: isLoading),
+                              if (currentMaterial.price != null) ...[
+                                Divider(height: 24.h, color: const Color(0xFFE5E7EB)),
+                                _buildInfoRow(AppStrings.currentPrice.tr(), "${currentMaterial.price} ${AppStrings.egp.tr()}", isLoading: isLoading),
+                              ],
                             ],
                           ),
                         ),
@@ -199,7 +203,7 @@ class RawMaterialDetailsView extends StatelessWidget {
                     color: ColorManager.white,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 10,
                         offset: const Offset(0, -5),
                       ),

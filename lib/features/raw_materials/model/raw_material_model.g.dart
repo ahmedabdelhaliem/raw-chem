@@ -32,6 +32,8 @@ _$RawMaterialModelImpl _$$RawMaterialModelImplFromJson(
       casNumber: json['cas_number'] as String?,
       description: json['description'] as String?,
       image: json['image'] as String?,
+      price: json['price'] as String?,
+      date: json['date'] as String?,
     );
 
 Map<String, dynamic> _$$RawMaterialModelImplToJson(
@@ -43,4 +45,6 @@ Map<String, dynamic> _$$RawMaterialModelImplToJson(
       'cas_number': instance.casNumber,
       'description': instance.description,
       'image': instance.image,
+      'price': instance.price,
+      'date': instance.date,
     };

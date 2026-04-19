@@ -19,7 +19,11 @@ class ProfileCubit extends Cubit<BaseState<ProfileUser>> {
     final result = await _authRepo.getProfile();
 
     result.fold(
-      (failure) => emit(state.copyWith(status: Status.error, errorMessage: failure.message)),
+      (failure) => emit(state.copyWith(
+        status: Status.error,
+        errorMessage: failure.message,
+        failure: failure,
+      )),
       (response) => emit(state.copyWith(status: Status.success, data: response.data)),
     );
   }
@@ -40,7 +44,11 @@ class ProfileCubit extends Cubit<BaseState<ProfileUser>> {
         final refreshResult = await _authRepo.getProfile();
         
         refreshResult.fold(
-          (failure) => emit(state.copyWith(status: Status.error, errorMessage: failure.message)),
+          (failure) => emit(state.copyWith(
+            status: Status.error,
+            errorMessage: failure.message,
+            failure: failure,
+          )),
           (profileResponse) => emit(state.copyWith(status: Status.success, data: profileResponse.data)),
         );
       },
@@ -57,8 +65,12 @@ class ProfileCubit extends Cubit<BaseState<ProfileUser>> {
     await _appPreferences.logout();
 
     result.fold(
-      (failure) => emit(state.copyWith(status: Status.error, errorMessage: failure.message)),
-      (_) => emit(const BaseState(status: Status.success)),
+      (failure) => emit(state.copyWith(
+        status: Status.error,
+        errorMessage: failure.message,
+        failure: failure,
+      )),
+      (_) => emit(const BaseState(status: Status.success, metadata: {'isLogout': true})),
     );
   }
 }

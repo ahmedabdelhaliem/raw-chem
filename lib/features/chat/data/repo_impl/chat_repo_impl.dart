@@ -5,6 +5,7 @@ import 'package:raw_chem/features/chat/data/data_source/chat_socket_service.dart
 import 'package:raw_chem/features/chat/domain/model/message_model.dart';
 import 'package:raw_chem/features/chat/domain/model/chat_model.dart';
 import 'package:raw_chem/features/chat/domain/repo/chat_repo.dart';
+import 'package:raw_chem/common/model/paginated_response.dart';
 
 class ChatRepoImpl implements ChatRepo {
   final ChatApiDataSource _apiDataSource;
@@ -18,8 +19,8 @@ class ChatRepoImpl implements ChatRepo {
   }
 
   @override
-  Future<Either<Failure, List<MessageModel>>> getChatMessages(int chatId) {
-    return _apiDataSource.getChatMessages(chatId);
+  Future<Either<Failure, PaginatedResponse<MessageModel>>> getChatMessages(int chatId, {int page = 1}) {
+    return _apiDataSource.getChatMessages(chatId, page: page);
   }
 
   @override

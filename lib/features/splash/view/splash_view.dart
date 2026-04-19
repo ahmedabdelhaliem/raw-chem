@@ -12,6 +12,7 @@ import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
+import 'package:raw_chem/common/widgets/copyright_widget.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -131,25 +132,12 @@ class _SplashViewState extends State<SplashView> {
               left: 0,
               right: 0,
               child:
-                  Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            AppStrings.DesignedAndDevelopedBy.tr(),
-                            style: TextStyle(
-                              color: ColorManager.greyTextColor.withValues(alpha: 0.6),
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 1.1,
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-                          Image.asset(
-                            ImageAssets.brmjaLogo,
-                            height: 25.h,
-                            color: ColorManager.primary.withValues(alpha: 0.8),
-                          ),
-                        ],
+                  CopyrightWidget(
+                        showCopyrightText: false,
+                        designedByFontSize: 10.sp,
+                        logoColor: ColorManager.primary.withValues(alpha: 0.8),
+                        logoHeight: 25.h,
+                        logoWidth: 25.h * 5,
                       )
                       .animate()
                       .fadeIn(delay: 1500.ms, duration: 1000.ms)
@@ -245,7 +233,7 @@ class _SplashViewState extends State<SplashView> {
           SizedBox(height: 8.h),
 
           Text(
-            "Premium Raw Materials Hub",
+           AppStrings.appDescription.tr(),
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,

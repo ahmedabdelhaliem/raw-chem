@@ -6,7 +6,9 @@ import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/order_card_widget.dart';
+import 'package:raw_chem/common/widgets/default_error_widget.dart';
 import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/core/constants/order_statuses.dart';
 
 class OrdersHistoryView extends StatefulWidget {
   const OrdersHistoryView({super.key});
@@ -17,6 +19,7 @@ class OrdersHistoryView extends StatefulWidget {
 
 class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -27,6 +30,7 @@ class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTicker
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -87,82 +91,82 @@ class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTicker
       body: TabBarView(
         controller: _tabController,
         children: [
-          _buildOrdersListTab(status: ['pending_supplier', 'accepted']),
-          _buildOrdersListTab(status: 'rejected'),
+          _buildOrdersListTab(status: OrderStatuses.currentOrders),
+          _buildOrdersListTab(status: OrderStatuses.previousOrders),
         ],
       ),
     );
   }
 
-  Widget _buildOrdersListTab({required dynamic status}) {
+  Widget _buildOrdersListTab({required List<String> status}) {
     return BlocProvider(
-      create: (context) => instance<PurchaseOrdersHistoryCubit>()..getPurchaseOrders(status: status),
-      child: BlocBuilder<PurchaseOrdersHistoryCubit, BaseState<PaginatedResponse<PurchaseOrderModel>>>(
+      create: (context) => instance<PurchaseOrdersHistoryCubit>()..getPurchaseOrders(status: null),
+      child: BlocBuilder<PurchaseOrdersHistoryCubit, BaseState<PurchaseOrderModel>>(
         builder: (context, state) {
-          if (state.isLoading && (state.data?.data.isEmpty ?? true)) {
+          if (state.isLoading && state.items.isEmpty) {
             return _buildOrdersHistoryShimmer();
           }
 
-          if (state.isError && (state.data?.data.isEmpty ?? true)) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(state.errorMessage ?? AppStrings.unknownError.tr()),
-                  SizedBox(height: 16.h),
-                  ElevatedButton(
-                    onPressed: () => context.read<PurchaseOrdersHistoryCubit>().getPurchaseOrders(status: status),
-                    child: Text(AppStrings.retry.tr()),
-                  ),
-                ],
-              ),
+          if (state.isError && state.items.isEmpty) {
+            return DefaultErrorWidget(
+              errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
+              onPressed: () => context.read<PurchaseOrdersHistoryCubit>().getPurchaseOrders(status: null),
             );
           }
 
-          final orders = state.data?.data ?? [];
-          if (orders.isEmpty) {
+          // Client-side filtering based on tab status
+          final filteredOrders = state.items.where((order) => status.contains(order.status)).toList();
+          if (filteredOrders.isEmpty && !state.isLoading) {
             return _buildEmptyState();
           }
 
           return RefreshIndicator(
-            onRefresh: () async => context.read<PurchaseOrdersHistoryCubit>().getPurchaseOrders(status: status),
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
-              itemCount: orders.length,
-              itemBuilder: (context, index) {
-                final order = orders[index];
-                
-                // Determine status label and color
-                String statusLabel = '';
-                Color statusColor = Colors.grey;
-                
-                if (order.status == 'accepted' || order.status == 'awaiting_payment') {
-                    statusLabel = AppStrings.statusAccepted.tr();
-                    statusColor = ColorManager.primary;
-                } else if (order.status == 'rejected') {
-                    statusLabel = AppStrings.statusRejected.tr();
-                    statusColor = Colors.red;
-                } else if (order.status == 'pending_supplier') {
-                    statusLabel = AppStrings.statusPending.tr();
-                    statusColor = Colors.amber.shade900;
-                } else {
-                    statusLabel = AppStrings.status.tr();
-                }
+            onRefresh: () async => context.read<PurchaseOrdersHistoryCubit>().getPurchaseOrders(status: null),
+            child: PaginatedListWrapper(
+              scrollController: _scrollController,
+              paginationHandler: context.read<PurchaseOrdersHistoryCubit>().paginationHandler,
+              fetchFunction: (page, limit, [params]) => instance<RawMaterialsRepo>().getPurchaseOrders(
+                page: page,
+              ),
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+                itemCount: filteredOrders.length,
+                itemBuilder: (context, index) {
+                  final order = filteredOrders[index];
+                  
+                  // Determine status label and color
+                  String statusLabel = '';
+                  Color statusColor = Colors.grey;
+                  
+                  if (order.status == OrderStatuses.accepted || order.status == OrderStatuses.awaitingPayment || order.status == OrderStatuses.completed) {
+                      statusLabel = AppStrings.statusAccepted.tr();
+                      statusColor = ColorManager.primary;
+                  } else if (order.status == OrderStatuses.rejected || order.status == OrderStatuses.cancelled || order.status == OrderStatuses.failed) {
+                      statusLabel = AppStrings.statusRejected.tr();
+                      statusColor = Colors.red;
+                  } else if (order.status == OrderStatuses.pending || order.status == 'pending_supplier') {
+                      statusLabel = AppStrings.statusPending.tr();
+                      statusColor = Colors.amber.shade900;
+                  } else {
+                      statusLabel = AppStrings.status.tr();
+                  }
 
-                return Padding(
-                  padding: EdgeInsets.only(bottom: 16.h),
-                  child: OrderCardWidget(
-                    orderNumber: order.invoice?.invoiceNumber ?? '#PO-${order.id}',
-                    date: order.createdAt?.split('T').first ?? '',
-                    amount: '${order.invoice?.grandTotal ?? order.supplierQuote?.grandTotal ?? order.estimatedSubtotal} ${AppStrings.egp.tr()}',
-                    status: statusLabel,
-                    statusColor: statusColor,
-                    onTapDetails: () {
-                      context.push(AppRouters.orderDetailsView, extra: order);
-                    },
-                  ),
-                );
-              },
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 16.h),
+                    child: OrderCardWidget(
+                      orderNumber: order.invoice?.invoiceNumber ?? '#PO-${order.id}',
+                      date: order.createdAt?.split('T').first ?? '',
+                      amount: '${order.invoice?.grandTotal ?? order.supplierQuote?.grandTotal ?? order.estimatedSubtotal} ${AppStrings.egp.tr()}',
+                      status: statusLabel,
+                      statusColor: statusColor,
+                      onTapDetails: () {
+                        context.push(AppRouters.orderDetailsView, extra: order);
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
           );
         },
@@ -200,7 +204,7 @@ class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTicker
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40.w),
             child: Text(
-              'لا توجد طلبات في هذا القسم حالياً. ابدأ استكشاف المواد الخام الآن!',
+              AppStrings.ordersEmptyMessage.tr(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14.sp,

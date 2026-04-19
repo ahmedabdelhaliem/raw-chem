@@ -39,7 +39,7 @@ class RecipeCardWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
-              color: ColorManager.black.withOpacity(0.04),
+              color: ColorManager.black.withValues(alpha: 0.04),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
@@ -76,7 +76,7 @@ class RecipeCardWidget extends StatelessWidget {
                       title,
                       style: TextStyle(
                         fontSize: 12.sp,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.bold,
                         color: const Color(0xFF1B3D2F),
                         height: 1.2,
                       ),
@@ -84,6 +84,20 @@ class RecipeCardWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                     ),
+                    if (category.isNotEmpty) ...[
+                      SizedBox(height: 2.h),
+                      Text(
+                        category,
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w600,
+                          color: ColorManager.primary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                     SizedBox(height: 4.h),
                     Expanded(
                       child: Text(
@@ -125,7 +139,7 @@ class RecipeCardWidget extends StatelessWidget {
           ? Icon(
               Icons.image_not_supported_outlined,
               size: 28.sp,
-              color: ColorManager.greyTextColor.withOpacity(0.3),
+              color: ColorManager.greyTextColor.withValues(alpha: 0.3),
             )
           : CachedNetworkImage(
               imageUrl: imageUrl,
@@ -140,7 +154,7 @@ class RecipeCardWidget extends StatelessWidget {
               errorWidget: (context, url, error) => Icon(
                 Icons.image_not_supported_outlined,
                 size: 28.sp,
-                color: ColorManager.greyTextColor.withOpacity(0.3),
+                color: ColorManager.greyTextColor.withValues(alpha: 0.3),
               ),
             ),
     );
