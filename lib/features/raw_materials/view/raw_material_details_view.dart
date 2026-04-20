@@ -1,9 +1,11 @@
+import 'dart:ui' as ui;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:raw_chem/app/app_functions.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
@@ -101,23 +103,28 @@ class RawMaterialDetailsView extends StatelessWidget {
                               Text(
                                 title,
                                 style: TextStyle(
-                                  fontSize: 22.sp,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.w900,
                                   color: const Color(0xFF1B3D2F),
+                                  letterSpacing: -0.5,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
                               SizedBox(height: 12.h),
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+                                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFE2F9D1),
+                                  color: const Color(0xFF4A7D2C).withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(10.r),
+                                  border: Border.all(
+                                    color: const Color(0xFF4A7D2C).withValues(alpha: 0.2),
+                                    width: 1,
+                                  ),
                                 ),
                                 child: Text(
                                   category,
                                   style: TextStyle(
-                                    fontSize: 14.sp,
+                                    fontSize: 13.sp,
                                     color: const Color(0xFF4A7D2C),
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -155,40 +162,30 @@ class RawMaterialDetailsView extends StatelessWidget {
                         ),
                         SizedBox(height: 30.h),
 
-                        // Technical Details Section
-                        Container(
-                          padding: EdgeInsets.all(20.w),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF9FBFB),
-                            borderRadius: BorderRadius.circular(20.r),
-                            border: Border.all(color: const Color(0xFFE5E7EB)),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(Icons.info_outline, color: Color(0xFF4A7D2C), size: 18),
-                                  SizedBox(width: 8.w),
-                                  Text(
-                                    AppStrings.technicalDetails.tr(),
-                                    style: TextStyle(
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF1B3D2F),
-                                    ),
-                                  ),
-                                ],
+                        // Info Cards Section
+                        Column(
+                          verticalDirection: VerticalDirection.down,
+                          children: [
+                            _buildInfoRow(
+                              icon: Icons.tag_rounded,
+                              label: AppStrings.casNumber.tr(),
+                              value: casNumber,
+                              isLoading: isLoading,
+                              onCopy: () => AppFunctions.copyText(
+                                  context: context, mounted: true, text: casNumber),
+                            ),
+                            if (currentMaterial.price != null) ...[
+                              SizedBox(height: 12.h),
+                              _buildInfoRow(
+                                icon: Icons.payments_outlined,
+                                label: AppStrings.currentPrice.tr(),
+                                value: "${currentMaterial.price} ${AppStrings.egp.tr()}",
+                                isLoading: isLoading,
                               ),
-                              Divider(height: 24.h, color: const Color(0xFFE5E7EB)),
-                              _buildInfoRow(AppStrings.casNumber.tr(), casNumber, isLoading: isLoading),
-                              if (currentMaterial.price != null) ...[
-                                Divider(height: 24.h, color: const Color(0xFFE5E7EB)),
-                                _buildInfoRow(AppStrings.currentPrice.tr(), "${currentMaterial.price} ${AppStrings.egp.tr()}", isLoading: isLoading),
-                              ],
                             ],
-                          ),
+                          ],
                         ),
-                        SizedBox(height: 40.h),
+                        SizedBox(height: 48.h),
                       ],
                     ),
                   ),
@@ -225,6 +222,7 @@ class RawMaterialDetailsView extends StatelessWidget {
   }
 
   Widget _buildInfoSection(
+    BuildContext context,
     String title,
     String content, {
     bool isTitle = false,
@@ -250,39 +248,95 @@ class RawMaterialDetailsView extends StatelessWidget {
               child: SkeletonBar(width: 200.w, height: 14.h, radius: 4),
             )
           else
-            Text(
-              content,
-              style: TextStyle(fontSize: 12.sp, color: const Color(0xFF1B3D2F), height: 1.5),
-              textAlign: TextAlign.right,
+            Directionality(
+              textDirection: ui.TextDirection.ltr,
+              child: Text(
+                content,
+                style: TextStyle(fontSize: 12.sp, color: const Color(0xFF1B3D2F), height: 1.5),
+                textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+              ),
             ),
         ],
       ],
     );
   }
-
-  Widget _buildInfoRow(String label, String value, {required bool isLoading}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        if (isLoading && value.isEmpty)
-          SkeletonWidget(
-            isLoading: true,
-            child: SkeletonBar(width: 80.w, height: 14.h, radius: 4),
-          )
-        else
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xFF1B3D2F),
+  Widget _buildInfoRow({
+    required IconData icon,
+    required String label,
+    required String value,
+    required bool isLoading,
+    VoidCallback? onCopy,
+  }) {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAF9),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: const Color(0xFFE8F2EE)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(8.w),
+            decoration: BoxDecoration(
+              color: const Color(0xFFE2F9D1).withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Icon(icon, color: const Color(0xFF4A7D2C), size: 20.sp),
+          ),
+          SizedBox(width: 14.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: const Color(0xFF8A9992),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                if (isLoading && value.isEmpty)
+                  SkeletonWidget(
+                    isLoading: true,
+                    child: SkeletonBar(width: 80.w, height: 14.h, radius: 4),
+                  )
+                else
+                  Directionality(
+                    textDirection: ui.TextDirection.ltr,
+                    child: Text(
+                      value,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF1B3D2F),
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
-        Text(
-          label,
-          style: TextStyle(fontSize: 13.sp, color: const Color(0xFFB4B4CC)),
-        ),
-      ],
+          if (onCopy != null && value.isNotEmpty)
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: onCopy,
+                borderRadius: BorderRadius.circular(8.r),
+                child: Container(
+                  padding: EdgeInsets.all(8.w),
+                  child: Icon(
+                    Icons.copy_rounded,
+                    size: 18.sp,
+                    color: const Color(0xFF4A7D2C),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

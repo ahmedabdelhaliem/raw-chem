@@ -6,13 +6,14 @@ import 'package:raw_chem/common/http/either.dart';
 import 'package:raw_chem/common/http/failure.dart';
 import 'package:raw_chem/common/http/pagination_helper.dart';
 import 'package:raw_chem/features/chat/domain/model/message_model.dart';
+import 'package:raw_chem/features/chat/domain/model/firebase_chat_config.dart';
 import 'package:raw_chem/features/chat/domain/repo/chat_repo.dart';
 import 'package:raw_chem/common/model/paginated_response.dart';
 
 class ChatCubit extends Cubit<BaseState<MessageModel>> {
   final ChatRepo _chatRepo;
   final AppPreferences _appPreferences;
-  StreamSubscription? _socketSubscription;
+  StreamSubscription? _firebaseSubscription;
   final Set<String> _messageIds = {};
   late final PaginationHandler<MessageModel, ChatCubit> paginationHandler;
 
@@ -24,18 +25,35 @@ class ChatCubit extends Cubit<BaseState<MessageModel>> {
 
   Future<void> initChat(int chatId) async {
     emit(state.copyWith(status: Status.loading, items: []));
+    _messageIds.clear();
 
+    // 1. Init Firebase Real-time (Start listening early to avoid missing messages)
+    _setupRealtimeChat(chatId);
+
+    // 2. Fetch History
     await paginationHandler.loadFirstPage(
       (page, limit, [params]) => _chatRepo.getChatMessages(chatId, page: page),
     );
 
     if (state.isSuccess) {
-       _messageIds.clear();
        for (var msg in state.items) {
-         _messageIds.add(msg.id);
+         _messageIds.add(msg.id.toString());
        }
-       _connectSocket();
     }
+  }
+
+  Future<void> _setupRealtimeChat(int chatId) async {
+    final result = await _chatRepo.getFirebaseToken(chatId);
+    result.fold(
+      (failure) => null, // Handle failure if necessary
+      (config) async {
+        await _chatRepo.initFirebaseChat(config);
+        _firebaseSubscription?.cancel();
+        _firebaseSubscription = _chatRepo.messagesStream.listen((message) {
+          _handleIncomingMessage(message);
+        });
+      },
+    );
   }
 
   Future<Either<Failure, PaginatedResponse<MessageModel>>> getChatMessages({
@@ -44,46 +62,107 @@ class ChatCubit extends Cubit<BaseState<MessageModel>> {
   }) async {
     final result = await _chatRepo.getChatMessages(chatId, page: page);
     result.fold((l) => null, (response) {
-      for (var msg in response!.data) {
-        _messageIds.add(msg.id);
+      if (response != null) {
+        for (var msg in response.data) {
+          _messageIds.add(msg.id.toString());
+        }
       }
     });
     return result;
   }
 
-  void _connectSocket() {
-    final token = _appPreferences.getToken();
-    if (token.isEmpty) return;
+  void _handleIncomingMessage(MessageModel message) {
+    final messageIdStr = message.id.toString();
+    
+    // 1. Check if ID already exists (Exact match)
+    final existingIndex = state.items.indexWhere((m) => m.id.toString() == messageIdStr);
+    
+    if (existingIndex != -1) {
+      // Update existing message (e.g. to fill in attachment_url from API response)
+      final List<MessageModel> updatedItems = List.from(state.items);
+      updatedItems[existingIndex] = message;
+      emit(state.copyWith(items: updatedItems));
+    } else {
+      // 2. Reconciliation: Is it a "Me" message that might be a replacement for a temp?
+      if (message.senderType == 'user') {
+        // Find the last (oldest) matching temp message that hasn't been replaced yet
+        final tempIndex = state.items.lastIndexWhere((m) => 
+          m.id.toString().startsWith('temp_') && 
+          m.type == message.type &&
+          (m.body == message.body || (m.type == 'image' && m.attachmentUrl != null))
+        );
+          
+        if (tempIndex != -1) {
+          // Found a matching temp message! Reconcile it now.
+          final tempIdStr = state.items[tempIndex].id.toString();
+          _messageIds.remove(tempIdStr);
+          _messageIds.add(messageIdStr);
+          
+          final List<MessageModel> updatedItems = List.from(state.items);
+          updatedItems[tempIndex] = message;
+          emit(state.copyWith(items: updatedItems));
+          return;
+        }
+      }
+      
+      // 3. New message or no temp match: Add to list
+      _messageIds.add(messageIdStr);
+      final updatedMessages = [message, ...state.items]; 
+      emit(state.copyWith(items: updatedMessages));
+    }
+  }
 
-    _chatRepo.connectSocket(token);
-    _socketSubscription?.cancel();
-    _socketSubscription = _chatRepo.messagesStream.listen(
-      (message) {
-        _handleIncomingMessage(message);
+  Future<void> sendMessage(int chatId, String? messageText, {String? imagePath}) async {
+    if (messageText == null && imagePath == null) return;
+    
+    final tempId = 'temp_${DateTime.now().millisecondsSinceEpoch}';
+    final myId = _appPreferences.getUserId();
+    
+    // 1. Create Optimistic Message
+    final optimisticMessage = MessageModel(
+      id: tempId,
+      senderId: myId,
+      senderType: 'user', // Set sender type explicitly
+      type: imagePath != null ? 'image' : 'text',
+      body: messageText,
+      attachmentUrl: imagePath, // Use local path for preview
+      createdAt: DateTime.now().toIso8601String(),
+    );
+
+    // 2. Add to list immediately
+    _handleIncomingMessage(optimisticMessage);
+    
+    // 3. Call API
+    final result = await _chatRepo.sendMessage(chatId, message: messageText, imagePath: imagePath);
+    
+    result.fold(
+      (failure) {
+        // Remove optimistic message on failure
+        final updatedItems = state.items.where((m) => m.id.toString() != tempId).toList();
+        emit(state.copyWith(items: updatedItems));
+        _messageIds.remove(tempId);
       },
-      onError: (error) {
-        // Handle stream error if necessary
+      (message) {
+        // Replace optimistic message with real message
+        final List<MessageModel> updatedItems = List.from(state.items);
+        final index = updatedItems.indexWhere((m) => m.id.toString() == tempId);
+        
+        if (index != -1) {
+          updatedItems[index] = message;
+          _messageIds.remove(tempId);
+          _messageIds.add(message.id.toString());
+          emit(state.copyWith(items: updatedItems));
+        } else {
+          _handleIncomingMessage(message);
+        }
       },
     );
   }
 
-  void _handleIncomingMessage(MessageModel message) {
-    if (_messageIds.contains(message.id)) return;
-
-    _messageIds.add(message.id);
-    final updatedMessages = [message, ...state.items]; // Newest at top for reversed list
-    emit(state.copyWith(items: updatedMessages));
-  }
-
-  void sendMessage(int chatId, String messageText) {
-    if (messageText.trim().isEmpty) return;
-    _chatRepo.sendMessage(chatId, messageText);
-  }
-
   @override
   Future<void> close() {
-    _socketSubscription?.cancel();
-    _chatRepo.disconnectSocket();
+    _firebaseSubscription?.cancel();
+    _chatRepo.disposeFirebaseChat();
     return super.close();
   }
 }

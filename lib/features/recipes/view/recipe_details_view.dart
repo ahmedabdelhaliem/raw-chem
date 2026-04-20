@@ -6,6 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:raw_chem/app/app_functions.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
@@ -140,10 +141,7 @@ class RecipeDetailsView extends StatelessWidget {
                     onPressed: () {
                       final fullRecipe =
                           '${AppStrings.recipe.tr()}: $title\n\n${AppStrings.ingredients.tr()}:\n$ingredients\n\n${AppStrings.measurements.tr()}:\n$measurements\n\n${AppStrings.preparationInstructions.tr()}:\n$preparation';
-                      Clipboard.setData(ClipboardData(text: fullRecipe));
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(AppStrings.fullRecipeCopiedSuccessfully.tr())));
+                      AppFunctions.copyText(context: context, mounted: true, text: fullRecipe);
                     },
                   ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.5),
                 ),
@@ -239,10 +237,7 @@ class RecipeDetailsView extends StatelessWidget {
                 : Alignment.centerLeft,
             child: InkWell(
               onTap: () {
-                Clipboard.setData(ClipboardData(text: content));
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text('$title ${AppStrings.copiedSuccessfully.tr()}')));
+                AppFunctions.copyText(context: context, mounted: true, text: content);
               },
               borderRadius: BorderRadius.circular(8.r),
               child: Container(

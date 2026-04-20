@@ -49,6 +49,7 @@ class _RawMaterialsViewState extends State<RawMaterialsView> {
         ),
       ],
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: ColorManager.bg,
         appBar: DefaultAppBar(
           text: AppStrings.rawMaterials.tr(),
@@ -185,8 +186,8 @@ class _RawMaterialsViewState extends State<RawMaterialsView> {
                   if (_debounce?.isActive ?? false) _debounce?.cancel();
                   _debounce = Timer(const Duration(seconds: 2), () {
                     final text = value.trim();
-                    // Check if the input is only digits and/or hyphens (valid CAS number pattern)
-                    final isCasNumber = RegExp(r'^[\d-]+$').hasMatch(text) && text.isNotEmpty;
+                    // Check if the input contains a hyphen and consists only of digits/hyphens (valid CAS number pattern)
+                    final isCasNumber = text.contains('-') && RegExp(r'^[\d-]+$').hasMatch(text) && text.isNotEmpty;
 
                     if (isCasNumber) {
                       context.read<RawMaterialsCubit>().fetchMaterials(query: '', casNumber: text);

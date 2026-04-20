@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pinput/pinput.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/extensions/context_extension.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
@@ -35,8 +36,7 @@ class VerifyOtpView extends StatefulWidget {
 }
 
 class _VerifyOtpViewState extends State<VerifyOtpView> {
-  final List<TextEditingController> _controllers = List.generate(5, (_) => TextEditingController());
-  final List<FocusNode> _focusNodes = List.generate(5, (_) => FocusNode());
+  final TextEditingController _pinController = TextEditingController();
   int _timerSeconds = 59;
   Timer? _timer;
   bool _canResend = false;
@@ -75,12 +75,7 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
   @override
   void dispose() {
     _timer?.cancel();
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    for (var node in _focusNodes) {
-      node.dispose();
-    }
+    _pinController.dispose();
     super.dispose();
   }
 
@@ -94,7 +89,7 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
               AppRouters.resetPasswordView,
               extra: {
                 'phone': widget.phone,
-                'token': _controllers.map((c) => c.text).join(),
+                'token': _pinController.text,
               },
             );
           } else if (state.isError) {
@@ -111,7 +106,7 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
         builder: (context, state) {
           final cubit = context.read<ForgotPwdCubit>();
           return _buildScaffold(context, state.isLoading, cubit.resendStatus == ForgotResendStatus.loading, () {
-            String token = _controllers.map((c) => c.text).join();
+            String token = _pinController.text;
             if (token.length == 5) {
               context.read<ForgotPwdCubit>().verifyOtpForgot(widget.phone, token);
             } else {
@@ -143,7 +138,7 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
       builder: (context, state) {
         final cubit = context.read<VerifyOtpCubit>();
         return _buildScaffold(context, state.isLoading, cubit.resendStatus == ResendStatus.loading, () {
-          String token = _controllers.map((c) => c.text).join();
+          String token = _pinController.text;
           if (token.length == 5) {
             context.read<VerifyOtpCubit>().verifyOtp(
                   VerifyOtpRequest(phone: widget.phone, token: token),
@@ -199,42 +194,39 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
                 style: getBoldStyle(color: ColorManager.primary, fontSize: 16.sp),
               ),
               SizedBox(height: 50.h),
-              // OTP Fields
-              Row(
+              // OTP Fields (Using Pinput for better UX)
+              Pinput(
+                length: 5,
+                controller: _pinController,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(
-                  5,
-                  (index) => SizedBox(
-                    width: 60.w,
-                    height: 60.h,
-                    child: TextField(
-                      controller: _controllers[index],
-                      focusNode: _focusNodes[index],
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      maxLength: 1,
-                      style: getBoldStyle(color: ColorManager.primary, fontSize: 20.sp),
-                      decoration: InputDecoration(
-                        counterText: "",
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: const BorderSide(color: ColorManager.greyBorder),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: const BorderSide(color: ColorManager.primary),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        if (value.isNotEmpty && index < 4) {
-                          _focusNodes[index + 1].requestFocus();
-                        } else if (value.isEmpty && index > 0) {
-                          _focusNodes[index - 1].requestFocus();
-                        }
-                      },
-                    ),
+                defaultPinTheme: PinTheme(
+                  width: 60.w,
+                  height: 60.h,
+                  textStyle: getBoldStyle(color: ColorManager.primary, fontSize: 20.sp),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: ColorManager.greyBorder),
                   ),
                 ),
+                focusedPinTheme: PinTheme(
+                  width: 60.w,
+                  height: 60.h,
+                  textStyle: getBoldStyle(color: ColorManager.primary, fontSize: 20.sp),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: ColorManager.primary),
+                  ),
+                ),
+                submittedPinTheme: PinTheme(
+                  width: 60.w,
+                  height: 60.h,
+                  textStyle: getBoldStyle(color: ColorManager.primary, fontSize: 20.sp),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: ColorManager.greyBorder),
+                  ),
+                ),
+                onCompleted: (pin) => onVerify(),
               ),
               SizedBox(height: 40.h),
               // Verify Button

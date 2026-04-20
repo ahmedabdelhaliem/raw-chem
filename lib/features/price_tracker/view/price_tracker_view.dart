@@ -49,6 +49,7 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
         BlocProvider(create: (context) => instance<RawMaterialFamiliesCubit>()),
       ],
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: ColorManager.bg,
         appBar: DefaultAppBar(
           text: AppStrings.priceTracker.tr(),
@@ -188,8 +189,8 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
                   if (_debounce?.isActive ?? false) _debounce?.cancel();
                   _debounce = Timer(const Duration(seconds: 2), () {
                     final text = value.trim();
-                    // Check if the input is only digits and/or hyphens (valid CAS number pattern)
-                    final isCasNumber = RegExp(r'^[\d-]+$').hasMatch(text) && text.isNotEmpty;
+                    // Check if the input contains a hyphen and consists only of digits/hyphens (valid CAS number pattern)
+                    final isCasNumber = text.contains('-') && RegExp(r'^[\d-]+$').hasMatch(text) && text.isNotEmpty;
 
                     if (isCasNumber) {
                       context.read<PriceTrackerCubit>().fetchSupplierMaterials(query: '', casNumber: text);
@@ -199,7 +200,7 @@ class _PriceTrackerViewState extends State<PriceTrackerView> {
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: '${AppStrings.search.tr()}...',
+                  hintText: AppStrings.searchHint.tr(),
                   hintStyle: TextStyle(color: ColorManager.grey, fontSize: 14.sp),
                   prefixIcon: const Icon(Icons.search, color: ColorManager.grey),
                   border: InputBorder.none,
@@ -318,7 +319,7 @@ class PriceTrackerCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6.r),
                   ),
                   child: Text(
-                    "${AppStrings.casNumber.tr()}: ${model.casNumber}",
+                    "${AppStrings.casNumber.tr()}: \u200e${model.casNumber}",
                     style: TextStyle(
                       fontSize: 11.sp,
                       fontWeight: FontWeight.w600,

@@ -11,6 +11,7 @@ _$NotificationMetadataModelImpl _$$NotificationMetadataModelImplFromJson(
     _$NotificationMetadataModelImpl(
       type: json['type'] as String?,
       status: json['status'] as String?,
+      targetTab: json['target_tab'] as String?,
       purchaseOrderId: (json['purchase_order_id'] as num?)?.toInt(),
     );
 
@@ -19,6 +20,7 @@ Map<String, dynamic> _$$NotificationMetadataModelImplToJson(
     <String, dynamic>{
       'type': instance.type,
       'status': instance.status,
+      'target_tab': instance.targetTab,
       'purchase_order_id': instance.purchaseOrderId,
     };
 

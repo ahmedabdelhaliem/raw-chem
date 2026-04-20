@@ -40,7 +40,7 @@ class OrderCardWidget extends StatelessWidget {
             ),
           ],
         ),
-        margin: EdgeInsets.only(bottom: 18.h),
+        margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
         child: Column(
           children: [
@@ -109,27 +109,31 @@ class OrderCardWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppStrings.total.tr(),
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                          color: ColorManager.greyTextColor,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppStrings.total.tr(),
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
+                            color: ColorManager.greyTextColor,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        amount,
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w900,
-                          color: ColorManager.primary,
+                        SizedBox(height: 4.h),
+                        Text(
+                          amount,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w900,
+                            color: ColorManager.primary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   
                   // Action Button

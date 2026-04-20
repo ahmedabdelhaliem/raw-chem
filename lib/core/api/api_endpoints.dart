@@ -26,7 +26,8 @@ class EndPoints {
   
   // Chat
   static const String chats = "/chats";
-  static String chatMessages(int id) => "/chats/$id/messages";
+  static String firebaseToken(int purchaseOrderId) => "/supplier-materials/purchase-orders/$purchaseOrderId/chat/firebase-custom-token";
+  static String chatMessages(int purchaseOrderId) => "/supplier-materials/purchase-orders/$purchaseOrderId/chat/messages";
 
   // Locations
   static const String countries = "/countries";

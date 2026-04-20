@@ -1,7 +1,5 @@
-import 'package:raw_chem/common/resources/language_manager.dart';
-import 'package:raw_chem/common/resources/strings_manager.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:raw_chem/common/resources/language_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String langKey = 'lang_key';
@@ -19,6 +17,7 @@ const String prefsKeyUserId = "PREFS_KEY_USER_ID";
 const String prefsKeyHasChild = "PREFS_KEY_HAS_CHILD";
 const String prefsKeyIsSubscribed = "PREFS_KEY_IS_SUBSCRIBED";
 const String prefsKeySelectedChildId = "PREFS_KEY_SELECTED_CHILD_ID";
+const String prefsKeyReadNotificationIds = "PREFS_KEY_READ_NOTIFICATION_IDS";
 
 class AppPreferences {
   final SharedPreferences _sharedPreferences;
@@ -197,5 +196,15 @@ class AppPreferences {
       _sharedPreferences.remove(prefsKeyIsSubscribed),
       _sharedPreferences.remove(prefsKeySelectedChildId),
     ]);
+  }
+
+  Future<void> saveReadNotificationIds(Set<int> ids) async {
+    final list = ids.map((id) => id.toString()).toList();
+    await _sharedPreferences.setStringList(prefsKeyReadNotificationIds, list);
+  }
+
+  Set<int> getReadNotificationIds() {
+    final list = _sharedPreferences.getStringList(prefsKeyReadNotificationIds) ?? [];
+    return list.map((s) => int.tryParse(s) ?? -1).where((id) => id != -1).toSet();
   }
 }

@@ -197,7 +197,7 @@ class _TermsConditionsViewState extends State<TermsConditionsView> {
                   // Footer Notes
                   SizedBox(height: 50.h),
                   Text(
-                    "LEGAL DEPARTMENT • ROW CHEM",
+                    AppStrings.appName.tr(),
                     style: TextStyle(
                       fontSize: 9.sp,
                       fontWeight: FontWeight.bold,

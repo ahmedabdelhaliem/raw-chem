@@ -21,7 +21,7 @@ class SplashView extends StatefulWidget {
   State<SplashView> createState() => _SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView> {
+class _SplashViewState extends State<SplashView> { 
   Timer? _timer;
   bool _showNoInternet = false;
   bool _isChecking = false;
@@ -33,7 +33,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void _startDelay() {
-    _timer = Timer(const Duration(seconds: 4), _checkConnectivityAndNavigate);
+    _timer = Timer(const Duration(seconds: 2 ), _checkConnectivityAndNavigate);
   }
 
   Future<void> _checkConnectivityAndNavigate() async {

@@ -11,6 +11,7 @@ import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/features/chat/domain/model/chat_model.dart';
 import 'package:raw_chem/features/chat/presentation/cubit/chat_inbox_cubit.dart';
 import 'package:raw_chem/features/chat/presentation/view/widgets/chat_inbox_item.dart';
+import 'package:raw_chem/core/state/base_state.dart';
 
 class ChatInboxView extends StatefulWidget {
   const ChatInboxView({super.key});
@@ -38,10 +39,10 @@ class _ChatInboxViewState extends State<ChatInboxView> {
       ),
       body: BlocBuilder<ChatInboxCubit, BaseState<ChatModel>>(
         builder: (context, state) {
-          if (state.status == Status.loading) {
+          if (state.status == Status.loading && state.items.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state.status == Status.error) {
+          if (state.status == Status.error && state.items.isEmpty) {
             return Center(child: Text(state.failure?.message ?? 'Error'));
           }
           

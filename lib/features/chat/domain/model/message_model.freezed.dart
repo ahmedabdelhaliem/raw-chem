@@ -20,12 +20,17 @@ MessageModel _$MessageModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MessageModel {
-  String get id => throw _privateConstructorUsedError;
-  String get message => throw _privateConstructorUsedError;
+  dynamic get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'sender_type')
+  String? get senderType => throw _privateConstructorUsedError;
   @JsonKey(name: 'sender_id')
-  String get senderId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'chat_id')
-  String get chatId => throw _privateConstructorUsedError;
+  dynamic get senderId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'sender_name')
+  String? get senderName => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  String? get body => throw _privateConstructorUsedError;
+  @JsonKey(name: 'attachment_url')
+  String? get attachmentUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   String get createdAt => throw _privateConstructorUsedError;
 
@@ -42,10 +47,13 @@ abstract class $MessageModelCopyWith<$Res> {
       _$MessageModelCopyWithImpl<$Res, MessageModel>;
   @useResult
   $Res call(
-      {String id,
-      String message,
-      @JsonKey(name: 'sender_id') String senderId,
-      @JsonKey(name: 'chat_id') String chatId,
+      {dynamic id,
+      @JsonKey(name: 'sender_type') String? senderType,
+      @JsonKey(name: 'sender_id') dynamic senderId,
+      @JsonKey(name: 'sender_name') String? senderName,
+      String type,
+      String? body,
+      @JsonKey(name: 'attachment_url') String? attachmentUrl,
       @JsonKey(name: 'created_at') String createdAt});
 }
 
@@ -62,29 +70,44 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? message = null,
-    Object? senderId = null,
-    Object? chatId = null,
+    Object? id = freezed,
+    Object? senderType = freezed,
+    Object? senderId = freezed,
+    Object? senderName = freezed,
+    Object? type = null,
+    Object? body = freezed,
+    Object? attachmentUrl = freezed,
     Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      senderId: null == senderId
+              as dynamic,
+      senderType: freezed == senderType
+          ? _value.senderType
+          : senderType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      senderId: freezed == senderId
           ? _value.senderId
           : senderId // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      senderName: freezed == senderName
+          ? _value.senderName
+          : senderName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
               as String,
-      chatId: null == chatId
-          ? _value.chatId
-          : chatId // ignore: cast_nullable_to_non_nullable
-              as String,
+      body: freezed == body
+          ? _value.body
+          : body // ignore: cast_nullable_to_non_nullable
+              as String?,
+      attachmentUrl: freezed == attachmentUrl
+          ? _value.attachmentUrl
+          : attachmentUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -102,10 +125,13 @@ abstract class _$$MessageModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String message,
-      @JsonKey(name: 'sender_id') String senderId,
-      @JsonKey(name: 'chat_id') String chatId,
+      {dynamic id,
+      @JsonKey(name: 'sender_type') String? senderType,
+      @JsonKey(name: 'sender_id') dynamic senderId,
+      @JsonKey(name: 'sender_name') String? senderName,
+      String type,
+      String? body,
+      @JsonKey(name: 'attachment_url') String? attachmentUrl,
       @JsonKey(name: 'created_at') String createdAt});
 }
 
@@ -120,29 +146,44 @@ class __$$MessageModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? message = null,
-    Object? senderId = null,
-    Object? chatId = null,
+    Object? id = freezed,
+    Object? senderType = freezed,
+    Object? senderId = freezed,
+    Object? senderName = freezed,
+    Object? type = null,
+    Object? body = freezed,
+    Object? attachmentUrl = freezed,
     Object? createdAt = null,
   }) {
     return _then(_$MessageModelImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      senderId: null == senderId
+              as dynamic,
+      senderType: freezed == senderType
+          ? _value.senderType
+          : senderType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      senderId: freezed == senderId
           ? _value.senderId
           : senderId // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      senderName: freezed == senderName
+          ? _value.senderName
+          : senderName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
               as String,
-      chatId: null == chatId
-          ? _value.chatId
-          : chatId // ignore: cast_nullable_to_non_nullable
-              as String,
+      body: freezed == body
+          ? _value.body
+          : body // ignore: cast_nullable_to_non_nullable
+              as String?,
+      attachmentUrl: freezed == attachmentUrl
+          ? _value.attachmentUrl
+          : attachmentUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -156,31 +197,42 @@ class __$$MessageModelImplCopyWithImpl<$Res>
 class _$MessageModelImpl implements _MessageModel {
   const _$MessageModelImpl(
       {required this.id,
-      required this.message,
-      @JsonKey(name: 'sender_id') required this.senderId,
-      @JsonKey(name: 'chat_id') required this.chatId,
+      @JsonKey(name: 'sender_type') this.senderType,
+      @JsonKey(name: 'sender_id') this.senderId,
+      @JsonKey(name: 'sender_name') this.senderName,
+      required this.type,
+      this.body,
+      @JsonKey(name: 'attachment_url') this.attachmentUrl,
       @JsonKey(name: 'created_at') required this.createdAt});
 
   factory _$MessageModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessageModelImplFromJson(json);
 
   @override
-  final String id;
+  final dynamic id;
   @override
-  final String message;
+  @JsonKey(name: 'sender_type')
+  final String? senderType;
   @override
   @JsonKey(name: 'sender_id')
-  final String senderId;
+  final dynamic senderId;
   @override
-  @JsonKey(name: 'chat_id')
-  final String chatId;
+  @JsonKey(name: 'sender_name')
+  final String? senderName;
+  @override
+  final String type;
+  @override
+  final String? body;
+  @override
+  @JsonKey(name: 'attachment_url')
+  final String? attachmentUrl;
   @override
   @JsonKey(name: 'created_at')
   final String createdAt;
 
   @override
   String toString() {
-    return 'MessageModel(id: $id, message: $message, senderId: $senderId, chatId: $chatId, createdAt: $createdAt)';
+    return 'MessageModel(id: $id, senderType: $senderType, senderId: $senderId, senderName: $senderName, type: $type, body: $body, attachmentUrl: $attachmentUrl, createdAt: $createdAt)';
   }
 
   @override
@@ -188,19 +240,32 @@ class _$MessageModelImpl implements _MessageModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MessageModelImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.senderId, senderId) ||
-                other.senderId == senderId) &&
-            (identical(other.chatId, chatId) || other.chatId == chatId) &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            (identical(other.senderType, senderType) ||
+                other.senderType == senderType) &&
+            const DeepCollectionEquality().equals(other.senderId, senderId) &&
+            (identical(other.senderName, senderName) ||
+                other.senderName == senderName) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.body, body) || other.body == body) &&
+            (identical(other.attachmentUrl, attachmentUrl) ||
+                other.attachmentUrl == attachmentUrl) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, message, senderId, chatId, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      senderType,
+      const DeepCollectionEquality().hash(senderId),
+      senderName,
+      type,
+      body,
+      attachmentUrl,
+      createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -218,10 +283,13 @@ class _$MessageModelImpl implements _MessageModel {
 
 abstract class _MessageModel implements MessageModel {
   const factory _MessageModel(
-          {required final String id,
-          required final String message,
-          @JsonKey(name: 'sender_id') required final String senderId,
-          @JsonKey(name: 'chat_id') required final String chatId,
+          {required final dynamic id,
+          @JsonKey(name: 'sender_type') final String? senderType,
+          @JsonKey(name: 'sender_id') final dynamic senderId,
+          @JsonKey(name: 'sender_name') final String? senderName,
+          required final String type,
+          final String? body,
+          @JsonKey(name: 'attachment_url') final String? attachmentUrl,
           @JsonKey(name: 'created_at') required final String createdAt}) =
       _$MessageModelImpl;
 
@@ -229,15 +297,23 @@ abstract class _MessageModel implements MessageModel {
       _$MessageModelImpl.fromJson;
 
   @override
-  String get id;
+  dynamic get id;
   @override
-  String get message;
+  @JsonKey(name: 'sender_type')
+  String? get senderType;
   @override
   @JsonKey(name: 'sender_id')
-  String get senderId;
+  dynamic get senderId;
   @override
-  @JsonKey(name: 'chat_id')
-  String get chatId;
+  @JsonKey(name: 'sender_name')
+  String? get senderName;
+  @override
+  String get type;
+  @override
+  String? get body;
+  @override
+  @JsonKey(name: 'attachment_url')
+  String? get attachmentUrl;
   @override
   @JsonKey(name: 'created_at')
   String get createdAt;

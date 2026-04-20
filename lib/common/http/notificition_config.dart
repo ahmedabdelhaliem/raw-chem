@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../app/app_prefs.dart';
 import '../../app/imports.dart';
+import '../resources/app_router.dart';
 
 class MessagingConfig {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -64,8 +65,12 @@ class MessagingConfig {
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         log("Notification tapped: ${response.payload}");
         if (response.payload != null) {
-          // ignore: unused_local_variable
-          final data = jsonDecode(response.payload!) as Map<String, dynamic>;
+          try {
+            final data = jsonDecode(response.payload!) as Map<String, dynamic>;
+            _handleNotificationClick(data);
+          } catch (e) {
+            log("Error parsing notification payload: $e");
+          }
         }
       },
     );
@@ -125,12 +130,43 @@ class MessagingConfig {
         .then((RemoteMessage? message) {
       if (message != null) {
         log("Initial message: ${message.data}");
+        _handleNotificationClick(message.data);
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       log("On message opened app: ${message.data}");
+      _handleNotificationClick(message.data);
     });
+  }
+
+  static void _handleNotificationClick(Map<String, dynamic> data) {
+    log("Handling notification click with data: $data");
+    
+    // The data might contain a nested metadata map or be flat
+    final Map<String, dynamic> metadata = data['metadata'] is Map 
+        ? Map<String, dynamic>.from(data['metadata'] as Map)
+        : data;
+
+    final String? type = metadata['type']?.toString();
+    final String? targetTab = metadata['target_tab']?.toString();
+
+    if (type == 'supplier_material_purchase_order_chat_message' || targetTab == 'chat') {
+      final dynamic orderId = metadata['purchase_order_id'];
+      if (orderId != null) {
+        final int id = orderId is int ? orderId : int.tryParse(orderId.toString()) ?? 0;
+        if (id != 0) {
+          final String name = data['title']?.toString() ?? 'Supplier';
+          AppRouters.router.push(
+            AppRouters.chatView,
+            extra: {
+              'chatId': id,
+              'supplierName': name,
+            },
+          );
+        }
+      }
+    }
   }
 
   @pragma('vm:entry-point')

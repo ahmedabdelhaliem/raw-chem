@@ -31,6 +31,12 @@ class VerifyOtpCubit extends Cubit<BaseState<VerifyOtpResponse>> {
         if (token != null && token.isNotEmpty) {
           await _appPrefs.saveToken(token);
         }
+        
+        final userId = response.data?.user?.id;
+        if (userId != null) {
+          await _appPrefs.setUserId(userId.toString());
+        }
+        
         emit(state.copyWith(status: Status.success, data: response));
       },
     );

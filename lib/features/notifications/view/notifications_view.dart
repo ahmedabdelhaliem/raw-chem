@@ -1,16 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
-import 'package:raw_chem/common/widgets/shimmer_container_widget.dart';
 import 'package:raw_chem/common/widgets/default_error_widget.dart';
+import 'package:raw_chem/common/widgets/shimmer_container_widget.dart';
 
 class NotificationsView extends StatefulWidget {
   const NotificationsView({super.key});
@@ -47,7 +44,8 @@ class _NotificationsViewState extends State<NotificationsView> {
           if (state.isFailure && state.items.isEmpty) {
             return DefaultErrorWidget(
               errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
-              onPressed: () => context.read<NotificationsCubit>().fetchNotifications(isReload: true),
+              onPressed: () =>
+                  context.read<NotificationsCubit>().fetchNotifications(isReload: true),
             );
           }
 
@@ -63,7 +61,8 @@ class _NotificationsViewState extends State<NotificationsView> {
             child: PaginatedListWrapper(
               scrollController: _scrollController,
               paginationHandler: context.read<NotificationsCubit>().paginationHandler,
-              fetchFunction: (page, limit, [params]) => instance<NotificationsRepo>().getNotifications(page: page),
+              fetchFunction: (page, limit, [params]) =>
+                  instance<NotificationsRepo>().getNotifications(page: page),
               child: ListView.separated(
                 controller: _scrollController,
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
@@ -134,10 +133,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                       ),
                       Text(
                         timeAgo,
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: ColorManager.greyTextColor,
-                        ),
+                        style: TextStyle(fontSize: 10.sp, color: ColorManager.greyTextColor),
                       ),
                     ],
                   ),
@@ -164,21 +160,21 @@ class _NotificationsViewState extends State<NotificationsView> {
     if (metadata == null) return;
 
     if (metadata.type == 'supplier_material_purchase_order') {
-       // If we have an order ID, we can try to navigate.
-       if (metadata.purchaseOrderId != null) {
-         // Create a skeleton PurchaseOrderModel to pass, or fetch it.
-         // For now, based on current AppRouter, it expects a full model.
-         // We might need to modify the router to accept ID and fetch, but here is a workaround:
-         final skeletonOrder = PurchaseOrderModel(
-           id: metadata.purchaseOrderId!,
-           status: metadata.status ?? 'pending',
-           quantity: 0,
-           listedUnitPrice: '0.0',
-           estimatedSubtotal: '0.0',
-           supplierMaterial: null, // This might cause issues if view uses it immediately
-         );
-         context.push(AppRouters.orderDetailsView, extra: skeletonOrder);
-       }
+      // If we have an order ID, we can try to navigate.
+      if (metadata.purchaseOrderId != null) {
+        // Create a skeleton PurchaseOrderModel to pass, or fetch it.
+        // For now, based on current AppRouter, it expects a full model.
+        // We might need to modify the router to accept ID and fetch, but here is a workaround:
+        final skeletonOrder = PurchaseOrderModel(
+          id: metadata.purchaseOrderId!,
+          status: metadata.status ?? 'pending',
+          quantity: 0,
+          listedUnitPrice: '0.0',
+          estimatedSubtotal: '0.0',
+          supplierMaterial: null, // This might cause issues if view uses it immediately
+        );
+        context.push(AppRouters.orderDetailsView, extra: skeletonOrder);
+      }
     }
   }
 
@@ -198,10 +194,7 @@ class _NotificationsViewState extends State<NotificationsView> {
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       itemCount: 8,
       separatorBuilder: (context, index) => SizedBox(height: 12.h),
-      itemBuilder: (context, index) => ShimmerContainerWidget(
-        height: 80.h,
-        radios: 16.r,
-      ),
+      itemBuilder: (context, index) => ShimmerContainerWidget(height: 80.h, radios: 16.r),
     );
   }
 
@@ -210,15 +203,22 @@ class _NotificationsViewState extends State<NotificationsView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.notifications_off_outlined, size: 80.sp, color: ColorManager.lightGreyTextColor),
+          Icon(
+            Icons.notifications_off_outlined,
+            size: 80.sp,
+            color: ColorManager.lightGreyTextColor,
+          ),
           SizedBox(height: 16.h),
           Text(
             AppStrings.noNotifications.tr(),
-            style: TextStyle(fontSize: 16.sp, color: ColorManager.greyTextColor, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 16.sp,
+              color: ColorManager.greyTextColor,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
     ).animate().fadeIn();
   }
-
 }

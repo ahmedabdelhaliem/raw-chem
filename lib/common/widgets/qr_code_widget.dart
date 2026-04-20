@@ -122,14 +122,8 @@ class QrCodeWidget extends StatelessWidget {
                   if (showCopyButton) ...[
                     SizedBox(width: 12.w),
                     InkWell(
-                      onTap: () async {
-                        await Clipboard.setData(ClipboardData(text: data));
-                        // ignore: use_build_context_synchronously
-                        AppFunctions.showsToast(
-                          AppStrings.textCopied.tr(),
-                          ColorManager.successGreen,
-                          context,
-                        );
+                      onTap: () {
+                        AppFunctions.copyText(context: context, mounted: true, text: data);
                       },
                       child: Icon(
                         Icons.copy_rounded,

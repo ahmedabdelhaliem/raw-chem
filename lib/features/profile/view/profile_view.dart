@@ -168,12 +168,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     iconData: Iconsax.user,
                                     onTap: () => context.push(AppRouters.personalDataView),
                                   ),
-                                  _buildDivider(),
-                                  ProfileMenuItemWidget(
-                                    title: AppStrings.chatInbox.tr(),
-                                    iconData: Iconsax.message_2,
-                                    onTap: () => context.push(AppRouters.chatInboxView),
-                                  ),
+
                                   _buildDivider(),
                                   ProfileMenuItemWidget(
                                     title: AppStrings.ordersHistory.tr(),

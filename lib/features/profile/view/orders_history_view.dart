@@ -1,13 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
+import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
-import 'package:raw_chem/common/widgets/order_card_widget.dart';
 import 'package:raw_chem/common/widgets/default_error_widget.dart';
-import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/common/widgets/order_card_widget.dart';
 import 'package:raw_chem/core/constants/order_statuses.dart';
 
 class OrdersHistoryView extends StatefulWidget {
@@ -19,18 +18,16 @@ class OrdersHistoryView extends StatefulWidget {
 
 class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    _scrollController.dispose();
     super.dispose();
   }
 
@@ -52,7 +49,7 @@ class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTicker
         elevation: 0,
         iconTheme: const IconThemeData(color: ColorManager.blackText),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.h),
+          preferredSize: Size.fromHeight(60.h),
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
             decoration: BoxDecoration(
@@ -61,6 +58,8 @@ class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTicker
             ),
             child: TabBar(
               controller: _tabController,
+              isScrollable: true,
+              tabAlignment: TabAlignment.center,
               labelColor: ColorManager.white,
               unselectedLabelColor: ColorManager.greyTextColor,
               indicatorSize: TabBarIndicatorSize.tab,
@@ -76,13 +75,11 @@ class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTicker
                 ],
               ),
               dividerColor: Colors.transparent,
-              labelStyle: TextStyle(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.bold,
-              ),
+              labelStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
               tabs: [
-                Tab(text: AppStrings.currentOrders.tr()),
-                Tab(text: AppStrings.previousOrders.tr()),
+                Tab(text: AppStrings.tabPending.tr()),
+                Tab(text: AppStrings.tabAccepted.tr()),
+                Tab(text: AppStrings.tabRejected.tr()),
               ],
             ),
           ),
@@ -91,14 +88,34 @@ class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTicker
       body: TabBarView(
         controller: _tabController,
         children: [
-          _buildOrdersListTab(status: OrderStatuses.currentOrders),
-          _buildOrdersListTab(status: OrderStatuses.previousOrders),
+          OrdersListTab(key: const PageStorageKey('pending'), status: OrderStatuses.pendingTab),
+          OrdersListTab(key: const PageStorageKey('accepted'), status: OrderStatuses.acceptedTab),
+          OrdersListTab(key: const PageStorageKey('rejected'), status: OrderStatuses.rejectedTab),
         ],
       ),
     );
   }
+}
 
-  Widget _buildOrdersListTab({required List<String> status}) {
+class OrdersListTab extends StatefulWidget {
+  final List<String> status;
+  const OrdersListTab({super.key, required this.status});
+
+  @override
+  State<OrdersListTab> createState() => _OrdersListTabState();
+}
+
+class _OrdersListTabState extends State<OrdersListTab> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => instance<PurchaseOrdersHistoryCubit>()..getPurchaseOrders(status: null),
       child: BlocBuilder<PurchaseOrdersHistoryCubit, BaseState<PurchaseOrderModel>>(
@@ -110,54 +127,61 @@ class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTicker
           if (state.isError && state.items.isEmpty) {
             return DefaultErrorWidget(
               errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
-              onPressed: () => context.read<PurchaseOrdersHistoryCubit>().getPurchaseOrders(status: null),
+              onPressed: () =>
+                  context.read<PurchaseOrdersHistoryCubit>().getPurchaseOrders(status: null),
             );
           }
 
           // Client-side filtering based on tab status
-          final filteredOrders = state.items.where((order) => status.contains(order.status)).toList();
+          final filteredOrders = state.items.where((order) => widget.status.contains(order.status)).toList();
+
           if (filteredOrders.isEmpty && !state.isLoading) {
             return _buildEmptyState();
           }
 
           return RefreshIndicator(
-            onRefresh: () async => context.read<PurchaseOrdersHistoryCubit>().getPurchaseOrders(status: null),
+            onRefresh: () async =>
+                context.read<PurchaseOrdersHistoryCubit>().getPurchaseOrders(status: null),
             child: PaginatedListWrapper(
               scrollController: _scrollController,
               paginationHandler: context.read<PurchaseOrdersHistoryCubit>().paginationHandler,
-              fetchFunction: (page, limit, [params]) => instance<RawMaterialsRepo>().getPurchaseOrders(
-                page: page,
-              ),
+              fetchFunction: (page, limit, [params]) => instance<RawMaterialsRepo>().getPurchaseOrders(page: page),
               child: ListView.builder(
                 controller: _scrollController,
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                 itemCount: filteredOrders.length,
                 itemBuilder: (context, index) {
                   final order = filteredOrders[index];
-                  
+
                   // Determine status label and color
                   String statusLabel = '';
                   Color statusColor = Colors.grey;
-                  
-                  if (order.status == OrderStatuses.accepted || order.status == OrderStatuses.awaitingPayment || order.status == OrderStatuses.completed) {
-                      statusLabel = AppStrings.statusAccepted.tr();
-                      statusColor = ColorManager.primary;
-                  } else if (order.status == OrderStatuses.rejected || order.status == OrderStatuses.cancelled || order.status == OrderStatuses.failed) {
-                      statusLabel = AppStrings.statusRejected.tr();
-                      statusColor = Colors.red;
-                  } else if (order.status == OrderStatuses.pending || order.status == 'pending_supplier') {
-                      statusLabel = AppStrings.statusPending.tr();
-                      statusColor = Colors.amber.shade900;
+
+                  if (order.status == OrderStatuses.accepted ||
+                      order.status == OrderStatuses.awaitingPayment ||
+                      order.status == OrderStatuses.completed) {
+                    statusLabel = AppStrings.statusAccepted.tr();
+                    statusColor = ColorManager.primary;
+                  } else if (order.status == OrderStatuses.rejected ||
+                      order.status == OrderStatuses.cancelled ||
+                      order.status == OrderStatuses.failed) {
+                    statusLabel = AppStrings.statusRejected.tr();
+                    statusColor = Colors.red;
+                  } else if (order.status == OrderStatuses.pending ||
+                      order.status == 'pending_supplier') {
+                    statusLabel = AppStrings.statusPending.tr();
+                    statusColor = Colors.amber.shade900;
                   } else {
-                      statusLabel = AppStrings.status.tr();
+                    statusLabel = AppStrings.status.tr();
                   }
 
                   return Padding(
-                    padding: EdgeInsets.only(bottom: 16.h),
+                    padding: EdgeInsets.only(bottom: 10.h),
                     child: OrderCardWidget(
                       orderNumber: order.invoice?.invoiceNumber ?? '#PO-${order.id}',
                       date: order.createdAt?.split('T').first ?? '',
-                      amount: '${order.invoice?.grandTotal ?? order.supplierQuote?.grandTotal ?? order.estimatedSubtotal} ${AppStrings.egp.tr()}',
+                      amount:
+                          '${order.invoice?.grandTotal ?? order.supplierQuote?.grandTotal ?? order.estimatedSubtotal} ${AppStrings.egp.tr()}',
                       status: statusLabel,
                       statusColor: statusColor,
                       onTapDetails: () {
@@ -206,11 +230,7 @@ class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTicker
             child: Text(
               AppStrings.ordersEmptyMessage.tr(),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: ColorManager.greyTextColor,
-                height: 1.5,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: ColorManager.greyTextColor, height: 1.5),
             ),
           ),
         ],
@@ -227,7 +247,7 @@ class _OrdersHistoryViewState extends State<OrdersHistoryView> with SingleTicker
         itemCount: 5,
         itemBuilder: (context, index) {
           return Padding(
-            padding: EdgeInsets.only(bottom: 18.h),
+            padding: EdgeInsets.only(bottom: 12.h),
             child: Container(
               height: 160.h,
               width: double.infinity,

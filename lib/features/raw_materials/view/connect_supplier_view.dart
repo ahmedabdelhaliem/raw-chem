@@ -1,19 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
-import 'package:raw_chem/core/constants/order_statuses.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_app_bar.dart';
 import 'package:raw_chem/common/widgets/default_button_widget.dart';
 import 'package:raw_chem/common/widgets/default_dropdown_menu_widget.dart';
-import 'package:raw_chem/common/widgets/default_form_field.dart';
 import 'package:raw_chem/common/widgets/default_error_widget.dart';
-import 'package:raw_chem/features/chat/presentation/view/widgets/chat_shimmer.dart';
+import 'package:raw_chem/common/widgets/default_form_field.dart';
+import 'package:raw_chem/core/constants/order_statuses.dart';
 
 class ConnectSupplierView extends StatefulWidget {
   final int? materialId;
@@ -68,21 +65,23 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                 final paymentUrl = response?['payment_url'] ?? response?['invoice_url'];
 
                 if (paymentUrl != null) {
-                  context.push(
-                    AppRouters.fawaterkWebView, 
-                    extra: {
-                      'url': paymentUrl,
-                      'successUrl': 'payments/fawaterak/success',
-                      'failureUrl': 'payments/fawaterak/failure',
-                    }
-                  ).then((result) {
-                    if (result == true) {
-                      context.showSuccessMessage(AppStrings.paymentSuccess.tr());
-                      context.pop(); // Go back
-                    } else if (result == false) {
-                      context.showErrorMessage(AppStrings.paymentFailed.tr());
-                    }
-                  });
+                  context
+                      .push(
+                        AppRouters.fawaterkWebView,
+                        extra: {
+                          'url': paymentUrl,
+                          'successUrl': 'payments/fawaterak/success',
+                          'failureUrl': 'payments/fawaterak/failure',
+                        },
+                      )
+                      .then((result) {
+                        if (result == true) {
+                          context.showSuccessMessage(AppStrings.paymentSuccess.tr());
+                          context.pop(); // Go back
+                        } else if (result == false) {
+                          context.showErrorMessage(AppStrings.paymentFailed.tr());
+                        }
+                      });
                 } else {
                   context.showSuccessMessage(AppStrings.requestSentSuccess.tr());
                   context.pop();
@@ -153,7 +152,9 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                             onSelected: (val) => locationCubit.selectGovernorate(val),
                             optionTitle: (item) => item?.name ?? '',
                             searchOptionTitle: (item) => item?.name ?? '',
-                            enabled: locationState.selectedCountry != null && !locationState.isLoadingGovernorates,
+                            enabled:
+                                locationState.selectedCountry != null &&
+                                !locationState.isLoadingGovernorates,
                           ),
                           SizedBox(height: 20.h),
                           DefaultDropdownMenuWidget<CityModel>(
@@ -164,7 +165,9 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                             onSelected: (val) => locationCubit.selectCity(val),
                             optionTitle: (item) => item?.name ?? '',
                             searchOptionTitle: (item) => item?.name ?? '',
-                            enabled: locationState.selectedGovernorate != null && !locationState.isLoadingCities,
+                            enabled:
+                                locationState.selectedGovernorate != null &&
+                                !locationState.isLoadingCities,
                           ),
                           SizedBox(height: 20.h),
                           DefaultFormField(
@@ -206,7 +209,9 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                             title: AppStrings.detailedArea.tr(),
                             hintText: AppStrings.detailedAreaHint.tr(),
                             fillColor: ColorManager.white,
-                            validator: (val) => (val == null || val.isEmpty) ? AppStrings.detailedAreaHint.tr() : null,
+                            validator: (val) => (val == null || val.isEmpty)
+                                ? AppStrings.detailedAreaHint.tr()
+                                : null,
                           ),
                         ],
                       ),
@@ -222,24 +227,30 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                                 isLoading: purchaseState.isLoading,
                                 onPressed: () {
                                   final isFormValid = _formKey.currentState?.validate() ?? false;
-                                  final isLocationValid = locationState.selectedCountry != null && locationState.selectedGovernorate != null && locationState.selectedCity != null;
+                                  final isLocationValid =
+                                      locationState.selectedCountry != null &&
+                                      locationState.selectedGovernorate != null &&
+                                      locationState.selectedCity != null;
 
                                   if (!isFormValid || !isLocationValid) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(AppStrings.fillAllDetails.tr()), backgroundColor: Colors.orange),
+                                      SnackBar(
+                                        content: Text(AppStrings.fillAllDetails.tr()),
+                                        backgroundColor: Colors.orange,
+                                      ),
                                     );
                                     return;
                                   }
 
                                   context.read<CreatePurchaseOrderCubit>().createPurchaseOrder(
-                                        materialId: widget.materialId ?? 0,
-                                        quantity: double.tryParse(_quantityController.text) ?? 1,
-                                        countryId: locationState.selectedCountry!.id,
-                                        governorateId: locationState.selectedGovernorate!.id,
-                                        cityId: locationState.selectedCity!.id,
-                                        distinguishingMark: _detailedAreaController.text,
-                                        recipientPhone: _phoneController.text,
-                                      );
+                                    materialId: widget.materialId ?? 0,
+                                    quantity: double.tryParse(_quantityController.text) ?? 1,
+                                    countryId: locationState.selectedCountry!.id,
+                                    governorateId: locationState.selectedGovernorate!.id,
+                                    cityId: locationState.selectedCity!.id,
+                                    distinguishingMark: _detailedAreaController.text,
+                                    recipientPhone: _phoneController.text,
+                                  );
                                 },
                                 color: const Color(0xFF006B3E),
                                 textColor: Colors.white,
@@ -249,8 +260,15 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                                 textFirst: true,
                                 iconBuilder: Container(
                                   padding: EdgeInsets.all(5.w),
-                                  decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                                  child: Icon(Icons.arrow_back, color: const Color(0xFF006B3E), size: 14.sp),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.arrow_back,
+                                    color: const Color(0xFF006B3E),
+                                    size: 14.sp,
+                                  ),
                                 ),
                               );
                             },
@@ -314,7 +332,8 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
               body: DefaultErrorWidget(
                 errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
                 buttonTitle: AppStrings.retry.tr(),
-                onPressed: () => context.read<PurchaseOrderDetailsCubit>().getPurchaseOrderDetails(order.id),
+                onPressed: () =>
+                    context.read<PurchaseOrderDetailsCubit>().getPurchaseOrderDetails(order.id),
               ),
             );
           }
@@ -324,48 +343,52 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
           return Scaffold(
             backgroundColor: const Color(0xFFF8F9FE),
             appBar: DefaultAppBar(
-              text: currentOrder.status == OrderStatuses.accepted 
-                  ? AppStrings.orderDetails.tr() 
-                  : currentOrder.status == OrderStatuses.rejected 
-                    ? AppStrings.orderDetails.tr()
-                    : AppStrings.orderDetails.tr(),
+              text: AppStrings.orderDetails.tr(),
               backgroundColor: ColorManager.white,
               titleColor: ColorManager.black,
               withLeading: true,
             ),
             body: RefreshIndicator(
-              onRefresh: () => context.read<PurchaseOrderDetailsCubit>().getPurchaseOrderDetails(currentOrder.id),
+              onRefresh: () => context.read<PurchaseOrderDetailsCubit>().getPurchaseOrderDetails(
+                currentOrder.id,
+              ),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildPremiumOrderInfoCard(currentOrder),
-                    if (currentOrder.status == OrderStatuses.rejected && currentOrder.rejectionReason != null) ...[
-                      SizedBox(height: 24.h),
+                    if (currentOrder.status == OrderStatuses.rejected &&
+                        currentOrder.rejectionReason != null) ...[
+                      SizedBox(height: 16.h),
                       _buildRejectionCard(currentOrder.rejectionReason!),
                     ],
-                    SizedBox(height: 24.h),
+                    SizedBox(height: 16.h),
                     Text(
                       AppStrings.items.tr(),
-                      style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: ColorManager.blackText),
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: ColorManager.blackText,
+                      ),
                     ),
                     SizedBox(height: 16.h),
                     _buildOrderItemsSummary(currentOrder),
-                    SizedBox(height: 24.h),
-                    if (currentOrder.status == OrderStatuses.accepted && currentOrder.supplierQuote != null) ...[
+                    SizedBox(height: 16.h),
+                    if (currentOrder.status == OrderStatuses.accepted &&
+                        currentOrder.supplierQuote != null) ...[
                       _buildPriceSummaryCard(currentOrder),
-                      SizedBox(height: 20.h),
+                      SizedBox(height: 16.h),
                     ],
                   ],
                 ),
               ),
             ),
-            bottomNavigationBar: currentOrder.status == OrderStatuses.accepted 
-                ? (currentOrder.isPaid 
-                    ? _buildGeneralChatBottomBar(context, currentOrder) 
-                    : _buildBottomPaymentBar(context, currentOrder))
+            bottomNavigationBar: currentOrder.status == OrderStatuses.accepted
+                ? (currentOrder.isPaid
+                      ? _buildGeneralChatBottomBar(context, currentOrder)
+                      : _buildBottomPaymentBar(context, currentOrder))
                 : null,
           );
         },
@@ -378,16 +401,25 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 15, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 15,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      padding: EdgeInsets.all(20.w),
+      padding: EdgeInsets.all(16.w),
       child: Column(
         children: [
           Row(
             children: [
               Container(
                 padding: EdgeInsets.all(12.w),
-                decoration: BoxDecoration(color: ColorManager.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                  color: ColorManager.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
                 child: Icon(Icons.receipt_long_rounded, color: ColorManager.primary, size: 24.sp),
               ),
               SizedBox(width: 16.w),
@@ -395,27 +427,56 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(AppStrings.orderNumber.tr(), style: TextStyle(fontSize: 12.sp, color: ColorManager.greyTextColor)),
+                    Text(
+                      AppStrings.orderNumber.tr(),
+                      style: TextStyle(fontSize: 12.sp, color: ColorManager.greyTextColor),
+                    ),
                     SizedBox(height: 4.h),
-                    Text(order.invoice?.invoiceNumber ?? '#PO-${order.id}', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: ColorManager.blackText)),
+                    Text(
+                      order.invoice?.invoiceNumber ?? '#PO-${order.id}',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: ColorManager.blackText,
+                      ),
+                    ),
                   ],
                 ),
               ),
               _getStatusBadge(order),
             ],
           ),
-          Padding(padding: EdgeInsets.symmetric(vertical: 16.h), child: Divider(color: Colors.grey.withValues(alpha: 0.1))),
-          _buildInfoRow(Icons.phone_outlined, AppStrings.recipientPhone.tr(), order.recipientPhone ?? AppStrings.notProvided.tr()),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 12.h),
+            child: Divider(color: Colors.grey.withValues(alpha: 0.1)),
+          ),
+          _buildInfoRow(
+            Icons.phone_outlined,
+            AppStrings.recipientPhone.tr(),
+            order.recipientPhone ?? AppStrings.notProvided.tr(),
+          ),
           if (order.location != null) ...[
-             SizedBox(height: 12.h),
-             _buildInfoRow(Icons.location_on_outlined, AppStrings.location.tr(), '${order.location?.city ?? ''} - ${order.location?.governorate ?? ''} - ${order.location?.country ?? ''}'),
+            SizedBox(height: 12.h),
+            _buildInfoRow(
+              Icons.location_on_outlined,
+              AppStrings.location.tr(),
+              '${order.location?.city ?? ''} - ${order.location?.governorate ?? ''} - ${order.location?.country ?? ''}',
+            ),
           ],
           if (order.distinguishingMark != null) ...[
             SizedBox(height: 12.h),
-            _buildInfoRow(Icons.map_outlined, AppStrings.detailedArea.tr(), order.distinguishingMark!),
+            _buildInfoRow(
+              Icons.map_outlined,
+              AppStrings.detailedArea.tr(),
+              order.distinguishingMark!,
+            ),
           ],
           SizedBox(height: 12.h),
-          _buildInfoRow(Icons.date_range_outlined, AppStrings.orderDate.tr(), order.createdAt?.split('T').first ?? AppStrings.notProvided.tr()),
+          _buildInfoRow(
+            Icons.date_range_outlined,
+            AppStrings.orderDate.tr(),
+            order.createdAt?.split('T').first ?? AppStrings.notProvided.tr(),
+          ),
         ],
       ),
     );
@@ -427,15 +488,22 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 18.sp, color: ColorManager.greyTextColor),
-          SizedBox(width: 12.w),
-          Text(title, style: TextStyle(fontSize: 13.sp, color: ColorManager.greyTextColor)),
+          Icon(icon, size: 16.sp, color: ColorManager.greyTextColor),
           SizedBox(width: 8.w),
+          Text(
+            title,
+            style: TextStyle(fontSize: 12.sp, color: ColorManager.greyTextColor),
+          ),
+          SizedBox(width: 4.w),
           Expanded(
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600, color: ColorManager.blackText),
+              style: TextStyle(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w600,
+                color: ColorManager.blackText,
+              ),
             ),
           ),
         ],
@@ -460,13 +528,20 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
               Icon(Icons.error_outline, color: Colors.red, size: 20.sp),
               SizedBox(width: 8.w),
               Text(
-                '${AppStrings.statusRejected.tr()}:', 
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.red.shade900)
+                '${AppStrings.statusRejected.tr()}:',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red.shade900,
+                ),
               ),
             ],
           ),
           SizedBox(height: 8.h),
-          Text(reason, style: TextStyle(fontSize: 14.sp, color: Colors.red.shade800)),
+          Text(
+            reason,
+            style: TextStyle(fontSize: 14.sp, color: Colors.red.shade800),
+          ),
         ],
       ),
     );
@@ -515,8 +590,8 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
       decoration: BoxDecoration(color: statusBgColor, borderRadius: BorderRadius.circular(20.r)),
       child: Text(
-        statusText, 
-        style: TextStyle(color: statusColor, fontSize: 12.sp, fontWeight: FontWeight.bold)
+        statusText,
+        style: TextStyle(color: statusColor, fontSize: 12.sp, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -529,7 +604,13 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       padding: EdgeInsets.all(12.w),
       child: Row(
@@ -537,7 +618,10 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
           Container(
             width: 70.w,
             height: 70.w,
-            decoration: BoxDecoration(color: const Color(0xFFF5F6FA), borderRadius: BorderRadius.circular(12.r)),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F6FA),
+              borderRadius: BorderRadius.circular(12.r),
+            ),
             child: Icon(Icons.science_outlined, color: ColorManager.primary, size: 30.sp),
           ),
           SizedBox(width: 16.w),
@@ -545,26 +629,72 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(material.name, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: ColorManager.blackText), maxLines: 2),
-                if (material.supplierName != null) 
-                  Text(material.supplierName!, style: TextStyle(fontSize: 12.sp, color: ColorManager.greyTextColor)),
+                Text(
+                  material.name,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                    color: ColorManager.blackText,
+                  ),
+                  maxLines: 2,
+                ),
+                if (material.supplierName != null)
+                  Text(
+                    material.supplierName!,
+                    style: TextStyle(fontSize: 12.sp, color: ColorManager.greyTextColor),
+                  ),
                 SizedBox(height: 10.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                      decoration: BoxDecoration(color: ColorManager.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8.r)),
-                      child: Text('${AppStrings.quantity.tr()}: ${order.quantity}', style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold, color: ColorManager.primary)),
+                    Flexible(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                        decoration: BoxDecoration(
+                          color: ColorManager.primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Text(
+                          '${AppStrings.quantity.tr()}: ${order.quantity}',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                            color: ColorManager.primary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         if (order.supplierQuote != null) ...[
-                             Text('${order.supplierQuote?.unitPrice} ${AppStrings.egp.tr()}', style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w900, color: ColorManager.primary)),
-                             Text('${order.listedUnitPrice} ${AppStrings.egp.tr()}', style: TextStyle(fontSize: 11.sp, decoration: TextDecoration.lineThrough, color: ColorManager.greyTextColor)),
+                          Text(
+                            '${order.supplierQuote?.unitPrice} ${AppStrings.egp.tr()}',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w900,
+                              color: ColorManager.primary,
+                            ),
+                          ),
+                          Text(
+                            '${order.listedUnitPrice} ${AppStrings.egp.tr()}',
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              decoration: TextDecoration.lineThrough,
+                              color: ColorManager.greyTextColor,
+                            ),
+                          ),
                         ] else ...[
-                             Text('${order.listedUnitPrice} ${AppStrings.egp.tr()}', style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w900, color: ColorManager.blackText)),
+                          Text(
+                            '${order.listedUnitPrice} ${AppStrings.egp.tr()}',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w900,
+                              color: ColorManager.blackText,
+                            ),
+                          ),
                         ],
                       ],
                     ),
@@ -584,54 +714,94 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 15, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 15,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      padding: EdgeInsets.all(24.w),
+      padding: EdgeInsets.all(20.w),
       child: Column(
         children: [
           Row(
             children: [
               Icon(Icons.payment_rounded, color: ColorManager.primary, size: 20.sp),
               SizedBox(width: 8.w),
-              Text(AppStrings.orderDetails.tr(), style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: ColorManager.blackText)),
+              Text(
+                AppStrings.orderDetails.tr(),
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: ColorManager.blackText,
+                ),
+              ),
             ],
           ),
           SizedBox(height: 20.h),
           _buildPriceRow(AppStrings.subtotal.tr(), '${quote.lineSubtotal} ${AppStrings.egp.tr()}'),
-          if (quote.discountPercent != null && quote.discountPercent != '0.00' && quote.discountPercent != 'null') ...[
-             SizedBox(height: 14.h),
-             _buildPriceRow(
-               '${AppStrings.discount.tr()} (${quote.discountPercent}%)', 
-               '- ${quote.discountTotal ?? '0'} ${AppStrings.egp.tr()}', 
-               isGreen: true
-             ),
-          ] else if (quote.discountAmount != null && quote.discountAmount != '0.00' && quote.discountAmount != 'null') ...[
-             SizedBox(height: 14.h),
-             _buildPriceRow(
-               AppStrings.discount.tr(), 
-               '- ${quote.discountAmount} ${AppStrings.egp.tr()}', 
-               isGreen: true
-             ),
+          if (quote.discountPercent != null &&
+              quote.discountPercent != '0.00' &&
+              quote.discountPercent != 'null') ...[
+            SizedBox(height: 14.h),
+            _buildPriceRow(
+              '${AppStrings.discount.tr()} (${quote.discountPercent}%)',
+              '- ${quote.discountTotal ?? '0'} ${AppStrings.egp.tr()}',
+              isGreen: true,
+            ),
+          ] else if (quote.discountAmount != null &&
+              quote.discountAmount != '0.00' &&
+              quote.discountAmount != 'null') ...[
+            SizedBox(height: 14.h),
+            _buildPriceRow(
+              AppStrings.discount.tr(),
+              '- ${quote.discountAmount} ${AppStrings.egp.tr()}',
+              isGreen: true,
+            ),
           ],
           SizedBox(height: 14.h),
-          _buildPriceRow(AppStrings.shippingFee.tr(), quote.shippingFee != null && quote.shippingFee != '0.00' ? '${quote.shippingFee} ${AppStrings.egp.tr()}' : AppStrings.notProvided.tr(), isGreen: quote.shippingFee == null || quote.shippingFee == '0.00'),
+          _buildPriceRow(
+            AppStrings.shippingFee.tr(),
+            quote.shippingFee != null && quote.shippingFee != '0.00'
+                ? '${quote.shippingFee} ${AppStrings.egp.tr()}'
+                : AppStrings.notProvided.tr(),
+            isGreen: quote.shippingFee == null || quote.shippingFee == '0.00',
+          ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 20.h), 
+            padding: EdgeInsets.symmetric(vertical: 16.h),
             child: Row(
-              children: List.generate(30, (index) => Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 2.w),
-                  height: 1,
-                  color: index % 2 == 0 ? Colors.grey.shade200 : Colors.transparent,
+              children: List.generate(
+                30,
+                (index) => Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 2.w),
+                    height: 1,
+                    color: index % 2 == 0 ? Colors.grey.shade200 : Colors.transparent,
+                  ),
                 ),
-              )),
+              ),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppStrings.total.tr(), style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold, color: ColorManager.blackText)),
-              Text('${order.invoice?.grandTotal ?? quote.grandTotal} ${AppStrings.egp.tr()}', style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w900, color: ColorManager.primary)),
+              Text(
+                AppStrings.total.tr(),
+                style: TextStyle(
+                  fontSize: 17.sp,
+                  fontWeight: FontWeight.bold,
+                  color: ColorManager.blackText,
+                ),
+              ),
+              Text(
+                '${order.invoice?.grandTotal ?? quote.grandTotal} ${AppStrings.egp.tr()}',
+                style: TextStyle(
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.w900,
+                  color: ColorManager.primary,
+                ),
+              ),
             ],
           ),
         ],
@@ -643,21 +813,40 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: TextStyle(fontSize: 14.sp, color: ColorManager.greyTextColor)),
-        Text(value, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: isGreen ? const Color(0xFF19B273) : ColorManager.blackText)),
+        Text(
+          title,
+          style: TextStyle(fontSize: 14.sp, color: ColorManager.greyTextColor),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.bold,
+            color: isGreen ? const Color(0xFF19B273) : ColorManager.blackText,
+          ),
+        ),
       ],
     );
   }
 
   Widget _buildBottomPaymentBar(BuildContext context, PurchaseOrderModel order) {
     return Container(
-      padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 30.h),
-      decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 20, offset: const Offset(0, -5))]),
+      padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 15.h), // Reduced bottom padding
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 20,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
       child: BlocConsumer<ConfirmPaymentCubit, BaseState<dynamic>>(
         listener: (context, state) {
           if (state.isSuccess) {
             final paymentData = state.data?['payment_data'];
-            
+
             // Handle embedded errors from Fawaterk (even if response is 200)
             if (paymentData is Map && paymentData.containsKey('error')) {
               context.showToast(
@@ -667,24 +856,27 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
               return;
             }
 
-            final url = paymentData?['redirectTo'] ?? paymentData?['url'] ?? state.data?['checkout_url'];
+            final url =
+                paymentData?['redirectTo'] ?? paymentData?['url'] ?? state.data?['checkout_url'];
             if (url != null) {
-              context.push(
-                AppRouters.fawaterkWebView, 
-                extra: {
-                  'url': url,
-                  'successUrl': 'payments/fawaterak/success',
-                  'failureUrl': 'payments/fawaterak/failure',
-                }
-              ).then((result) {
-                if (result == true) {
-                  context.showSuccessMessage(AppStrings.paymentSuccess.tr());
-                  // Refresh order details to show "Paid" status
-                  context.read<PurchaseOrderDetailsCubit>().getPurchaseOrderDetails(order.id);
-                } else if (result == false) {
-                  context.showErrorMessage(AppStrings.paymentFailed.tr());
-                }
-              });
+              context
+                  .push(
+                    AppRouters.fawaterkWebView,
+                    extra: {
+                      'url': url,
+                      'successUrl': 'payments/fawaterak/success',
+                      'failureUrl': 'payments/fawaterak/failure',
+                    },
+                  )
+                  .then((result) {
+                    if (result == true) {
+                      context.showSuccessMessage(AppStrings.paymentSuccess.tr());
+                      // Refresh order details to show "Paid" status
+                      context.read<PurchaseOrderDetailsCubit>().getPurchaseOrderDetails(order.id);
+                    } else if (result == false) {
+                      context.showErrorMessage(AppStrings.paymentFailed.tr());
+                    }
+                  });
             } else {
               context.showToast(
                 text: AppStrings.failedToStartPaymentNoUrl.tr(),
@@ -701,23 +893,23 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
         builder: (context, state) {
           return Row(
             children: [
+              // Chat Button (Left side)
+              _buildFloatingChatButton(context, order),
+              SizedBox(width: 12.w),
+              // Pay Now Button (Primary)
               Expanded(
                 child: DefaultButtonWidget(
                   text: AppStrings.payNow.tr(),
                   isLoading: state.isLoading,
                   onPressed: () {
-                    context.read<ConfirmPaymentCubit>().confirmPayment(
-                      orderId: order.id,
-                    );
+                    context.read<ConfirmPaymentCubit>().confirmPayment(orderId: order.id);
                   },
                   color: ColorManager.primary,
                   textColor: Colors.white,
-                  radius: 16.r,
-                  height: 56.h,
+                  radius: 12.r,
+                  height: 48.h,
                 ),
               ),
-              SizedBox(width: 12.w),
-              _buildFloatingChatButton(context),
             ],
           );
         },
@@ -727,58 +919,69 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
 
   Widget _buildGeneralChatBottomBar(BuildContext context, PurchaseOrderModel order) {
     return Container(
-      padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 30.h),
-      decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 15, offset: const Offset(0, -5))]),
+      padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 15.h), // Reduced bottom padding
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 15,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
       child: DefaultButtonWidget(
         text: AppStrings.contactSupplier.tr(),
-        onPressed: () => _handleChat(context, order.supplierMaterial?.id ?? 1),
+        onPressed: () => _handleChat(context, order.id, order.supplierMaterial?.supplierName ?? ''),
         color: const Color(0xFF25D366),
         textColor: Colors.white,
         radius: 16.r,
         height: 56.h,
         isIcon: true,
         textFirst: true,
-        iconBuilder: Icon(Icons.chat_bubble_rounded, size: 20.sp, color: Colors.white),
+        iconBuilder: Icon(Icons.forum_rounded, size: 20.sp, color: Colors.white),
       ),
     );
   }
 
   // --- SHARED HELPER METHODS ---
 
-  Widget _buildFloatingChatButton(BuildContext context) {
+  Widget _buildFloatingChatButton(BuildContext context, PurchaseOrderModel order) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () => _handleChat(context, 1),
-        borderRadius: BorderRadius.circular(12.r),
+        onTap: () => _handleChat(context, order.id, order.supplierMaterial?.supplierName ?? ''),
+        borderRadius: BorderRadius.circular(16.r),
         child: Container(
-          height: 54.h,
-          width: 54.h,
+          height: 48.h,
+          width: 48.h,
           decoration: BoxDecoration(
-            color: const Color(0xFF25D366),
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [BoxShadow(color: const Color(0xFF25D366).withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))],
+            gradient: const LinearGradient(
+              colors: [Color(0xFF25D366), Color(0xFF19B273)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16.r), // Squircle-like appearance
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF19B273).withValues(alpha: 0.4),
+                blurRadius: 15,
+                offset: const Offset(0, 6),
+              ),
+            ],
+            border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1.5),
           ),
-          child: Icon(Icons.chat_bubble_outline_rounded, color: Colors.white, size: 24.sp),
+          child: Icon(Icons.forum_rounded, color: Colors.white, size: 20.sp),
         ),
       ),
     );
   }
 
-  Future<void> _handleChat(BuildContext context, int supplierId) async {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.startingChat.tr()), duration: const Duration(seconds: 1)));
-    try {
-      final result = await instance<ChatRepo>().createChat(supplierId);
-      result.fold(
-        (failure) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.failedToStartChat.tr(args: [failure.message])), backgroundColor: Colors.red)),
-        (response) {
-          if (!context.mounted) return;
-          context.push(AppRouters.chatView);
-        },
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.unexpectedError.tr()), backgroundColor: Colors.red));
-    }
+  void _handleChat(BuildContext context, int purchaseOrderId, String supplierName) {
+    context.push(
+      AppRouters.chatView,
+      extra: {'chatId': purchaseOrderId, 'supplierName': supplierName},
+    );
   }
 
   // void _showPaymentMethodsBottomSheet(BuildContext context, PurchaseOrderModel order) {
@@ -813,7 +1016,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
   //                         child: const Center(child: CircularProgressIndicator()),
   //                       );
   //                     }
-                      
+
   //                     if (state.isError) {
   //                       return DefaultErrorWidget(
   //                         errorMessage: state.errorMessage ?? AppStrings.unknownError.tr(),
@@ -823,7 +1026,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
   //                     }
 
   //                     final methods = state.data ?? [];
-                      
+
   //                     if (methods.isEmpty) {
   //                       return Padding(
   //                         padding: EdgeInsets.symmetric(vertical: 40.h),
@@ -850,7 +1053,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
   //                         final method = methods[index];
   //                         final iconColor = _getPaymentColor(method.paymentCode);
   //                         final iconData = _getPaymentIcon(method.paymentCode);
-                            
+
   //                           return Material(
   //                             color: Colors.transparent,
   //                             child: InkWell(
@@ -858,7 +1061,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
   //                               onTap: () {
   //                                 Navigator.pop(context);
   //                                 context.read<ConfirmPaymentCubit>().confirmPayment(
-  //                                       orderId: order.id, 
+  //                                       orderId: order.id,
   //                                       paymentMethodId: method.paymentId,
   //                                     );
   //                               },
@@ -945,7 +1148,7 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
   Color _getPaymentColor(String code) {
     if (code.toLowerCase().contains('fawry')) return Colors.amber.shade600;
     if (code.toLowerCase().contains('wallet')) return Colors.blue.shade600;
-    return const Color(0xFF006B3E); 
+    return const Color(0xFF006B3E);
   }
 
   Widget _buildOrderDetailsShimmer() {
@@ -962,7 +1165,10 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
             Container(
               height: 120.h,
               width: double.infinity,
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16.r)),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.r),
+              ),
             ),
             SizedBox(height: 24.h),
             // Items Label Shimmer
@@ -972,14 +1178,20 @@ class _ConnectSupplierViewState extends State<ConnectSupplierView> {
             Container(
               height: 150.h,
               width: double.infinity,
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16.r)),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.r),
+              ),
             ),
             SizedBox(height: 24.h),
             // Price Summary Card Shimmer
             Container(
               height: 200.h,
               width: double.infinity,
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16.r)),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.r),
+              ),
             ),
           ],
         ),

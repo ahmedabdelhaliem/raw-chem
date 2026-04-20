@@ -23,6 +23,8 @@ NotificationMetadataModel _$NotificationMetadataModelFromJson(
 mixin _$NotificationMetadataModel {
   String? get type => throw _privateConstructorUsedError;
   String? get status => throw _privateConstructorUsedError;
+  @JsonKey(name: 'target_tab')
+  String? get targetTab => throw _privateConstructorUsedError;
   @JsonKey(name: 'purchase_order_id')
   int? get purchaseOrderId => throw _privateConstructorUsedError;
 
@@ -41,6 +43,7 @@ abstract class $NotificationMetadataModelCopyWith<$Res> {
   $Res call(
       {String? type,
       String? status,
+      @JsonKey(name: 'target_tab') String? targetTab,
       @JsonKey(name: 'purchase_order_id') int? purchaseOrderId});
 }
 
@@ -60,6 +63,7 @@ class _$NotificationMetadataModelCopyWithImpl<$Res,
   $Res call({
     Object? type = freezed,
     Object? status = freezed,
+    Object? targetTab = freezed,
     Object? purchaseOrderId = freezed,
   }) {
     return _then(_value.copyWith(
@@ -70,6 +74,10 @@ class _$NotificationMetadataModelCopyWithImpl<$Res,
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
+              as String?,
+      targetTab: freezed == targetTab
+          ? _value.targetTab
+          : targetTab // ignore: cast_nullable_to_non_nullable
               as String?,
       purchaseOrderId: freezed == purchaseOrderId
           ? _value.purchaseOrderId
@@ -91,6 +99,7 @@ abstract class _$$NotificationMetadataModelImplCopyWith<$Res>
   $Res call(
       {String? type,
       String? status,
+      @JsonKey(name: 'target_tab') String? targetTab,
       @JsonKey(name: 'purchase_order_id') int? purchaseOrderId});
 }
 
@@ -109,6 +118,7 @@ class __$$NotificationMetadataModelImplCopyWithImpl<$Res>
   $Res call({
     Object? type = freezed,
     Object? status = freezed,
+    Object? targetTab = freezed,
     Object? purchaseOrderId = freezed,
   }) {
     return _then(_$NotificationMetadataModelImpl(
@@ -119,6 +129,10 @@ class __$$NotificationMetadataModelImplCopyWithImpl<$Res>
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
+              as String?,
+      targetTab: freezed == targetTab
+          ? _value.targetTab
+          : targetTab // ignore: cast_nullable_to_non_nullable
               as String?,
       purchaseOrderId: freezed == purchaseOrderId
           ? _value.purchaseOrderId
@@ -134,6 +148,7 @@ class _$NotificationMetadataModelImpl implements _NotificationMetadataModel {
   const _$NotificationMetadataModelImpl(
       {this.type,
       this.status,
+      @JsonKey(name: 'target_tab') this.targetTab,
       @JsonKey(name: 'purchase_order_id') this.purchaseOrderId});
 
   factory _$NotificationMetadataModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -144,12 +159,15 @@ class _$NotificationMetadataModelImpl implements _NotificationMetadataModel {
   @override
   final String? status;
   @override
+  @JsonKey(name: 'target_tab')
+  final String? targetTab;
+  @override
   @JsonKey(name: 'purchase_order_id')
   final int? purchaseOrderId;
 
   @override
   String toString() {
-    return 'NotificationMetadataModel(type: $type, status: $status, purchaseOrderId: $purchaseOrderId)';
+    return 'NotificationMetadataModel(type: $type, status: $status, targetTab: $targetTab, purchaseOrderId: $purchaseOrderId)';
   }
 
   @override
@@ -159,13 +177,16 @@ class _$NotificationMetadataModelImpl implements _NotificationMetadataModel {
             other is _$NotificationMetadataModelImpl &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.targetTab, targetTab) ||
+                other.targetTab == targetTab) &&
             (identical(other.purchaseOrderId, purchaseOrderId) ||
                 other.purchaseOrderId == purchaseOrderId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, type, status, purchaseOrderId);
+  int get hashCode =>
+      Object.hash(runtimeType, type, status, targetTab, purchaseOrderId);
 
   @JsonKey(ignore: true)
   @override
@@ -186,6 +207,7 @@ abstract class _NotificationMetadataModel implements NotificationMetadataModel {
   const factory _NotificationMetadataModel(
           {final String? type,
           final String? status,
+          @JsonKey(name: 'target_tab') final String? targetTab,
           @JsonKey(name: 'purchase_order_id') final int? purchaseOrderId}) =
       _$NotificationMetadataModelImpl;
 
@@ -196,6 +218,9 @@ abstract class _NotificationMetadataModel implements NotificationMetadataModel {
   String? get type;
   @override
   String? get status;
+  @override
+  @JsonKey(name: 'target_tab')
+  String? get targetTab;
   @override
   @JsonKey(name: 'purchase_order_id')
   int? get purchaseOrderId;

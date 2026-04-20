@@ -76,21 +76,21 @@ class AppStrings {
   //==welcome
   static const String welcome = "Welcome";
   //==welcomeMessage
-  static const String welcomeMessage = "Welcome to Row Chem";
+  static const String welcomeMessage = "Welcome to Raw Chem";
   //==welcomeTitle
-  static const String welcomeTitle = "Welcome to Row Chem";
+  static const String welcomeTitle = "Welcome to Raw Chem";
   //==onBoardingTitle1
-  static const String onBoardingTitle1 = "Welcome to Row Chem";
+  static const String onBoardingTitle1 = "Welcome to Raw Chem";
   //==onBoardingTitle2
-  static const String onBoardingTitle2 = "Welcome to Row Chem";
+  static const String onBoardingTitle2 = "Welcome to Raw Chem";
   //==onBoardingTitle3
-  static const String onBoardingTitle3 = "Welcome to Row Chem";
+  static const String onBoardingTitle3 = "Welcome to Raw Chem";
   //==onBoardingBody1
-  static const String onBoardingBody1 = "Welcome to Row Chem";
+  static const String onBoardingBody1 = "Welcome to Raw Chem";
   //==onBoardingBody2
-  static const String onBoardingBody2 = "Welcome to Row Chem";
+  static const String onBoardingBody2 = "Welcome to Raw Chem";
   //==onBoardingBody3
-  static const String onBoardingBody3 = "Welcome to Row Chem";
+  static const String onBoardingBody3 = "Welcome to Raw Chem";
 
   // Auth
   static const String loginTitle = "loginTitle";
@@ -318,6 +318,9 @@ class AppStrings {
   static const String statusPending = "statusPending";
   static const String statusAwaitingPayment = "statusAwaitingPayment";
   static const String statusPaid = "statusPaid";
+  static const String tabPending = "tabPending";
+  static const String tabAccepted = "tabAccepted";
+  static const String tabRejected = "tabRejected";
   static const String appDescription = "appDescription";
   
   // Static Pages UI

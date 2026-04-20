@@ -206,7 +206,7 @@ class _AboutUsViewState extends State<AboutUsView> {
                   // Bottom Branding (Subtle watermark)
                   SizedBox(height: 50.h),
                   Text(
-                    "ROW CHEM",
+                    AppStrings.appName.tr(),
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.bold,

@@ -14,7 +14,7 @@ class ProfileCubit extends Cubit<BaseState<ProfileUser>> {
   ProfileCubit(this._authRepo, this._appPreferences) : super(const BaseState());
 
   Future<void> getProfile() async {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: Status.loading, metadata: {}));
 
     final result = await _authRepo.getProfile();
 
@@ -24,7 +24,12 @@ class ProfileCubit extends Cubit<BaseState<ProfileUser>> {
         errorMessage: failure.message,
         failure: failure,
       )),
-      (response) => emit(state.copyWith(status: Status.success, data: response.data)),
+      (response) async {
+        if (response.data?.id != null) {
+          await _appPreferences.setUserId(response.data!.id.toString());
+        }
+        emit(state.copyWith(status: Status.success, data: response.data, metadata: {}));
+      },
     );
   }
 
@@ -49,7 +54,7 @@ class ProfileCubit extends Cubit<BaseState<ProfileUser>> {
             errorMessage: failure.message,
             failure: failure,
           )),
-          (profileResponse) => emit(state.copyWith(status: Status.success, data: profileResponse.data)),
+          (profileResponse) => emit(state.copyWith(status: Status.success, data: profileResponse.data, metadata: {})),
         );
       },
     );

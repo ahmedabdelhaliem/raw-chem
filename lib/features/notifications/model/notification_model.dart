@@ -8,6 +8,7 @@ class NotificationMetadataModel with _$NotificationMetadataModel {
   const factory NotificationMetadataModel({
     String? type,
     String? status,
+    @JsonKey(name: 'target_tab') String? targetTab,
     @JsonKey(name: 'purchase_order_id') int? purchaseOrderId,
   }) = _NotificationMetadataModel;
 

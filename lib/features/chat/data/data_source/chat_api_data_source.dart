@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:raw_chem/common/http/api_consumer.dart';
 import 'package:raw_chem/core/api/api_endpoints.dart';
 import 'package:raw_chem/features/chat/domain/model/message_model.dart';
 import 'package:raw_chem/features/chat/domain/model/chat_model.dart';
+import 'package:raw_chem/features/chat/domain/model/firebase_chat_config.dart';
 import 'package:raw_chem/common/http/failure.dart';
 import 'package:raw_chem/common/http/either.dart';
 import 'package:raw_chem/common/model/paginated_response.dart';
@@ -9,7 +11,9 @@ import 'package:raw_chem/common/model/pagination_model.dart';
 
 abstract class ChatApiDataSource {
   Future<Either<Failure, CreateChatResponse>> createChat(int supplierId);
+  Future<Either<Failure, FirebaseChatConfig>> getFirebaseToken(int purchaseOrderId);
   Future<Either<Failure, PaginatedResponse<MessageModel>>> getChatMessages(int chatId, {int page = 1});
+  Future<Either<Failure, MessageModel>> sendMessage(int chatId, {String? body, String? imagePath});
   Future<Either<Failure, List<ChatModel>>> getChats();
 }
 
@@ -26,7 +30,16 @@ class ChatApiDataSourceImpl implements ChatApiDataSource {
     );
     return response.fold(
       (failure) => Left(failure),
-      (json) => Right(CreateChatResponse.fromJson(json)),
+      (json) => Right(CreateChatResponse.fromJson(json['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, FirebaseChatConfig>> getFirebaseToken(int purchaseOrderId) async {
+    final response = await _apiConsumer.get(EndPoints.firebaseToken(purchaseOrderId));
+    return response.fold(
+      (failure) => Left(failure),
+      (json) => Right(FirebaseChatConfig.fromJson(json['data'])),
     );
   }
 
@@ -34,24 +47,42 @@ class ChatApiDataSourceImpl implements ChatApiDataSource {
   Future<Either<Failure, PaginatedResponse<MessageModel>>> getChatMessages(int chatId, {int page = 1}) async {
     final response = await _apiConsumer.get(
       EndPoints.chatMessages(chatId),
-      queryParameters: {'page': page, 'limit': 15},
+      queryParameters: {'page': page, 'limit': 30},
     );
     return response.fold(
       (failure) => Left(failure),
       (json) {
-        final List data = json['data'] ?? [];
+        final List data = json['data']?['messages'] ?? [];
         final messages = data.map((e) => MessageModel.fromJson(e)).toList();
         
-        // Return a PaginatedResponse with metadata if available, or fake it
         final pagination = PaginationModel(
-          currentPage: json['meta']?['current_page'] ?? page,
-          lastPage: json['meta']?['last_page'] ?? page,
-          total: json['meta']?['total'] ?? messages.length,
-          perPage: json['meta']?['per_page'] ?? 15,
+          currentPage: json['pagination']?['current_page'] ?? page,
+          lastPage: json['pagination']?['last_page'] ?? page,
+          total: json['pagination']?['total'] ?? messages.length,
+          perPage: json['pagination']?['per_page'] ?? 30,
         );
 
         return Right(PaginatedResponse(data: messages, pagination: pagination));
       },
+    );
+  }
+
+  @override
+  Future<Either<Failure, MessageModel>> sendMessage(int chatId, {String? body, String? imagePath}) async {
+    final Map<String, dynamic> data = {};
+    if (body != null) data['body'] = body;
+    if (imagePath != null) {
+      data['image'] = await MultipartFile.fromFile(imagePath);
+    }
+
+    final response = await _apiConsumer.post(
+      EndPoints.chatMessages(chatId),
+      formData: FormData.fromMap(data),
+    );
+
+    return response.fold(
+      (failure) => Left(failure),
+      (json) => Right(MessageModel.fromJson(json['data'])),
     );
   }
 

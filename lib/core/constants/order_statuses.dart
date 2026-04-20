@@ -9,6 +9,23 @@ class OrderStatuses {
   static const String failed = "failed";
 
   // Groups for UI
+  static const List<String> pendingTab = [
+    pending,
+    'pending_supplier',
+  ];
+
+  static const List<String> acceptedTab = [
+    accepted,
+    awaitingPayment,
+    completed,
+  ];
+
+  static const List<String> rejectedTab = [
+    rejected,
+    cancelled,
+    failed,
+  ];
+
   static const List<String> currentOrders = [
     pending,
     accepted,
@@ -23,3 +40,4 @@ class OrderStatuses {
     failed,
   ];
 }
+

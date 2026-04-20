@@ -50,6 +50,14 @@ Future<void> initAppModule() async {
           options.headers["Accept-Language"] = instance<AppPreferences>().getAppLanguage();
           return handler.next(options);
         },
+        onError: (DioException e, handler) async {
+          if (e.response?.statusCode == 401) {
+            // Logout and redirect
+            await instance<AppPreferences>().logout();
+            AppRouters.router.go(AppRouters.loginView);
+          }
+          return handler.next(e);
+        },
       ),
   
       if (!kReleaseMode)
@@ -78,9 +86,11 @@ Future<void> initAppModule() async {
   instance.registerLazySingleton<HomeRepo>(() => HomeRepo(instance()));
   instance.registerLazySingleton<OnboardingRepo>(() => OnboardingRepo(instance()));
   instance.registerLazySingleton<PriceTrackerRepo>(() => PriceTrackerRepo(instance()));
-  instance.registerLazySingleton<SuppliersRepo>(() => SuppliersRepo(instance()));
+  // Chat Services
+  instance.registerLazySingleton<ChatFirebaseService>(() => ChatFirebaseService());
+  
   instance.registerLazySingleton<ChatRepo>(
-      () => ChatRepoImpl(ChatApiDataSourceImpl(instance()), ChatSocketServiceImpl()));
+      () => ChatRepoImpl(ChatApiDataSourceImpl(instance()), instance<ChatFirebaseService>()));
   instance.registerLazySingleton<LocationsRepo>(() => LocationsRepo(instance()));
   instance.registerLazySingleton<PaymentRepo>(() => PaymentRepo(instance()));
   instance.registerLazySingleton<NotificationsRepo>(() => NotificationsRepo(instance()));
@@ -113,6 +123,6 @@ Future<void> initAppModule() async {
   instance.registerFactory<CreatePurchaseOrderCubit>(() => CreatePurchaseOrderCubit(instance()));
   instance.registerFactory<PurchaseOrderDetailsCubit>(() => PurchaseOrderDetailsCubit(instance()));
   instance.registerFactory<ConfirmPaymentCubit>(() => ConfirmPaymentCubit(instance()));
-  instance.registerFactory<NotificationsCubit>(() => NotificationsCubit(instance()));
+  instance.registerFactory<NotificationsCubit>(() => NotificationsCubit(instance(), instance()));
   instance.registerFactory<PurchaseOrdersHistoryCubit>(() => PurchaseOrdersHistoryCubit(instance()));
 }

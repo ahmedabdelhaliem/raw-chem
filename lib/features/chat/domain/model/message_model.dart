@@ -6,10 +6,13 @@ part 'message_model.g.dart';
 @freezed
 class MessageModel with _$MessageModel {
   const factory MessageModel({
-    required String id,
-    required String message,
-    @JsonKey(name: 'sender_id') required String senderId,
-    @JsonKey(name: 'chat_id') required String chatId,
+    required dynamic id,
+    @JsonKey(name: 'sender_type') String? senderType,
+    @JsonKey(name: 'sender_id') dynamic senderId,
+    @JsonKey(name: 'sender_name') String? senderName,
+    required String type,
+    String? body,
+    @JsonKey(name: 'attachment_url') String? attachmentUrl,
     @JsonKey(name: 'created_at') required String createdAt,
   }) = _MessageModel;
 
