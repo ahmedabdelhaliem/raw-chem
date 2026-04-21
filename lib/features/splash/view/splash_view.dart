@@ -12,7 +12,7 @@ import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
-import 'package:raw_chem/common/widgets/copyright_widget.dart';
+
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -125,24 +125,7 @@ class _SplashViewState extends State<SplashView> {
             child: _showNoInternet ? _buildNoInternetState() : _buildLogoState(),
           ),
 
-          // Bottom Branding (Modern & Clean)
-          if (!_showNoInternet)
-            Positioned(
-              bottom: 40.h,
-              left: 0,
-              right: 0,
-              child:
-                  CopyrightWidget(
-                        showCopyrightText: false,
-                        designedByFontSize: 10.sp,
-                        logoColor: ColorManager.primary.withValues(alpha: 0.8),
-                        logoHeight: 25.h,
-                        logoWidth: 25.h * 5,
-                      )
-                      .animate()
-                      .fadeIn(delay: 1500.ms, duration: 1000.ms)
-                      .slideY(begin: 0.5, end: 0, curve: Curves.easeOutBack),
-            ),
+
         ],
       ),
     );

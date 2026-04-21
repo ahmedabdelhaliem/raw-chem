@@ -6,14 +6,8 @@ import '../model/forgot_password/verify_otp_forgot_request.dart';
 import '../model/forgot_password/reset_password_request.dart';
 import '../repo/auth_repo.dart';
 
-// Reuse ResendStatus from verify_otp_cubit
-enum ForgotResendStatus { idle, loading, success, error }
-
 class ForgotPwdCubit extends Cubit<BaseState<ForgotResponse>> {
   final AuthRepo _authRepo;
-
-  ForgotResendStatus resendStatus = ForgotResendStatus.idle;
-  String? resendError;
 
   ForgotPwdCubit(this._authRepo) : super(const BaseState<ForgotResponse>());
 
@@ -38,22 +32,21 @@ class ForgotPwdCubit extends Cubit<BaseState<ForgotResponse>> {
   }
 
   Future<void> resendOtpForgot(String phone) async {
-    resendStatus = ForgotResendStatus.loading;
-    resendError = null;
-    emit(state.copyWith()); // trigger rebuild
+    emit(state.copyWith(resendStatus: ResendStatus.loading, resendError: null));
 
     final result = await _authRepo.resendOtpForgot(phone);
     result.fold(
       (failure) {
-        resendStatus = ForgotResendStatus.error;
-        resendError = failure.message;
-        emit(state.copyWith());
+        emit(state.copyWith(resendStatus: ResendStatus.error, resendError: failure.message));
       },
       (_) {
-        resendStatus = ForgotResendStatus.success;
-        emit(state.copyWith());
+        emit(state.copyWith(resendStatus: ResendStatus.success));
       },
     );
+  }
+
+  void resetResendStatus() {
+    emit(state.copyWith(resendStatus: ResendStatus.idle, resendError: null));
   }
 
   Future<void> resetPassword(ResetPasswordRequest request) async {
@@ -67,7 +60,5 @@ class ForgotPwdCubit extends Cubit<BaseState<ForgotResponse>> {
 
   void reset() {
     emit(const BaseState<ForgotResponse>());
-    resendStatus = ForgotResendStatus.idle;
-    resendError = null;
   }
 }

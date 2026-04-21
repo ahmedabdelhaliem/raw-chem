@@ -15,6 +15,7 @@ class RegisterRequest with _$RegisterRequest {
     required String password,
     required String passwordConfirmation,
     required List<int> categoryIds,
+    String? companyName,
     MultipartFile? image,
     String? fcmToken,
   }) = _RegisterRequest;
@@ -28,6 +29,7 @@ class RegisterRequest with _$RegisterRequest {
       "password": password,
       "password_confirmation": passwordConfirmation,
       "category_ids[]": categoryIds,
+      if (companyName != null) "company_name": companyName,
       if (image != null) "image": image,
       if (fcmToken != null) "fcm_token": fcmToken,
     });

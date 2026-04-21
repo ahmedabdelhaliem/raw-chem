@@ -1,3 +1,4 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/extensions/context_extension.dart';
+import 'package:raw_chem/common/utils/phone_validation_rules.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
@@ -27,6 +29,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _selectedCountryCode = '+20';
 
   @override
   void dispose() {
@@ -162,7 +165,21 @@ class _LoginViewState extends State<LoginView> {
                                   controller: _phoneController,
                                   hintText: AppStrings.phoneNumber.tr(),
                                   keyboardType: TextInputType.phone,
-                                  prefixWidget: Icon(Icons.phone_iphone_rounded, color: ColorManager.primary.withValues(alpha: 0.6), size: 20.sp),
+                                  prefixWidget: CountryCodePicker(
+                                    onChanged: (code) {
+                                      setState(() {
+                                        _selectedCountryCode = code.dialCode ?? '+20';
+                                      });
+                                    },
+                                    initialSelection: 'EG',
+                                    favorite: const ['+20', '+966'],
+                                    showCountryOnly: false,
+                                    showOnlyCountryWhenClosed: false,
+                                    alignLeft: false,
+                                    padding: EdgeInsets.zero,
+                                    textStyle: getBoldStyle(color: ColorManager.primary, fontSize: 13.sp),
+                                  ),
+                                  validator: (value) => PhoneValidationRules.validate(value, _selectedCountryCode),
                                 ),
                                 SizedBox(height: 20.h),
                                 // Password Field
@@ -198,7 +215,10 @@ class _LoginViewState extends State<LoginView> {
                                     if (_formKey.currentState!.validate()) {
                                       context.read<LoginCubit>().login(
                                             LoginRequest(
-                                              phone: _phoneController.text,
+                                              phone: PhoneValidationRules.getFullPhoneNumber(
+                                                _phoneController.text,
+                                                _selectedCountryCode,
+                                              ),
                                               password: _passwordController.text,
                                             ),
                                           );

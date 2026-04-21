@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +10,7 @@ import 'package:raw_chem/common/resources/strings_manager.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:raw_chem/app/imports.dart';
+import 'package:raw_chem/common/utils/phone_validation_rules.dart';
 import 'package:raw_chem/common/extensions/context_extension.dart';
 import 'package:raw_chem/core/state/base_state.dart';
 import 'package:raw_chem/features/profile/model/profile/profile_model.dart';
@@ -32,6 +34,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   late TextEditingController _phoneController;
   late TextEditingController _companyController;
   bool _hasInitializedFields = false;
+  String _selectedCountryCode = '+20';
   bool _isPopping = false;
   List<int> _selectedCategoryIds = [];
   XFile? _pickedImage;
@@ -59,8 +62,21 @@ class _PersonalDataViewState extends State<PersonalDataView> {
     if (user != null) {
       _nameController = TextEditingController(text: user.name ?? '');
       _emailController = TextEditingController(text: user.email ?? '');
-      _phoneController = TextEditingController(text: user.phone ?? '');
       _companyController = TextEditingController(text: user.companyName ?? '');
+      
+      // Parse phone into country code and local number
+      String rawPhone = user.phone ?? '';
+      if (rawPhone.startsWith('+966')) {
+        _selectedCountryCode = '+966';
+        _phoneController = TextEditingController(text: rawPhone.substring(4));
+      } else if (rawPhone.startsWith('+20')) {
+        _selectedCountryCode = '+20';
+        _phoneController = TextEditingController(text: rawPhone.substring(3));
+      } else {
+        _selectedCountryCode = '+20';
+        _phoneController = TextEditingController(text: rawPhone);
+      }
+      
       if (user.categories != null && user.categories!.isNotEmpty) {
         _selectedCategoryIds = user.categories!.map((c) => c.id!).toList();
       } else {
@@ -98,8 +114,20 @@ class _PersonalDataViewState extends State<PersonalDataView> {
           if (state.isSuccess && !_hasInitializedFields && state.data != null) {
             _nameController.text = state.data?.name ?? '';
             _emailController.text = state.data?.email ?? '';
-            _phoneController.text = state.data?.phone ?? '';
             _companyController.text = state.data?.companyName ?? '';
+            
+            // Re-parse phone on first load from network
+            String rawPhone = state.data?.phone ?? '';
+            if (rawPhone.startsWith('+966')) {
+              _selectedCountryCode = '+966';
+              _phoneController.text = rawPhone.substring(4);
+            } else if (rawPhone.startsWith('+20')) {
+              _selectedCountryCode = '+20';
+              _phoneController.text = rawPhone.substring(3);
+            } else {
+              _phoneController.text = rawPhone;
+            }
+
             if (state.data?.categories != null && state.data!.categories!.isNotEmpty) {
               _selectedCategoryIds = state.data!.categories!.map((c) => c.id!).toList();
             } else {
@@ -262,12 +290,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                     keyboardType: TextInputType.emailAddress,
                                   ),
                                   SizedBox(height: 20.h),
-                                  _buildTextField(
-                                    label: AppStrings.phoneNumber.tr(),
-                                    controller: _phoneController,
-                                    icon: Iconsax.call,
-                                    keyboardType: TextInputType.phone,
-                                  ),
+                                  _buildPhoneField(),
                                   SizedBox(height: 20.h),
                                   _buildTextField(
                                     label: AppStrings.companyName.tr(),
@@ -280,14 +303,14 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                   DefaultButtonWidget(
                                     isLoading: state.isLoading,
                                     onPressed: () {
-                                      final request = UpdateProfileRequest(
-                                        name: _nameController.text,
-                                        email: _emailController.text,
-                                        phone: _phoneController.text,
-                                        companyName: _companyController.text,
-                                        categoryIds: _selectedCategoryIds.isNotEmpty ? _selectedCategoryIds : [1],
-                                        image: _pickedImage,
-                                      );
+                                        final request = UpdateProfileRequest(
+                                          name: _nameController.text,
+                                          email: _emailController.text,
+                                          phone: PhoneValidationRules.getFullPhoneNumber(_phoneController.text, _selectedCountryCode),
+                                          companyName: _companyController.text,
+                                          categoryIds: _selectedCategoryIds.isNotEmpty ? _selectedCategoryIds : [1],
+                                          image: _pickedImage,
+                                        );
                                       context.read<ProfileCubit>().updateProfile(request);
                                     },
                                     text: AppStrings.save.tr(),
@@ -435,6 +458,66 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               validator: (value) => _selectedCategoryIds.isEmpty ? AppStrings.pleaseSelectField.tr() : null,
             );
           },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPhoneField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 4.w, bottom: 8.h),
+          child: Text(
+            AppStrings.phoneNumber.tr(),
+            style: TextStyle(
+              fontSize: 13.sp,
+              color: ColorManager.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        TextFormField(
+          controller: _phoneController,
+          keyboardType: TextInputType.phone,
+          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
+          validator: (value) => PhoneValidationRules.validate(value, _selectedCountryCode),
+          decoration: InputDecoration(
+            prefixIcon: CountryCodePicker(
+              onChanged: (code) {
+                setState(() {
+                  _selectedCountryCode = code.dialCode ?? '+20';
+                });
+              },
+              initialSelection: _selectedCountryCode == '+966' ? 'SA' : 'EG',
+              favorite: const ['+20', '+966'],
+              showCountryOnly: false,
+              showOnlyCountryWhenClosed: false,
+              alignLeft: false,
+              padding: EdgeInsets.zero,
+              textStyle: TextStyle(
+                color: ColorManager.primary,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            filled: true,
+            fillColor: ColorManager.bg.withValues(alpha: 0.5),
+            contentPadding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: const BorderSide(color: ColorManager.primary, width: 1.5),
+            ),
+          ),
         ),
       ],
     );

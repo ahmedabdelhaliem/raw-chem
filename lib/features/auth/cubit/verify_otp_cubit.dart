@@ -5,15 +5,9 @@ import '../model/verify_otp/verify_otp_request.dart';
 import '../model/verify_otp/verify_otp_response.dart';
 import '../repo/auth_repo.dart';
 
-// Separate state for resend OTP to track its individual loading/success/error
-enum ResendStatus { idle, loading, success, error }
-
 class VerifyOtpCubit extends Cubit<BaseState<VerifyOtpResponse>> {
   final AuthRepo _authRepo;
   final AppPreferences _appPrefs;
-
-  ResendStatus resendStatus = ResendStatus.idle;
-  String? resendError;
 
   VerifyOtpCubit(this._authRepo, this._appPrefs)
       : super(const BaseState<VerifyOtpResponse>());
@@ -43,21 +37,20 @@ class VerifyOtpCubit extends Cubit<BaseState<VerifyOtpResponse>> {
   }
 
   Future<void> resendOtp(String phone) async {
-    resendStatus = ResendStatus.loading;
-    resendError = null;
-    emit(state.copyWith()); // trigger rebuild
+    emit(state.copyWith(resendStatus: ResendStatus.loading, resendError: null));
 
     final result = await _authRepo.resendOtp(phone);
     result.fold(
       (failure) {
-        resendStatus = ResendStatus.error;
-        resendError = failure.message;
-        emit(state.copyWith());
+        emit(state.copyWith(resendStatus: ResendStatus.error, resendError: failure.message));
       },
       (_) {
-        resendStatus = ResendStatus.success;
-        emit(state.copyWith());
+        emit(state.copyWith(resendStatus: ResendStatus.success));
       },
     );
+  }
+
+  void resetResendStatus() {
+    emit(state.copyWith(resendStatus: ResendStatus.idle, resendError: null));
   }
 }

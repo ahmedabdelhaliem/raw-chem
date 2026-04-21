@@ -329,5 +329,8 @@ class AppStrings {
   static const String reachOutToUs = "reachOutToUs";
   static const String whatsApp = "whatsApp";
   static const String legalDepartment = "legalDepartment";
+  static const String iAgreeTo = "iAgreeTo";
+  static const String pleaseAcceptTerms = "pleaseAcceptTerms";
+  static const String byCreatingAccountYouAgree = "byCreatingAccountYouAgree";
   static const String viewDetails = "viewDetails";
 }

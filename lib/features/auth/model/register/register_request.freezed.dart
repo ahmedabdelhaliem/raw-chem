@@ -23,6 +23,7 @@ mixin _$RegisterRequest {
   String get password => throw _privateConstructorUsedError;
   String get passwordConfirmation => throw _privateConstructorUsedError;
   List<int> get categoryIds => throw _privateConstructorUsedError;
+  String? get companyName => throw _privateConstructorUsedError;
   MultipartFile? get image => throw _privateConstructorUsedError;
   String? get fcmToken => throw _privateConstructorUsedError;
 
@@ -45,6 +46,7 @@ abstract class $RegisterRequestCopyWith<$Res> {
       String password,
       String passwordConfirmation,
       List<int> categoryIds,
+      String? companyName,
       MultipartFile? image,
       String? fcmToken});
 }
@@ -69,6 +71,7 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
     Object? password = null,
     Object? passwordConfirmation = null,
     Object? categoryIds = null,
+    Object? companyName = freezed,
     Object? image = freezed,
     Object? fcmToken = freezed,
   }) {
@@ -101,6 +104,10 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
           ? _value.categoryIds
           : categoryIds // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      companyName: freezed == companyName
+          ? _value.companyName
+          : companyName // ignore: cast_nullable_to_non_nullable
+              as String?,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -129,6 +136,7 @@ abstract class _$$RegisterRequestImplCopyWith<$Res>
       String password,
       String passwordConfirmation,
       List<int> categoryIds,
+      String? companyName,
       MultipartFile? image,
       String? fcmToken});
 }
@@ -151,6 +159,7 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
     Object? password = null,
     Object? passwordConfirmation = null,
     Object? categoryIds = null,
+    Object? companyName = freezed,
     Object? image = freezed,
     Object? fcmToken = freezed,
   }) {
@@ -183,6 +192,10 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
           ? _value._categoryIds
           : categoryIds // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      companyName: freezed == companyName
+          ? _value.companyName
+          : companyName // ignore: cast_nullable_to_non_nullable
+              as String?,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -206,6 +219,7 @@ class _$RegisterRequestImpl extends _RegisterRequest {
       required this.password,
       required this.passwordConfirmation,
       required final List<int> categoryIds,
+      this.companyName,
       this.image,
       this.fcmToken})
       : _categoryIds = categoryIds,
@@ -232,13 +246,15 @@ class _$RegisterRequestImpl extends _RegisterRequest {
   }
 
   @override
+  final String? companyName;
+  @override
   final MultipartFile? image;
   @override
   final String? fcmToken;
 
   @override
   String toString() {
-    return 'RegisterRequest(name: $name, email: $email, phone: $phone, birthDate: $birthDate, password: $password, passwordConfirmation: $passwordConfirmation, categoryIds: $categoryIds, image: $image, fcmToken: $fcmToken)';
+    return 'RegisterRequest(name: $name, email: $email, phone: $phone, birthDate: $birthDate, password: $password, passwordConfirmation: $passwordConfirmation, categoryIds: $categoryIds, companyName: $companyName, image: $image, fcmToken: $fcmToken)';
   }
 
   @override
@@ -257,6 +273,8 @@ class _$RegisterRequestImpl extends _RegisterRequest {
                 other.passwordConfirmation == passwordConfirmation) &&
             const DeepCollectionEquality()
                 .equals(other._categoryIds, _categoryIds) &&
+            (identical(other.companyName, companyName) ||
+                other.companyName == companyName) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.fcmToken, fcmToken) ||
                 other.fcmToken == fcmToken));
@@ -272,6 +290,7 @@ class _$RegisterRequestImpl extends _RegisterRequest {
       password,
       passwordConfirmation,
       const DeepCollectionEquality().hash(_categoryIds),
+      companyName,
       image,
       fcmToken);
 
@@ -292,6 +311,7 @@ abstract class _RegisterRequest extends RegisterRequest {
       required final String password,
       required final String passwordConfirmation,
       required final List<int> categoryIds,
+      final String? companyName,
       final MultipartFile? image,
       final String? fcmToken}) = _$RegisterRequestImpl;
   const _RegisterRequest._() : super._();
@@ -310,6 +330,8 @@ abstract class _RegisterRequest extends RegisterRequest {
   String get passwordConfirmation;
   @override
   List<int> get categoryIds;
+  @override
+  String? get companyName;
   @override
   MultipartFile? get image;
   @override

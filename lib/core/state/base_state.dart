@@ -13,6 +13,8 @@ enum Status {
   custom,
 }
 
+enum ResendStatus { idle, loading, success, error }
+
 extension BaseStateX<T> on BaseState<T> {
   bool get isInitial => status == Status.initial;
   bool get isLoading => status == Status.loading;
@@ -39,6 +41,8 @@ class BaseState<T> extends Equatable {
   final String? message;
   final Failure? failure;
   final bool hasMore;
+  final ResendStatus? resendStatus;
+  final String? resendError;
 
   const BaseState({
     this.status = Status.initial,
@@ -49,6 +53,8 @@ class BaseState<T> extends Equatable {
     this.message,
     this.failure,
     this.hasMore = false,
+    this.resendStatus,
+    this.resendError,
   });
 
   BaseState<T> copyWith({
@@ -60,6 +66,8 @@ class BaseState<T> extends Equatable {
     String? message,
     Failure? failure,
     bool? hasMore,
+    ResendStatus? resendStatus,
+    String? resendError,
   }) {
     return BaseState<T>(
       status: status ?? this.status,
@@ -70,9 +78,11 @@ class BaseState<T> extends Equatable {
       message: message ?? this.message,
       failure: failure ?? this.failure,
       hasMore: hasMore ?? this.hasMore,
+      resendStatus: resendStatus ?? this.resendStatus,
+      resendError: resendError ?? this.resendError,
     );
   }
 
   @override
-  List<Object?> get props => [status, data, items, metadata, errorMessage, message, failure, hasMore];
+  List<Object?> get props => [status, data, items, metadata, errorMessage, message, failure, hasMore, resendStatus, resendError];
 }

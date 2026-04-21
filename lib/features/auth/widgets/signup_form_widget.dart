@@ -1,12 +1,18 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
-import '../../../../common/resources/color_manager.dart';
-import '../../../../common/resources/strings_manager.dart';
-import '../../../../common/widgets/default_form_field.dart';
-import '../../../../common/widgets/filter_bottom_sheet_widget.dart';
+import 'package:raw_chem/common/resources/app_router.dart';
+import 'package:raw_chem/common/utils/phone_validation_rules.dart';
+import 'package:raw_chem/common/widgets/terms_conditions_bottom_sheet.dart';
+import 'package:raw_chem/common/resources/color_manager.dart';
+import 'package:raw_chem/common/resources/strings_manager.dart';
+import 'package:raw_chem/common/widgets/default_form_field.dart';
+import 'package:raw_chem/common/widgets/filter_bottom_sheet_widget.dart';
 
 class SignupFormWidget extends StatelessWidget {
   final TextEditingController nameController;
@@ -17,7 +23,11 @@ class SignupFormWidget extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
   final List<int> selectedCategoryIds;
+  final String initialCountryCode;
+  final bool isTermsAgreed;
+  final void Function(bool?) onTermsChanged;
   final void Function(List<int>) onCategoryChanged;
+  final void Function(String) onCountryCodeChanged;
 
   const SignupFormWidget({
     super.key,
@@ -29,7 +39,11 @@ class SignupFormWidget extends StatelessWidget {
     required this.passwordController,
     required this.confirmPasswordController,
     required this.selectedCategoryIds,
+    required this.initialCountryCode,
+    required this.isTermsAgreed,
+    required this.onTermsChanged,
     required this.onCategoryChanged,
+    required this.onCountryCodeChanged,
   });
 
   @override
@@ -132,7 +146,21 @@ class SignupFormWidget extends StatelessWidget {
           controller: phoneController,
           hintText: AppStrings.phoneNumber.tr(),
           keyboardType: TextInputType.phone,
-          prefixWidget: Icon(Icons.phone_iphone_rounded, color: prefixIconColor, size: prefixIconSize.sp),
+          prefixWidget: CountryCodePicker(
+            onChanged: (code) => onCountryCodeChanged(code.dialCode ?? '+20'),
+            initialSelection: initialCountryCode == '+966' ? 'SA' : 'EG',
+            favorite: const ['+20', '+966'],
+            showCountryOnly: false,
+            showOnlyCountryWhenClosed: false,
+            alignLeft: false,
+            padding: EdgeInsets.zero,
+            textStyle: TextStyle(
+              color: ColorManager.primary,
+              fontSize: 13.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          validator: (value) => PhoneValidationRules.validate(value, initialCountryCode),
         ),
         SizedBox(height: 10.h),
         // Email Field
@@ -163,6 +191,57 @@ class SignupFormWidget extends StatelessWidget {
             return null;
           },
           prefixWidget: Icon(Icons.lock_person_rounded, color: prefixIconColor, size: prefixIconSize.sp),
+        ),
+        SizedBox(height: 15.h),
+        // Terms and Conditions Checkbox
+        Row(
+          children: [
+            SizedBox(
+              width: 24.w,
+              height: 24.w,
+              child: Checkbox(
+                value: isTermsAgreed,
+                onChanged: onTermsChanged,
+                activeColor: ColorManager.primary,
+                side: BorderSide(color: ColorManager.primary.withValues(alpha: 0.2), width: 1.5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6.r),
+                ),
+              ),
+            ),
+            SizedBox(width: 10.w),
+            Expanded(
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: AppStrings.iAgreeTo.tr(),
+                      style: TextStyle(
+                        color: ColorManager.blackText.withValues(alpha: 0.7),
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                    TextSpan(
+                      text: AppStrings.termsAndConditions.tr(),
+                      style: TextStyle(
+                        color: ColorManager.primary,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          TermsConditionsBottomSheet.show(
+                            context: context,
+                            onAgree: () => onTermsChanged(true),
+                          );
+                        },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

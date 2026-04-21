@@ -95,17 +95,17 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
           } else if (state.isError) {
             context.showErrorMessage(state.errorMessage ?? "Invalid OTP");
           }
-          final cubit = context.read<ForgotPwdCubit>();
-          if (cubit.resendStatus == ForgotResendStatus.success) {
+          if ((state.resendStatus ?? ResendStatus.idle) == ResendStatus.success) {
             _startTimer();
             context.showSuccessMessage("OTP resent successfully!");
-          } else if (cubit.resendStatus == ForgotResendStatus.error) {
-            context.showErrorMessage(cubit.resendError ?? "Failed to resend OTP");
+            context.read<ForgotPwdCubit>().resetResendStatus();
+          } else if ((state.resendStatus ?? ResendStatus.idle) == ResendStatus.error) {
+            context.showErrorMessage(state.resendError ?? "Failed to resend OTP");
+            context.read<ForgotPwdCubit>().resetResendStatus();
           }
         },
         builder: (context, state) {
-          final cubit = context.read<ForgotPwdCubit>();
-          return _buildScaffold(context, state.isLoading, cubit.resendStatus == ForgotResendStatus.loading, () {
+          return _buildScaffold(context, state.isLoading, (state.resendStatus ?? ResendStatus.idle) == ResendStatus.loading, () {
             String token = _pinController.text;
             if (token.length == 5) {
               context.read<ForgotPwdCubit>().verifyOtpForgot(widget.phone, token);
@@ -126,18 +126,17 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
         } else if (state.isError) {
           context.showErrorMessage(state.errorMessage ?? "Invalid OTP");
         }
-        // Check resend status
-        final cubit = context.read<VerifyOtpCubit>();
-        if (cubit.resendStatus == ResendStatus.success) {
+        if ((state.resendStatus ?? ResendStatus.idle) == ResendStatus.success) {
           _startTimer(); // Reset timer on successful resend
           context.showSuccessMessage("OTP resent successfully!");
-        } else if (cubit.resendStatus == ResendStatus.error) {
-          context.showErrorMessage(cubit.resendError ?? "Failed to resend OTP");
+          context.read<VerifyOtpCubit>().resetResendStatus();
+        } else if ((state.resendStatus ?? ResendStatus.idle) == ResendStatus.error) {
+          context.showErrorMessage(state.resendError ?? "Failed to resend OTP");
+          context.read<VerifyOtpCubit>().resetResendStatus();
         }
       },
       builder: (context, state) {
-        final cubit = context.read<VerifyOtpCubit>();
-        return _buildScaffold(context, state.isLoading, cubit.resendStatus == ResendStatus.loading, () {
+        return _buildScaffold(context, state.isLoading, (state.resendStatus ?? ResendStatus.idle) == ResendStatus.loading, () {
           String token = _pinController.text;
           if (token.length == 5) {
             context.read<VerifyOtpCubit>().verifyOtp(

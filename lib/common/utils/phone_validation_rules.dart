@@ -13,14 +13,16 @@ class PhoneValidationRules {
   static String normalizePhone(String phone, String countryCode) {
     final cleanPhone = phone.trim();
 
-    // Remove leading zero for countries that don't use it in E.164
-    if (countryCode == '+20' || countryCode == '+966') {
-      if (cleanPhone.startsWith('0')) {
-        return cleanPhone.substring(1);
-      }
+    // Remove leading zero for E.164 compliance (standard for most countries)
+    if (cleanPhone.startsWith('0')) {
+      return cleanPhone.substring(1);
     }
 
     return cleanPhone;
+  }
+
+  static String getFullPhoneNumber(String phone, String countryCode) {
+    return countryCode + normalizePhone(phone, countryCode);
   }
 
   static int getPhoneLength(String countryCode) {
@@ -32,11 +34,12 @@ class PhoneValidationRules {
       return AppStrings.textFieldError.tr();
     }
 
-    final cleanPhone = value.trim();
-
-    // Check if it starts with 0 for Egypt/KSA and handle it
-    if ((countryCode == '+20' || countryCode == '+966') && cleanPhone.startsWith('0')) {
-      return AppStrings.invalidPhoneNumberLength.tr(); // Or a more specific error if available
+    String cleanPhone = value.trim();
+    
+    // For validation purposes, if it starts with 0, we treat it as if the 0 is removed 
+    // to check the actual significant digits length.
+    if (cleanPhone.startsWith('0')) {
+      cleanPhone = cleanPhone.substring(1);
     }
 
     final expectedLength = _lengths[countryCode];

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:raw_chem/app/imports.dart';
 import 'package:raw_chem/common/extensions/context_extension.dart';
+import 'package:raw_chem/common/utils/phone_validation_rules.dart';
 import 'package:raw_chem/common/resources/app_router.dart';
 import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
@@ -34,6 +36,8 @@ class _SignupViewState extends State<SignupView> {
   final TextEditingController _confirmPasswordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<int> _selectedCategoryIds = [];
+  String _selectedCountryCode = '+20';
+  bool _isTermsAgreed = false;
 
   @override
   void dispose() {
@@ -59,7 +63,7 @@ class _SignupViewState extends State<SignupView> {
           if (state.isSuccess) {
             context.pushReplacement(
               AppRouters.verifyOtpView,
-              extra: {'phone': _phoneController.text},
+              extra: {'phone': PhoneValidationRules.getFullPhoneNumber(_phoneController.text, _selectedCountryCode)},
             );
           } else if (state.isError) {
             if (state.failure is NetworkFailure) {
@@ -204,13 +208,25 @@ class _SignupViewState extends State<SignupView> {
                                       passwordController: _passwordController,
                                       confirmPasswordController: _confirmPasswordController,
                                       selectedCategoryIds: _selectedCategoryIds,
+                                      initialCountryCode: _selectedCountryCode,
                                       onCategoryChanged: (ids) {
                                         setState(() {
                                           _selectedCategoryIds = ids;
                                         });
                                       },
+                                      onCountryCodeChanged: (code) {
+                                        setState(() {
+                                          _selectedCountryCode = code;
+                                        });
+                                      },
+                                      isTermsAgreed: _isTermsAgreed,
+                                      onTermsChanged: (value) {
+                                        setState(() {
+                                          _isTermsAgreed = value ?? false;
+                                        });
+                                      },
                                     ),
-                                    SizedBox(height: 15.h),
+                                    SizedBox(height: 20.h),
                                     // Signup Button
                                     DefaultButtonWidget(
                                       isLoading: state.isLoading,
@@ -223,14 +239,25 @@ class _SignupViewState extends State<SignupView> {
                                               );
                                               return;
                                             }
+                                            if (!_isTermsAgreed) {
+                                              context.showToast(
+                                                text: AppStrings.pleaseAcceptTerms.tr(),
+                                                color: Colors.red
+                                              );
+                                              return;
+                                            }
                                             context.read<SignupCubit>().signup(
                                               RegisterRequest(
                                                 name: _nameController.text,
                                                 email: _emailController.text,
-                                                phone: _phoneController.text,
+                                                phone: PhoneValidationRules.getFullPhoneNumber(
+                                                  _phoneController.text,
+                                                  _selectedCountryCode,
+                                                ),
                                                 birthDate: _birthDateController.text,
                                                 password: _passwordController.text,
                                                 passwordConfirmation: _confirmPasswordController.text,
+                                                companyName: _companyController.text,
                                                 categoryIds: _selectedCategoryIds,
                                               ),
                                             );

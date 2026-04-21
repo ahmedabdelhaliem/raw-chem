@@ -248,7 +248,10 @@
   "legalDepartment": "الشؤون القانونية",
   "viewDetails": "عرض التفاصيل",
   "noMessagesYet": "لا توجد رسائل حتى الآن",
-  "noNotifications": "لا توجد إشعارات"
+  "noNotifications": "لا توجد إشعارات",
+  "iAgreeTo": "أنا أوافق على ",
+  "pleaseAcceptTerms": "يرجى الموافقة على الشروط والأحكام للمتابعة",
+  "byCreatingAccountYouAgree": "بإنشائك للحساب، فأنت توافق على "
 }
 
 

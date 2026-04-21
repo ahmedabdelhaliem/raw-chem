@@ -251,7 +251,10 @@
   "legalDepartment": "Legal Department",
   "viewDetails": "View Details",
   "noMessagesYet": "No messages yet",
-  "noNotifications": "No notifications"
+  "noNotifications": "No notifications",
+  "iAgreeTo": "I agree to ",
+  "pleaseAcceptTerms": "Please accept terms and conditions to continue",
+  "byCreatingAccountYouAgree": "By creating an account, you agree to "
 }
 
 
