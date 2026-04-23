@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
+import 'package:raw_chem/common/resources/assets_manager.dart';
 import 'package:raw_chem/core/state/base_state.dart';
 import 'package:raw_chem/features/profile/cubit/static_pages_cubit.dart';
 import 'package:raw_chem/features/profile/model/static_page/static_page_model.dart';
@@ -70,38 +71,34 @@ class _TermsConditionsViewState extends State<TermsConditionsView> {
               child: Column(
                 children: [
                   // Primary Branding Header (Dynamic from API)
-                  if (data?.banner != null || data?.image != null) 
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: 24.h),
-                      child: Center(
-                        child: Container(
-                          padding: EdgeInsets.all(10.r),
-                          decoration: BoxDecoration(
-                            color: ColorManager.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: ColorManager.primary.withValues(alpha: 0.1),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          child: ClipOval(
-                            child: Image.network(
-                              data?.banner ?? data!.image!,
-                              height: 70.h,
-                              width: 70.h,
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) => Icon(Icons.gavel_rounded, size: 40.sp, color: ColorManager.primary),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(vertical: 24.h),
+                    child: Center(
+                      child: Container(
+                        padding: EdgeInsets.all(10.r),
+                        decoration: BoxDecoration(
+                          color: ColorManager.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: ColorManager.primary.withValues(alpha: 0.1),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
                             ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            ImageAssets.logo,
+                            height: 70.h,
+                            width: 70.h,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
-                    ).animate().fadeIn(duration: 600.ms).scale(begin: const Offset(0.9, 0.9))
-                  else
-                    SizedBox(height: 20.h),
+                    ),
+                  ).animate().fadeIn(duration: 600.ms).scale(begin: const Offset(0.9, 0.9)),
 
                   // Terms Content Card
                   Container(

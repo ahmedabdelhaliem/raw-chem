@@ -120,7 +120,11 @@ class _LoginViewState extends State<LoginView> {
                                   ),
                                 ],
                               ),
-                              child: Image.asset(ImageAssets.logo, height: 105.h),
+                              child: SizedBox(
+                                height: 105.h,
+                                width: 105.h,
+                                child: Image.asset(ImageAssets.logo, fit: BoxFit.contain),
+                              ),
                             )
                                 .animate()
                                 .fadeIn(duration: 600.ms)

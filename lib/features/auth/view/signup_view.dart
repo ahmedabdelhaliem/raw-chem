@@ -148,20 +148,20 @@ class _SignupViewState extends State<SignupView> {
                                 ),
                               ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.2, end: 0),
 
-                              const Spacer(),
-
-                              // Centered Title (AppBar style)
-                              Text(
-                                AppStrings.signupTitle.tr(),
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorManager.primary,
-                                  letterSpacing: 1.1,
-                                ),
-                              ).animate().fadeIn(duration: 500.ms).slideY(begin: -0.2, end: 0),
-
-                              const Spacer(),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    AppStrings.signupTitle.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorManager.primary,
+                                      letterSpacing: 1.1,
+                                    ),
+                                  ),
+                                ).animate().fadeIn(duration: 500.ms).slideY(begin: -0.2, end: 0),
+                              ),
 
                               // Small Branded Logo (Top Right)
                               Container(
@@ -176,7 +176,11 @@ class _SignupViewState extends State<SignupView> {
                                     ),
                                   ],
                                 ),
-                                child: Image.asset(ImageAssets.logo, height: 40.h),
+                                child: SizedBox(
+                                  height: 40.h,
+                                  width: 40.h,
+                                  child: Image.asset(ImageAssets.logo, fit: BoxFit.contain),
+                                ),
                               ).animate().fadeIn(duration: 400.ms).slideX(begin: 0.2, end: 0),
                             ],
                           ),

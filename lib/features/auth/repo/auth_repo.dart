@@ -16,6 +16,7 @@ import '../model/login/login_response.dart';
 import '../../profile/model/faq/faq_model.dart';
 import '../../profile/model/profile/profile_model.dart';
 import '../../profile/model/static_page/static_page_model.dart';
+import '../../profile/model/settings/settings_model.dart';
 import '../../profile/model/update_profile/update_profile_request.dart';
 
 class AuthRepo {
@@ -173,6 +174,15 @@ class AuthRepo {
     return response.fold(
       (failure) => Left(failure),
       (data) => Right(FaqResponse.fromJson(data)),
+    );
+  }
+
+  Future<Either<Failure, SettingsResponse>> getSettings() async {
+    final response = await _apiConsumer.get(EndPoints.settings);
+
+    return response.fold(
+      (failure) => Left(failure),
+      (data) => Right(SettingsResponse.fromJson(data)),
     );
   }
 }

@@ -1,6 +1,6 @@
-{
-  "appName": "Raw Chem",
-  "appSlogan": "Raw Chem",
+﻿{
+  "appName": "RawKemya",
+  "appSlogan": "RawKemya",
   "Search": "Search",
   "textFieldError": "Please enter a valid text",
   "serverConnectionError": "Server connection error",
@@ -37,17 +37,17 @@
   "Skip": "Skip",
   "Next": "Next",
   "Get start": "Get start",
-  "Welcome to Raw Chem": "Welcome to Raw Chem",
+  "Welcome to RawKemya": "Welcome to RawKemya",
   "Please enter a valid text": "Please enter a valid text",
   "welcome": "Welcome",
-  "welcomeMessage": "Welcome to Raw Chem",
-  "welcomeTitle": "Welcome to Raw Chem",
-  "onBoardingTitle1": "Welcome to Raw Chem",
-  "onBoardingTitle2": "Welcome to Raw Chem",
-  "onBoardingTitle3": "Welcome to Raw Chem",
-  "onBoardingBody1": "Welcome to Raw Chem",
-  "onBoardingBody2": "Welcome to Raw Chem",
-  "onBoardingBody3": "Welcome to Raw Chem",
+  "welcomeMessage": "Welcome to RawKemya",
+  "welcomeTitle": "Welcome to RawKemya",
+  "onBoardingTitle1": "Welcome to RawKemya",
+  "onBoardingTitle2": "Welcome to RawKemya",
+  "onBoardingTitle3": "Welcome to RawKemya",
+  "onBoardingBody1": "Welcome to RawKemya",
+  "onBoardingBody2": "Welcome to RawKemya",
+  "onBoardingBody3": "Welcome to RawKemya",
   "loginTitle": "Let's Login!",
   "loginSubtitle": "Login to your account to continue buying your products.",
   "phoneNumber": "Phone Number",
@@ -110,7 +110,7 @@
   "language": "Language",
   "notifications": "Notifications",
   "help": "Help",
-  "aboutUs": "About Raw Chem",
+  "aboutUs": "About RawKemya",
   "termsAndConditions": "Terms & Conditions",
   "fullName": "Full Name",
   "dateOfBirth": "Date of Birth",
@@ -202,7 +202,7 @@
   "cancelPaymentConfirm": "Are you sure you want to cancel the payment process?",
   "noPaymentMethodsAvailable": "Sorry, no payment methods are available at the moment. Please try again later.",
   "DesignedAndDevelopedBy": "Designed & Developed by",
-  "copyright": "Brmja tech . All Rights Reserved 2026 ©",
+  "copyright": "Brmja tech . All Rights Reserved 2026 Â©",
   "enterValidNumber": "Please enter a valid number",
   "invalidPhone": "Invalid phone number",
   "fillAllDetails": "Please ensure all fields are filled and location is selected",
@@ -242,7 +242,7 @@
   "failedToStartPaymentNoUrl": "Failed to start payment: No redirect URL found",
   "payFromAnyFawry": "Pay from any Fawry outlet",
   "faqs": "FAQs",
-  "arabicSubtitle": "عربي",
+  "arabicSubtitle": "Ø¹Ø±Ø¨ÙŠ",
   "englishSubtitle": "English",
   "lastUpdated": "Last updated",
   "howCanWeHelp": "How can we help you today?",
@@ -256,6 +256,7 @@
   "pleaseAcceptTerms": "Please accept terms and conditions to continue",
   "byCreatingAccountYouAgree": "By creating an account, you agree to "
 }
+
 
 
 

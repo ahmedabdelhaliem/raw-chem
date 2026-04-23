@@ -8,10 +8,11 @@ import 'package:raw_chem/features/auth/view/signup_success_view.dart';
 import 'package:raw_chem/features/auth/view/signup_view.dart';
 import 'package:raw_chem/features/auth/view/success_view.dart';
 import 'package:raw_chem/features/auth/view/verify_otp_view.dart';
-
+    
 import 'package:raw_chem/features/categories/view/category_items_view.dart';
 import 'package:raw_chem/features/chat/presentation/view/chat_inbox_view.dart';
 import 'package:raw_chem/features/chat/presentation/cubit/chat_inbox_cubit.dart';
+import 'package:raw_chem/features/profile/cubit/settings_cubit.dart';
 import 'package:raw_chem/features/payment/view/fawaterk_webview.dart';
 import 'package:raw_chem/features/chat/presentation/view/chat_view.dart';
 import 'package:raw_chem/features/home/view/home_view.dart';
@@ -146,8 +147,13 @@ abstract class AppRouters {
       ),
       GoRoute(
         path: AppRouters.helpSupportView,
-        builder: (context, state) =>
-            BlocProvider(create: (context) => instance<FaqCubit>(), child: const HelpSupportView()),
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => instance<FaqCubit>()),
+            BlocProvider(create: (context) => instance<SettingsCubit>()),
+          ],
+          child: const HelpSupportView(),
+        ),
       ),
       GoRoute(
         path: AppRouters.aboutUsView,

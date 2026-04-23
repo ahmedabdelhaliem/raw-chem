@@ -79,41 +79,36 @@ class _AboutUsViewState extends State<AboutUsView> {
               child: Column(
                 children: [
                   // Primary Branding Section (using API banner)
-                  if (data?.banner != null || data?.image != null) 
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: 30.h),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(12.r),
-                            decoration: BoxDecoration(
-                              color: ColorManager.white,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: ColorManager.primary.withValues(alpha: 0.1),
-                                  blurRadius: 25,
-                                  offset: const Offset(0, 10),
-                                ),
-                              ],
-                            ),
-                            child: ClipOval(
-                              child: Image.network(
-                                data?.banner ?? data!.image!,
-                                height: 80.h,
-                                width: 80.h,
-                                fit: BoxFit.contain,
-                                errorBuilder: (context, error, stackTrace) => Icon(Icons.business_rounded, size: 50.sp, color: ColorManager.primary),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(vertical: 30.h),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(12.r),
+                          decoration: BoxDecoration(
+                            color: ColorManager.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: ColorManager.primary.withValues(alpha: 0.1),
+                                blurRadius: 25,
+                                offset: const Offset(0, 10),
                               ),
+                            ],
+                          ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              ImageAssets.logo,
+                              height: 80.h,
+                              width: 80.h,
+                              fit: BoxFit.contain,
                             ),
                           ),
-                        ],
-                      ),
-                    ).animate().fadeIn(duration: 600.ms).scale(begin: const Offset(0.9, 0.9))
-                  else
-                    // Fallback if no image from API
-                    SizedBox(height: 30.h),
+                        ),
+                      ],
+                    ),
+                  ).animate().fadeIn(duration: 600.ms).scale(begin: const Offset(0.9, 0.9)),
 
                   // Description Card
                   Container(

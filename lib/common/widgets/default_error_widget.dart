@@ -52,7 +52,7 @@ class DefaultErrorWidget extends StatelessWidget {
                   ? Icon(Icons.wifi_off_rounded, size: 55.sp, color: ColorManager.greyTextColor)
                   : (isLottie
                       ? Lottie.asset(imagePath ?? JsonAssets.error, height: 110.h)
-                      : Image.asset(imagePath ?? ImageAssets.logo, height: 110.h)),
+                      : Image.asset(imagePath ?? ImageAssets.logo, height: 110.h, fit: BoxFit.contain)),
             ),
             
             SizedBox(height: 24.h),

@@ -1,6 +1,6 @@
 {
-  "appName": "رو كيم",
-  "appSlogan": "رو كيم",
+  "appName": "روكيميا",
+  "appSlogan": "روكيميا",
   "Search": "بحث",
   "textFieldError": "يرجى إدخال نص صالح",
   "serverConnectionError": "خطأ في الاتصال بالسيرفر",
@@ -37,17 +37,17 @@
   "Skip": "تخطي",
   "Next": "التالي",
   "Get start": "ابدأ الآن",
-  "Welcome to Raw Chem": "أهلاً بك في Raw Chem",
+  "Welcome to RawKemya": "أهلاً بك في روكيميا",
   "Please enter a valid text": "يرجى إدخال نص صالح",
   "welcome": "أهلاً بك",
-  "welcomeMessage": "أهلاً بك في رو كيم",
-  "welcomeTitle": "أهلاً بك في رو كيم",
-  "onBoardingTitle1": "أهلاً بك في رو كيم",
-  "onBoardingTitle2": "أهلاً بك في رو كيم",
-  "onBoardingTitle3": "أهلاً بك في رو كيم",
-  "onBoardingBody1": "أهلاً بك في رو كيم",
-  "onBoardingBody2": "أهلاً بك في رو كيم",
-  "onBoardingBody3": "أهلاً بك في رو كيم",
+  "welcomeMessage": "أهلاً بك في روكيميا",
+  "welcomeTitle": "أهلاً بك في روكيميا",
+  "onBoardingTitle1": "أهلاً بك في روكيميا",
+  "onBoardingTitle2": "أهلاً بك في روكيميا",
+  "onBoardingTitle3": "أهلاً بك في روكيميا",
+  "onBoardingBody1": "أهلاً بك في روكيميا",
+  "onBoardingBody2": "أهلاً بك في روكيميا",
+  "onBoardingBody3": "أهلاً بك في روكيميا",
   "loginTitle": "هيا نسجل الدخول!",
   "loginSubtitle": "تسجيل الدخول إلى حسابك لمتابعة شراء منتجاتك.",
   "phoneNumber": "رقم الهاتف",
@@ -110,7 +110,7 @@
   "language": "اللغة",
   "notifications": "الإشعارات",
   "help": "المساعدة",
-  "aboutUs": "عن راو كيم",
+  "aboutUs": "عن روكيميا",
   "termsAndConditions": "الشروط والأحكام",
   "fullName": "الاسم الكامل",
   "dateOfBirth": "تاريخ الميلاد",
@@ -253,6 +253,3 @@
   "pleaseAcceptTerms": "يرجى الموافقة على الشروط والأحكام للمتابعة",
   "byCreatingAccountYouAgree": "بإنشائك للحساب، فأنت توافق على "
 }
-
-
-

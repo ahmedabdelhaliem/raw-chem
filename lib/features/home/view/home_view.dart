@@ -9,8 +9,8 @@ import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/common/widgets/default_banner_widget.dart';
 import 'package:raw_chem/common/widgets/default_error_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_card_widget.dart';
-import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
 import 'package:raw_chem/common/widgets/raw_material_skeleton.dart';
+import 'package:raw_chem/common/widgets/recipe_card_widget.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -119,7 +119,7 @@ class HomeView extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: 80.h),
+            constraints: BoxConstraints(maxHeight: 100.h),
             child: Image.asset(ImageAssets.logoBlack, fit: BoxFit.contain),
           ),
         ),

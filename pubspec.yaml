@@ -119,9 +119,9 @@ flutter_native_splash:
   ios: true
   web: false
   color: "#ffffff"
-  image: assets/images/splash_logo.png
+  image: assets/images/3030.png
   android_12:
-    image: assets/images/splash_logo.png
+    image: assets/images/3030.png
     icon_background_color: "#ffffff"
     icon_background_color_dark: "#121212"
 dev_dependencies:
@@ -192,5 +192,5 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/splash_logo.png"
+  image_path: "assets/images/3030.png"
   min_sdk_version: 21

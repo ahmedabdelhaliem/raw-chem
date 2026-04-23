@@ -1,17 +1,18 @@
-import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:raw_chem/common/resources/color_manager.dart';
 import 'package:raw_chem/common/resources/strings_manager.dart';
 import 'package:raw_chem/core/state/base_state.dart';
 import 'package:raw_chem/core/ui/skeleton/skeleton_bar.dart';
 import 'package:raw_chem/core/ui/skeleton/skeleton_widget.dart';
 import 'package:raw_chem/features/profile/cubit/faq_cubit.dart';
+import 'package:raw_chem/features/profile/cubit/settings_cubit.dart';
 import 'package:raw_chem/features/profile/model/faq/faq_model.dart';
+import 'package:raw_chem/features/profile/model/settings/settings_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HelpSupportView extends StatefulWidget {
   const HelpSupportView({super.key});
@@ -25,12 +26,15 @@ class _HelpSupportViewState extends State<HelpSupportView> {
   void initState() {
     super.initState();
     context.read<FaqCubit>().getFaqs();
+    context.read<SettingsCubit>().getSettings();
   }
 
   Future<void> _launchUrl(String url) async {
     final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
+    try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      // If no app handles this URL, silently ignore
     }
   }
 
@@ -61,13 +65,20 @@ class _HelpSupportViewState extends State<HelpSupportView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                   Icon(Icons.help_center_outlined, size: 60.sp, color: ColorManager.greyTextColor.withValues(alpha: 0.3)),
-                   SizedBox(height: 16.h),
-                   Text(state.errorMessage ?? AppStrings.unknownError.tr(), style: TextStyle(fontSize: 14.sp)),
-                   TextButton(
-                     onPressed: () => context.read<FaqCubit>().getFaqs(),
-                     child: Text(AppStrings.retry.tr()),
-                   ),
+                  Icon(
+                    Icons.help_center_outlined,
+                    size: 60.sp,
+                    color: ColorManager.greyTextColor.withValues(alpha: 0.3),
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    state.errorMessage ?? AppStrings.unknownError.tr(),
+                    style: TextStyle(fontSize: 14.sp),
+                  ),
+                  TextButton(
+                    onPressed: () => context.read<FaqCubit>().getFaqs(),
+                    child: Text(AppStrings.retry.tr()),
+                  ),
                 ],
               ),
             );
@@ -127,9 +138,15 @@ class _HelpSupportViewState extends State<HelpSupportView> {
                           child: Center(
                             child: Column(
                               children: [
-                                Icon(Icons.info_outline, color: ColorManager.greyTextColor.withValues(alpha: 0.4)),
+                                Icon(
+                                  Icons.info_outline,
+                                  color: ColorManager.greyTextColor.withValues(alpha: 0.4),
+                                ),
                                 SizedBox(height: 8.h),
-                                Text(AppStrings.noDataFound.tr(), style: TextStyle(color: ColorManager.greyTextColor)),
+                                Text(
+                                  AppStrings.noDataFound.tr(),
+                                  style: const TextStyle(color: ColorManager.greyTextColor),
+                                ),
                               ],
                             ),
                           ),
@@ -172,47 +189,62 @@ class _HelpSupportViewState extends State<HelpSupportView> {
         children: [
           Text(
             AppStrings.howCanWeHelp.tr(),
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 8.h),
           Text(
             AppStrings.reachOutToUs.tr(),
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.8),
-              fontSize: 12.sp,
-            ),
+            style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 12.sp),
           ),
           SizedBox(height: 24.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildContactButton(
-                icon: Icons.chat_bubble_rounded,
-                label: AppStrings.whatsApp.tr(),
-                onTap: () => _launchUrl("https://wa.me/201014013440"), // Placeholder contact
-              ),
-              _buildContactButton(
-                icon: Icons.email_rounded,
-                label: AppStrings.email.tr(),
-                onTap: () => _launchUrl("mailto:support@rowchem.com"),
-              ),
-              _buildContactButton(
-                icon: Icons.phone_rounded,
-                label: AppStrings.phone.tr(),
-                onTap: () => _launchUrl("tel:+201014013440"),
-              ),
-            ],
+          BlocBuilder<SettingsCubit, BaseState<SettingsModel>>(
+            builder: (context, state) {
+              final settings = state.data;
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildContactButton(
+                    icon: Icons.chat_bubble_rounded,
+                    label: AppStrings.whatsApp.tr(),
+                    onTap: () {
+                      if (settings?.whatsapp != null) {
+                        _launchUrl("https://wa.me/${settings!.whatsapp}");
+                      }
+                    },
+                  ),
+                  _buildContactButton(
+                    icon: Icons.email_rounded,
+                    label: AppStrings.email.tr(),
+                    onTap: () {
+                      if (settings?.email != null) {
+                        _launchUrl("mailto:${settings!.email}");
+                      }
+                    },
+                  ),
+                  _buildContactButton(
+                    icon: Icons.phone_rounded,
+                    label: AppStrings.phone.tr(),
+                    onTap: () {
+                      if (settings?.phone != null) {
+                        _launchUrl("tel:${settings!.phone}");
+                      }
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),
     ).animate().fadeIn(duration: 600.ms).scale(begin: const Offset(0.95, 0.95));
   }
 
-  Widget _buildContactButton({required IconData icon, required String label, required VoidCallback onTap}) {
+  Widget _buildContactButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
     return Column(
       children: [
         GestureDetector(
@@ -253,7 +285,8 @@ class _HelpSupportViewState extends State<HelpSupportView> {
                   ],
                 ),
               ),
-              if (index != 4) Divider(height: 1, color: ColorManager.lightGrey2.withValues(alpha: 0.5)),
+              if (index != 4)
+                Divider(height: 1, color: ColorManager.lightGrey2.withValues(alpha: 0.5)),
             ],
           ),
         ),
@@ -285,9 +318,9 @@ class _HelpSupportViewState extends State<HelpSupportView> {
                 child: Text(
                   answer,
                   style: TextStyle(
-                    fontSize: 13.sp, 
-                    color: ColorManager.greyTextColor.withValues(alpha: 0.8), 
-                    height: 1.6
+                    fontSize: 13.sp,
+                    color: ColorManager.greyTextColor.withValues(alpha: 0.8),
+                    height: 1.6,
                   ),
                 ),
               ),

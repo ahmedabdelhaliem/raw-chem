@@ -181,7 +181,7 @@ class _SplashViewState extends State<SplashView> {
                     ),
                   ],
                 ),
-                child: Image.asset(ImageAssets.logo, width: 140.w, height: 140.w),
+                child: Image.asset(ImageAssets.logo, width: 140.w, height: 140.w, fit: BoxFit.contain),
               )
               .animate()
               .scale(

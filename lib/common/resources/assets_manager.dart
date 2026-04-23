@@ -25,7 +25,7 @@ class ImageAssets {
   static const String nassan = '$imagesPath/nassan.png';
   static const String star = "$imagesPath/Star1.png";
 
-  static const String logo = "$imagesPath/2020.png";
+  static const String logo = "$imagesPath/3030.png";
   //===assets\images\undraw_traveling_yhxq.png
   static const String onBoarding1 = "$imagesPath/undraw_traveling_yhxq.png";
   //====assets\images\undraw_off_road_re_leme.png
@@ -52,7 +52,6 @@ class ImageAssets {
   static const String noInternet = '$imagesPath/no_internet.png';
   static const String brmjaLogo = '$imagesPath/brmjalogo.png';
 }
-
 
 class IconAssets {
   static const String rightArrow = '$iconsPath/right_arrow.svg';

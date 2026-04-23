@@ -125,4 +125,5 @@ Future<void> initAppModule() async {
   instance.registerFactory<ConfirmPaymentCubit>(() => ConfirmPaymentCubit(instance()));
   instance.registerFactory<NotificationsCubit>(() => NotificationsCubit(instance(), instance()));
   instance.registerFactory<PurchaseOrdersHistoryCubit>(() => PurchaseOrdersHistoryCubit(instance()));
+  instance.registerLazySingleton<SettingsCubit>(() => SettingsCubit(instance()));
 }

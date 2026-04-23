@@ -47,6 +47,7 @@ class _AnimatedLoadingWidgetState extends State<AnimatedLoadingWidget>
                   ImageAssets.logoBlack,
                   height: 60.h,
                   width: 60.w,
+                  fit: BoxFit.contain,
                 )),
           ),
         ),

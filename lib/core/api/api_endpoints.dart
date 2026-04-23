@@ -13,6 +13,7 @@ class EndPoints {
   static const String terms = "/terms";
   static const String aboutUs = "/about-us";
   static const String faq = "/faq";
+  static const String settings = "/settings";
   static const String categories = "/categories";
   static const String recipes = "/recipes";
   static const String recipeTypes = "/recipe-types";

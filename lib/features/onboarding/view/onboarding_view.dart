@@ -85,7 +85,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                           ),
                         ],
                       ),
-                      child: Image.asset(ImageAssets.logo, width: 100.w, height: 100.w),
+                      child: Image.asset(ImageAssets.logo, width: 100.w, height: 100.w, fit: BoxFit.contain),
                     )
                         .animate(onPlay: (c) => c.repeat(reverse: true))
                         .scale(begin: const Offset(0.95, 0.95), end: const Offset(1.05, 1.05), duration: 1.seconds, curve: Curves.easeInOut)
