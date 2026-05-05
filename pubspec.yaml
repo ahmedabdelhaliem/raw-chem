@@ -147,6 +147,7 @@ flutter:
     - assets/json/
     - assets/translations/
     - assets/icons/
+    - assets/data/
 
   fonts:
     - family: Rubik

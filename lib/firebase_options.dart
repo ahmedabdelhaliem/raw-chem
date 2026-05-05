@@ -16,10 +16,7 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, Tar
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -27,15 +24,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -53,6 +44,7 @@ class DefaultFirebaseOptions {
     appId: '1:632822449676:android:41609b6b1d0f9505e49029',
     messagingSenderId: '632822449676',
     projectId: 'rowchem-4c7a3',
+    databaseURL: 'https://rowchem-4c7a3-default-rtdb.firebaseio.com',
     storageBucket: 'rowchem-4c7a3.firebasestorage.app',
   );
 
@@ -61,8 +53,43 @@ class DefaultFirebaseOptions {
     appId: '1:632822449676:ios:573ad5e0d4fdc9ade49029',
     messagingSenderId: '632822449676',
     projectId: 'rowchem-4c7a3',
+    databaseURL: 'https://rowchem-4c7a3-default-rtdb.firebaseio.com',
     storageBucket: 'rowchem-4c7a3.firebasestorage.app',
+    iosClientId: '632822449676-vo1vc91uk5u93mhuhiodnito3lj8rloa.apps.googleusercontent.com',
     iosBundleId: 'com.example.rawChem',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDUjsahqnYVYM_m99Ey1tm54XK8v7MZ72M',
+    appId: '1:632822449676:web:571d777317c2fc58e49029',
+    messagingSenderId: '632822449676',
+    projectId: 'rowchem-4c7a3',
+    authDomain: 'rowchem-4c7a3.firebaseapp.com',
+    databaseURL: 'https://rowchem-4c7a3-default-rtdb.firebaseio.com',
+    storageBucket: 'rowchem-4c7a3.firebasestorage.app',
+    measurementId: 'G-PH5LYWXB40',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBc-eTsp--DInjx20VBYbPDNvoetc8AkaQ',
+    appId: '1:632822449676:ios:573ad5e0d4fdc9ade49029',
+    messagingSenderId: '632822449676',
+    projectId: 'rowchem-4c7a3',
+    databaseURL: 'https://rowchem-4c7a3-default-rtdb.firebaseio.com',
+    storageBucket: 'rowchem-4c7a3.firebasestorage.app',
+    iosClientId: '632822449676-vo1vc91uk5u93mhuhiodnito3lj8rloa.apps.googleusercontent.com',
+    iosBundleId: 'com.example.rawChem',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDUjsahqnYVYM_m99Ey1tm54XK8v7MZ72M',
+    appId: '1:632822449676:web:8db448cbb2bbb846e49029',
+    messagingSenderId: '632822449676',
+    projectId: 'rowchem-4c7a3',
+    authDomain: 'rowchem-4c7a3.firebaseapp.com',
+    databaseURL: 'https://rowchem-4c7a3-default-rtdb.firebaseio.com',
+    storageBucket: 'rowchem-4c7a3.firebasestorage.app',
+    measurementId: 'G-2N0FRD5PLR',
   );
 
 }

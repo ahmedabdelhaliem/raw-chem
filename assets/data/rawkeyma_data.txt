@@ -1,0 +1,81 @@
+Rawkemya - App Description & Info
+
+One-line Description:
+Premium B2B marketplace for industrial raw materials and professional chemical formulations.
+
+============================================================
+
+Three-line Description:
+Rawkemya: Industrial Chemical Marketplace & Formulation Hub
+Source premium raw materials and access professional formulations in one platform.
+Connect with verified suppliers, track prices, and streamline procurement workflows.
+
+============================================================
+
+Full Description:
+
+Rawkemya is a professional B2B marketplace designed for the industrial chemical sector, offering direct access to premium raw materials and verified formulations. It bridges the gap between suppliers and manufacturers by providing detailed technical data, real-time price tracking, and a streamlined procurement experience.
+
+Designed for manufacturers, chemists, and industrial professionals, Rawkemya enables users to explore a comprehensive catalog of raw materials with full technical specifications, including CAS numbers and safety-related information. The platform goes beyond sourcing by offering a specialized library of “Top Formulations” and professional recipes across multiple industries such as cosmetics, paints, and detergents.
+
+With integrated real-time communication tools, users can connect directly with verified suppliers, request quotations, and manage procurement efficiently from a single interface. Rawkemya empowers businesses to optimize production, reduce sourcing time, and stay competitive in the industrial chemical market.
+
+Why choose Rawkemya?
+
+Rawkemya is more than just a sourcing platform — it is a complete industrial solution that combines procurement, technical knowledge, and supplier communication in one place. Whether you are sourcing raw materials or developing new formulations, Rawkemya provides the tools needed to enhance productivity and decision-making.
+
+============================================================
+
+Key Features:
+
+- Advanced Raw Material Sourcing: Browse a comprehensive catalog of industrial chemicals with full technical specifications and CAS numbers.
+- Professional Formulation Recipes: Access high-quality formulations for cosmetics, paints, detergents, and more.
+- Real-time Supplier Connection: Communicate directly with verified suppliers and request quotations بسهولة.
+- Dynamic Price Tracking: Monitor raw material price trends to make informed purchasing decisions.
+- Secure Order Management: Track orders and manage procurement history داخل منصة احترافية.
+
+============================================================
+
+Target Users:
+Chemical engineers, industrial manufacturers, procurement managers, and professional chemical suppliers.
+
+============================================================
+
+API Information:
+
+Base URL:
+https://raw-chem.betamoneta.com/api
+
+Delete Account Endpoint:
+https://raw-chem.betamoneta.com/api/delete-account
+
+============================================================
+
+Test Account:
+
+Phone: +201234567890
+Password: password123
+
+Note:
+Please use these credentials to access all app features for testing and review purposes.
+
+============================================================
+
+Reviewer Notes:
+
+Rawkemya is a B2B application intended for industrial professionals. بعض الخصائص تتطلب حساب موثق للتفاعل مع الموردين.
+
+The provided test account grants full access to:
+- Material Catalog
+- Formulation Library
+- Supplier Chat System
+
+Geolocation is used only to:
+- Determine shipping eligibility
+- Show location-based material availability
+
+No sensitive user data is shared without consent.
+
+============================================================
+
+Download Rawkemya now and optimize your industrial sourcing and formulation workflow.
