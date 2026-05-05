@@ -95,19 +95,22 @@ class _ProfileViewState extends State<ProfileView> {
                                       ),
                                     ],
                                   ),
-                                  child: CircleAvatar(
-                                    radius: 50.r,
-                                    backgroundColor: ColorManager.lightGrey.withValues(alpha: 0.5),
-                                    backgroundImage: user.image != null && user.image!.isNotEmpty
-                                        ? NetworkImage(user.image!)
-                                        : null,
-                                    child: user.image == null || user.image!.isEmpty
-                                        ? Icon(
-                                            Iconsax.user,
-                                            size: 40.sp,
-                                            color: ColorManager.greyTextColor,
-                                          )
-                                        : null,
+                                  child: Hero(
+                                    tag: 'profile_avatar',
+                                    child: CircleAvatar(
+                                      radius: 50.r,
+                                      backgroundColor: ColorManager.lightGrey.withValues(alpha: 0.5),
+                                      backgroundImage: user.image != null && user.image!.isNotEmpty
+                                          ? NetworkImage(user.image!)
+                                          : null,
+                                      child: user.image == null || user.image!.isEmpty
+                                          ? Icon(
+                                              Iconsax.user,
+                                              size: 40.sp,
+                                              color: ColorManager.greyTextColor,
+                                            )
+                                          : null,
+                                    ),
                                   ),
                                 ),
                               ),

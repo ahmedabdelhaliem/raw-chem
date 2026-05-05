@@ -286,6 +286,9 @@ class AppStrings {
   // New keys for hardcoded text
   static const String pleaseSelectField = "pleaseSelectField";
   static const String pleaseSelectOneCategory = "pleaseSelectOneCategory";
+  static const String pleaseEnterFullName = "pleaseEnterFullName";
+  static const String pleaseEnterEmail = "pleaseEnterEmail";
+  static const String pleaseEnterValidEmail = "pleaseEnterValidEmail";
   static const String statusCompleted = "statusCompleted";
   static const String paymentError = "paymentError";
   static const String failedToStartPaymentNoUrl = "failedToStartPaymentNoUrl";

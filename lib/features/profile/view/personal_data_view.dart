@@ -29,6 +29,7 @@ class PersonalDataView extends StatefulWidget {
 }
 
 class _PersonalDataViewState extends State<PersonalDataView> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
@@ -171,160 +172,184 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               child: state.data == null
                   ? PersonalDataFormSkeleton()
                   : SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          // Styled Header Section
-                          SizedBox(
-                            height: 200.h,
-                            width: double.infinity,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: Container(
-                                    height: 80.h,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: ColorManager.primary,
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(32.r),
-                                        bottomRight: Radius.circular(32.r),
+                      child: Form(
+                        key: _formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: Column(
+                          children: [
+                            // Styled Header Section
+                            SizedBox(
+                              height: 200.h,
+                              width: double.infinity,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: Container(
+                                      height: 80.h,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: ColorManager.primary,
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(32.r),
+                                          bottomRight: Radius.circular(32.r),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  child: GestureDetector(
-                                    onTap: _pickImage,
-                                    child: Stack(
-                                      alignment: Alignment.bottomRight,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(4.r),
-                                          decoration: const BoxDecoration(
-                                            color: ColorManager.white,
-                                            shape: BoxShape.circle,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black12,
-                                                blurRadius: 10,
-                                                offset: Offset(0, 5),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: GestureDetector(
+                                      onTap: _pickImage,
+                                      child: Stack(
+                                        alignment: Alignment.bottomRight,
+                                        children: [
+                                          Hero(
+                                            tag: 'profile_avatar',
+                                            child: Container(
+                                              padding: EdgeInsets.all(4.r),
+                                              decoration: const BoxDecoration(
+                                                color: ColorManager.white,
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black12,
+                                                    blurRadius: 10,
+                                                    offset: Offset(0, 5),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                          child: CircleAvatar(
-                                            radius: 60.r,
-                                            backgroundColor: ColorManager.lightGrey.withValues(alpha: 0.5),
-                                            backgroundImage: _pickedImage != null
-                                                ? FileImage(File(_pickedImage!.path)) as ImageProvider
-                                                : (state.data?.image != null && state.data!.image!.isNotEmpty
-                                                    ? NetworkImage(state.data!.image!)
-                                                    : null),
-                                            child: _pickedImage == null && (state.data?.image == null || state.data!.image!.isEmpty)
-                                                ? Icon(Iconsax.user, size: 50.sp, color: ColorManager.greyTextColor)
-                                                : null,
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.all(10.w),
-                                          decoration: BoxDecoration(
-                                            color: ColorManager.primary,
-                                            shape: BoxShape.circle,
-                                            border: Border.all(color: ColorManager.white, width: 2),
-                                            boxShadow: const [
-                                              BoxShadow(
-                                                color: Colors.black12,
-                                                blurRadius: 5,
-                                                offset: Offset(0, 2),
+                                              child: CircleAvatar(
+                                                radius: 60.r,
+                                                backgroundColor: ColorManager.lightGrey.withValues(alpha: 0.5),
+                                                backgroundImage: _pickedImage != null
+                                                    ? FileImage(File(_pickedImage!.path)) as ImageProvider
+                                                    : (state.data?.image != null && state.data!.image!.isNotEmpty
+                                                        ? NetworkImage(state.data!.image!)
+                                                        : null),
+                                                child: _pickedImage == null && (state.data?.image == null || state.data!.image!.isEmpty)
+                                                    ? Icon(Iconsax.user, size: 50.sp, color: ColorManager.greyTextColor)
+                                                    : null,
                                               ),
-                                            ],
+                                            ),
                                           ),
-                                          child: Icon(
-                                            Iconsax.camera,
-                                            color: ColorManager.white,
-                                            size: 20.sp,
+                                          Container(
+                                            padding: EdgeInsets.all(10.w),
+                                            decoration: BoxDecoration(
+                                              color: ColorManager.primary,
+                                              shape: BoxShape.circle,
+                                              border: Border.all(color: ColorManager.white, width: 2),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.black12,
+                                                  blurRadius: 5,
+                                                  offset: Offset(0, 2),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Icon(
+                                              Iconsax.camera,
+                                              color: ColorManager.white,
+                                              size: 20.sp,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-
-                          SizedBox(height: 10.h),
-
-
-                          Padding(
-                            padding: EdgeInsets.all(20.w),
-                            child: Container(
+                          
+                            SizedBox(height: 10.h),
+                          
+                          
+                            Padding(
                               padding: EdgeInsets.all(20.w),
-                              decoration: BoxDecoration(
-                                color: ColorManager.white,
-                                borderRadius: BorderRadius.circular(24.r),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.05),
-                                    blurRadius: 15,
-                                    offset: const Offset(0, 5),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  _buildTextField(
-                                    label: AppStrings.fullName.tr(),
-                                    controller: _nameController,
-                                    icon: Iconsax.user,
-                                  ),
-                                  SizedBox(height: 20.h),
-                                  _buildTextField(
-                                    label: AppStrings.email.tr(),
-                                    controller: _emailController,
-                                    icon: Iconsax.sms,
-                                    keyboardType: TextInputType.emailAddress,
-                                  ),
-                                  SizedBox(height: 20.h),
-                                  _buildPhoneField(),
-                                  SizedBox(height: 20.h),
-                                  _buildTextField(
-                                    label: AppStrings.companyName.tr(),
-                                    controller: _companyController,
-                                    icon: Iconsax.building,
-                                  ),
-                                  SizedBox(height: 20.h),
-                                  _buildCategoryDropdown(),
-                                  SizedBox(height: 40.h),
-                                  DefaultButtonWidget(
-                                    isLoading: state.isLoading,
-                                    onPressed: () {
-                                        final request = UpdateProfileRequest(
-                                          name: _nameController.text,
-                                          email: _emailController.text,
-                                          phone: PhoneValidationRules.getFullPhoneNumber(_phoneController.text, _selectedCountryCode),
-                                          companyName: _companyController.text,
-                                          categoryIds: _selectedCategoryIds.isNotEmpty ? _selectedCategoryIds : [1],
-                                          image: _pickedImage,
-                                        );
-                                      context.read<ProfileCubit>().updateProfile(request);
-                                    },
-                                    text: AppStrings.save.tr(),
-                                    color: ColorManager.primary,
-                                    textColor: ColorManager.white,
-                                    radius: 16.r,
-                                    height: 54.h,
-                                  ),
-                                ],
+                              child: Container(
+                                padding: EdgeInsets.all(20.w),
+                                decoration: BoxDecoration(
+                                  color: ColorManager.white,
+                                  borderRadius: BorderRadius.circular(24.r),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.05),
+                                      blurRadius: 15,
+                                      offset: const Offset(0, 5),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    _buildTextField(
+                                      label: AppStrings.fullName.tr(),
+                                      controller: _nameController,
+                                      icon: Iconsax.user,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return AppStrings.pleaseEnterFullName.tr();
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    _buildTextField(
+                                      label: AppStrings.email.tr(),
+                                      controller: _emailController,
+                                      icon: Iconsax.sms,
+                                      keyboardType: TextInputType.emailAddress,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return AppStrings.pleaseEnterEmail.tr();
+                                        }
+                                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                                          return AppStrings.pleaseEnterValidEmail.tr();
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    _buildPhoneField(),
+                                    SizedBox(height: 20.h),
+                                    _buildTextField(
+                                      label: AppStrings.companyName.tr(),
+                                      controller: _companyController,
+                                      icon: Iconsax.building,
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    _buildCategoryDropdown(),
+                                    SizedBox(height: 40.h),
+                                    DefaultButtonWidget(
+                                      isLoading: state.isLoading,
+                                      onPressed: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          final request = UpdateProfileRequest(
+                                            name: _nameController.text,
+                                            email: _emailController.text,
+                                            phone: PhoneValidationRules.getFullPhoneNumber(_phoneController.text, _selectedCountryCode),
+                                            companyName: _companyController.text,
+                                            categoryIds: _selectedCategoryIds.isNotEmpty ? _selectedCategoryIds : [1],
+                                            image: _pickedImage,
+                                          );
+                                          context.read<ProfileCubit>().updateProfile(request);
+                                        }
+                                      },
+                                      text: AppStrings.save.tr(),
+                                      color: ColorManager.primary,
+                                      textColor: ColorManager.white,
+                                      radius: 16.r,
+                                      height: 54.h,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 40.h),
-                        ],
+                            SizedBox(height: 40.h),
+                          ],
+                        ),
                       ),
                     ),
             ),
@@ -340,6 +365,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
     required IconData icon,
     TextInputType keyboardType = TextInputType.text,
     bool readOnly = false,
+    String? Function(String?)? validator,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,6 +385,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
           controller: controller,
           keyboardType: keyboardType,
           readOnly: readOnly,
+          validator: validator,
           style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: ColorManager.primary, size: 20.sp),
@@ -376,6 +403,14 @@ class _PersonalDataViewState extends State<PersonalDataView> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide: const BorderSide(color: ColorManager.primary, width: 1.5),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
             ),
           ),
         ),
@@ -516,6 +551,14 @@ class _PersonalDataViewState extends State<PersonalDataView> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide: const BorderSide(color: ColorManager.primary, width: 1.5),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
             ),
           ),
         ),
