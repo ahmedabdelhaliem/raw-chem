@@ -85,7 +85,7 @@
   "priceTracker": "المنتجات",
   "account": "الحساب",
   "suppliers": "الموردين",
-  "rawMaterials": "المواد الخام",
+  "rawMaterials": "اعرف خاماتك",
   "recipes": "التركيبات الأكثر طلباً",
   "viewMore": "عرض المزيد",
   "casNumber": "CAS Number:",
@@ -254,5 +254,9 @@
   "noNotifications": "لا توجد إشعارات",
   "iAgreeTo": "أنا أوافق على ",
   "pleaseAcceptTerms": "يرجى الموافقة على الشروط والأحكام للمتابعة",
-  "byCreatingAccountYouAgree": "بإنشائك للحساب، فأنت توافق على "
+  "byCreatingAccountYouAgree": "بإنشائك للحساب، فأنت توافق على ",
+  "chemicalFormula": "الصيغة الكيميائية",
+  "chemicalName": "الاسم الكيميائي",
+  "tradeName": "الاسم التجاري",
+  "percentage": "النسبة %"
 }

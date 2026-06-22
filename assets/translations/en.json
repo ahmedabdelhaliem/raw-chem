@@ -85,7 +85,7 @@
   "priceTracker": "Products",
   "account": "Account",
   "suppliers": "Suppliers",
-  "rawMaterials": "Raw Materials",
+  "rawMaterials": "Know Your Ingredients",
   "recipes": "Top Formulations",
   "viewMore": "View More",
   "casNumber": "CAS Number:",
@@ -145,7 +145,6 @@
   "contactSupplier": "Contact Supplier",
   "contactSupplierMessage": "Contact Supplier",
   "contactSupplierTitle": "Contact Supplier",
-
   "productDetails": "Product Details",
   "settings": "Settings",
   "profileUpdatedSuccessfully": "Profile updated successfully",
@@ -257,9 +256,9 @@
   "noNotifications": "No notifications",
   "iAgreeTo": "I agree to ",
   "pleaseAcceptTerms": "Please accept terms and conditions to continue",
-  "byCreatingAccountYouAgree": "By creating an account, you agree to "
+  "byCreatingAccountYouAgree": "By creating an account, you agree to ",
+  "chemicalFormula": "Chemical Formula",
+  "chemicalName": "Chemical Name",
+  "tradeName": "Trade Name",
+  "percentage": "%"
 }
-
-
-
-

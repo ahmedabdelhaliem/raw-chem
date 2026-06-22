@@ -336,4 +336,10 @@ class AppStrings {
   static const String pleaseAcceptTerms = "pleaseAcceptTerms";
   static const String byCreatingAccountYouAgree = "byCreatingAccountYouAgree";
   static const String viewDetails = "viewDetails";
+
+  // Ingredients table columns
+  static const String chemicalFormula = "chemicalFormula";
+  static const String chemicalName = "chemicalName";
+  static const String tradeName = "tradeName";
+  static const String percentage = "percentage";
 }

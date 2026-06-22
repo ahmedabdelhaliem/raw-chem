@@ -56,49 +56,52 @@ class _MainViewState extends State<MainView> {
         physics: const NeverScrollableScrollPhysics(),
         children: _pages,
       ),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.fromLTRB(16.w, 0, 16.w, 12.h),
-        decoration: BoxDecoration(
-          color: ColorManager.white.withValues(alpha: 0.9),
-          borderRadius: BorderRadius.circular(35.r),
-          boxShadow: [
-            BoxShadow(
-              color: ColorManager.primary.withValues(alpha: 0.08),
-              blurRadius: 30,
-              offset: const Offset(0, 15),
-            ),
-          ],
-          border: Border.all(color: ColorManager.primary.withValues(alpha: 0.15), width: 1.2),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(35.r),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 10.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildNavItem(0, Icons.home_outlined, Icons.home_rounded, AppStrings.home.tr()),
-                  _buildNavItem(
-                    1,
-                    Icons.grid_view_outlined,
-                    Icons.grid_view_rounded,
-                    AppStrings.categories.tr(),
-                  ),
-                  _buildNavItem(
-                    2,
-                    Icons.trending_up_outlined,
-                    Icons.trending_up_rounded,
-                    AppStrings.priceTracker.tr(),
-                  ),
-                  _buildNavItem(
-                    3,
-                    Icons.person_outline_rounded,
-                    Icons.person_rounded,
-                    AppStrings.account.tr(),
-                  ),
-                ],
+      bottomNavigationBar: SafeArea(
+        bottom: true,
+        child: Container(
+          margin: EdgeInsets.fromLTRB(16.w, 0, 16.w, 12.h),
+          decoration: BoxDecoration(
+            color: ColorManager.white.withValues(alpha: 0.9),
+            borderRadius: BorderRadius.circular(35.r),
+            boxShadow: [
+              BoxShadow(
+                color: ColorManager.primary.withValues(alpha: 0.08),
+                blurRadius: 30,
+                offset: const Offset(0, 15),
+              ),
+            ],
+            border: Border.all(color: ColorManager.primary.withValues(alpha: 0.15), width: 1.2),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(35.r),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 10.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildNavItem(0, Icons.home_outlined, Icons.home_rounded, AppStrings.home.tr()),
+                    _buildNavItem(
+                      1,
+                      Icons.grid_view_outlined,
+                      Icons.grid_view_rounded,
+                      AppStrings.categories.tr(),
+                    ),
+                    _buildNavItem(
+                      2,
+                      Icons.trending_up_outlined,
+                      Icons.trending_up_rounded,
+                      AppStrings.priceTracker.tr(),
+                    ),
+                    _buildNavItem(
+                      3,
+                      Icons.person_outline_rounded,
+                      Icons.person_rounded,
+                      AppStrings.account.tr(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

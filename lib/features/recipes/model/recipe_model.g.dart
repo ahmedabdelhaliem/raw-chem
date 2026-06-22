@@ -44,13 +44,36 @@ Map<String, dynamic> _$$RecipeDetailsResponseImplToJson(
       'data': instance.data,
     };
 
+_$RecipeIngredientModelImpl _$$RecipeIngredientModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$RecipeIngredientModelImpl(
+      id: (json['id'] as num).toInt(),
+      chemicalName: json['chemical_name'] as String?,
+      tradeName: json['trade_name'] as String?,
+      chemicalFormula: json['chemical_formula'] as String?,
+      percentage: json['percentage'] as String?,
+    );
+
+Map<String, dynamic> _$$RecipeIngredientModelImplToJson(
+        _$RecipeIngredientModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'chemical_name': instance.chemicalName,
+      'trade_name': instance.tradeName,
+      'chemical_formula': instance.chemicalFormula,
+      'percentage': instance.percentage,
+    };
+
 _$RecipeModelImpl _$$RecipeModelImplFromJson(Map<String, dynamic> json) =>
     _$RecipeModelImpl(
       id: (json['id'] as num).toInt(),
       order: json['order'] as String?,
       name: json['name'] as String?,
       description: json['description'] as String?,
-      ingredients: json['ingredients'] as String?,
+      ingredients: (json['ingredients'] as List<dynamic>?)
+          ?.map(
+              (e) => RecipeIngredientModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       measurements: json['measurements'] as String?,
       preparationInstructions: json['preparation_instructions'] as String?,
       image: json['image'] as String?,

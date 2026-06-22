@@ -30,7 +30,7 @@ class RecipeDetailsView extends StatelessWidget {
         // final String category = 'Default';
 
         final String desc = currentRecipe.description ?? '';
-        final String ingredients = currentRecipe.ingredients ?? '';
+        final List<RecipeIngredientModel> ingredients = currentRecipe.ingredients ?? [];
         final String measurements = currentRecipe.measurements ?? '';
         final String preparation = currentRecipe.preparationInstructions ?? '';
 
@@ -89,11 +89,9 @@ class RecipeDetailsView extends StatelessWidget {
                     ),
 
                     // Ingredients
-                    _buildSectionWithCopy(
+                    _buildIngredientsSection(
                       context,
-                      title: AppStrings.ingredients.tr(),
-                      content: ingredients,
-                      copyLabel: AppStrings.copy.tr(),
+                      ingredients: ingredients,
                       isLoading: isLoading,
                       delay: 400,
                     ),
@@ -139,8 +137,15 @@ class RecipeDetailsView extends StatelessWidget {
                     textFirst: true,
                     iconBuilder: Icon(Icons.copy_rounded, color: ColorManager.white, size: 20.sp),
                     onPressed: () {
+                      final formattedIngredients = ingredients.map((item) {
+                        final formula = item.chemicalFormula ?? '';
+                        final name = item.chemicalName ?? '';
+                        final trade = item.tradeName ?? '';
+                        final pct = item.percentage ?? '';
+                        return '$formula - $name - $trade - $pct%';
+                      }).join('\n');
                       final fullRecipe =
-                          '${AppStrings.recipe.tr()}: $title\n\n${AppStrings.ingredients.tr()}:\n$ingredients\n\n${AppStrings.measurements.tr()}:\n$measurements\n\n${AppStrings.preparationInstructions.tr()}:\n$preparation';
+                          '${AppStrings.recipe.tr()}: $title\n\n${AppStrings.ingredients.tr()}:\n$formattedIngredients\n\n${AppStrings.measurements.tr()}:\n$measurements\n\n${AppStrings.preparationInstructions.tr()}:\n$preparation';
                       AppFunctions.copyText(context: context, mounted: true, text: fullRecipe);
                     },
                   ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.5),
@@ -266,6 +271,223 @@ class RecipeDetailsView extends StatelessWidget {
           ).animate().fadeIn(delay: (delay + 100).ms).scale(),
         SizedBox(height: 20.h),
       ],
+    );
+  }
+
+  Widget _buildIngredientsSection(
+    BuildContext context, {
+    required List<RecipeIngredientModel> ingredients,
+    required bool isLoading,
+    required int delay,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          AppStrings.ingredients.tr(),
+          style: TextStyle(
+            fontSize: 12.sp,
+            color: ColorManager.greyTextColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: 8.h),
+        _buildIngredientsTable(context, ingredients, isLoading),
+        SizedBox(height: 10.h),
+        if (!isLoading || ingredients.isNotEmpty)
+          Align(
+            alignment: context.locale.languageCode == 'ar'
+                ? Alignment.centerRight
+                : Alignment.centerLeft,
+            child: InkWell(
+              onTap: () {
+                final formattedIngredients = ingredients.map((item) {
+                  final formula = item.chemicalFormula ?? '';
+                  final name = item.chemicalName ?? '';
+                  final trade = item.tradeName ?? '';
+                  final pct = item.percentage ?? '';
+                  return '$formula - $name - $trade - $pct%';
+                }).join('\n');
+                AppFunctions.copyText(context: context, mounted: true, text: formattedIngredients);
+              },
+              borderRadius: BorderRadius.circular(8.r),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                decoration: BoxDecoration(
+                  color: const Color(0xffD2E8B1),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      AppStrings.copy.tr(),
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.bold,
+                        color: ColorManager.primary,
+                      ),
+                    ),
+                    SizedBox(width: 5.w),
+                    Icon(Icons.copy_rounded, color: ColorManager.primary, size: 16.sp),
+                  ],
+                ),
+              ),
+            ),
+          ).animate().fadeIn(delay: (delay + 100).ms).scale(),
+        SizedBox(height: 20.h),
+      ],
+    );
+  }
+
+  Widget _buildIngredientsTable(BuildContext context, List<RecipeIngredientModel> ingredients, bool isLoading) {
+    if (isLoading && ingredients.isEmpty) {
+      return SkeletonWidget(
+        isLoading: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SkeletonBar(width: double.infinity, height: 40.h, radius: 8.r),
+            SizedBox(height: 10.h),
+            SkeletonBar(width: double.infinity, height: 35.h, radius: 8.r),
+            SizedBox(height: 5.h),
+            SkeletonBar(width: double.infinity, height: 35.h, radius: 8.r),
+            SizedBox(height: 5.h),
+            SkeletonBar(width: double.infinity, height: 35.h, radius: 8.r),
+          ],
+        ),
+      );
+    }
+
+    if (ingredients.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20.h),
+          child: Text(
+            AppStrings.noDataFound.tr(),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: ColorManager.greyTextColor,
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Build the table
+    return Container(
+      decoration: BoxDecoration(
+        color: ColorManager.white,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: ColorManager.greyBorder, width: 1.r),
+        boxShadow: [
+          BoxShadow(
+            color: ColorManager.black.withValues(alpha: 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12.r),
+        child: Table(
+          border: TableBorder(
+            verticalInside: BorderSide(
+              color: ColorManager.greyBorder.withValues(alpha: 0.6),
+              width: 1.r,
+            ),
+            horizontalInside: BorderSide(
+              color: ColorManager.greyBorder.withValues(alpha: 0.4),
+              width: 1.r,
+            ),
+          ),
+          columnWidths: const {
+            0: FlexColumnWidth(1.0), // Chemical Formula (short)
+            1: FlexColumnWidth(1.6), // Chemical Name (long)
+            2: FlexColumnWidth(1.4), // Trade Name (medium)
+            3: FlexColumnWidth(0.8), // Percentage (very short)
+          },
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: [
+            // Header Row
+            TableRow(
+              decoration: BoxDecoration(
+                color: ColorManager.primary.withValues(alpha: 0.06),
+              ),
+              children: [
+                _buildHeaderCell(AppStrings.chemicalFormula.tr(), context, isShort: true),
+                _buildHeaderCell(AppStrings.chemicalName.tr(), context, isShort: false),
+                _buildHeaderCell(AppStrings.tradeName.tr(), context, isShort: false),
+                _buildHeaderCell(AppStrings.percentage.tr(), context, isShort: true),
+              ],
+            ),
+            // Data Rows
+            ...List.generate(ingredients.length, (index) {
+              final item = ingredients[index];
+              final isOdd = index % 2 != 0;
+              return TableRow(
+                decoration: BoxDecoration(
+                  color: isOdd ? ColorManager.fillColor : ColorManager.white,
+                ),
+                children: [
+                  _buildDataCell(item.chemicalFormula ?? '', context, isShort: true),
+                  _buildDataCell(item.chemicalName ?? '', context, isShort: false),
+                  _buildDataCell(item.tradeName ?? '', context, isShort: false),
+                  _buildDataCell(
+                    item.percentage != null ? '${item.percentage}%' : '',
+                    context,
+                    isShort: true,
+                    isBold: true,
+                    textColor: ColorManager.primary,
+                  ),
+                ],
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderCell(String text, BuildContext context, {required bool isShort}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 10.sp,
+          fontWeight: FontWeight.bold,
+          color: ColorManager.primary,
+          fontFamily: 'Rubik',
+        ),
+        textAlign: isShort
+            ? TextAlign.center
+            : (context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left),
+      ),
+    );
+  }
+
+  Widget _buildDataCell(
+    String text,
+    BuildContext context, {
+    required bool isShort,
+    bool isBold = false,
+    Color? textColor,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 10.sp,
+          fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+          color: textColor ?? ColorManager.textColor,
+          fontFamily: 'Rubik',
+        ),
+        textAlign: isShort
+            ? TextAlign.center
+            : (context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left),
+      ),
     );
   }
 }

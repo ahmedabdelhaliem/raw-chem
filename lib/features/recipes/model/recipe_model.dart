@@ -30,13 +30,27 @@ class RecipeDetailsResponse with _$RecipeDetailsResponse {
 }
 
 @freezed
+class RecipeIngredientModel with _$RecipeIngredientModel {
+  const factory RecipeIngredientModel({
+    required int id,
+    @JsonKey(name: 'chemical_name') String? chemicalName,
+    @JsonKey(name: 'trade_name') String? tradeName,
+    @JsonKey(name: 'chemical_formula') String? chemicalFormula,
+    String? percentage,
+  }) = _RecipeIngredientModel;
+
+  factory RecipeIngredientModel.fromJson(Map<String, dynamic> json) =>
+      _$RecipeIngredientModelFromJson(json);
+}
+
+@freezed
 class RecipeModel with _$RecipeModel {
   const factory RecipeModel({
     required int id,
     String? order,
     String? name,
     String? description,
-    String? ingredients,
+    List<RecipeIngredientModel>? ingredients,
     String? measurements,
     @JsonKey(name: 'preparation_instructions') String? preparationInstructions,
     String? image,

@@ -16,6 +16,7 @@ class DefaultBannerWidget<T> extends StatefulWidget {
   final double enlargeFactor;
   final bool isLoading;
   final bool showIndicators;
+  final BoxFit fit;
 
   const DefaultBannerWidget({
     super.key,
@@ -28,6 +29,7 @@ class DefaultBannerWidget<T> extends StatefulWidget {
     this.enlargeFactor = .3,
     this.isLoading = false,
     this.showIndicators = true,
+    this.fit = BoxFit.fill,
   });
 
   @override
@@ -69,7 +71,10 @@ class _DefaultBannerWidgetState<T> extends State<DefaultBannerWidget<T>> {
           items: widget.images
               .asMap()
               .entries
-              .map((entry) => _buildImage(entry.value, entry.key, applyPadding: true))
+              .map(
+                (entry) =>
+                    _buildImage(entry.value, entry.key, applyPadding: true),
+              )
               .toList(),
           options: carousel.CarouselOptions(
             initialPage: 0,
@@ -108,22 +113,24 @@ class _DefaultBannerWidgetState<T> extends State<DefaultBannerWidget<T>> {
             imageUrl: widget.imageUrl(image),
             imageBuilder: (context, imageProvider) => Container(
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                ),
+                image: DecorationImage(image: imageProvider, fit: widget.fit),
               ),
             ),
             height: double.infinity,
-             width: double.infinity,
-            placeholder: (context, url) => const ShimmerContainerWidget(height: double.infinity),
+            width: double.infinity,
+            placeholder: (context, url) =>
+                const ShimmerContainerWidget(height: double.infinity),
             errorWidget: (context, url, error) => Container(
               decoration: BoxDecoration(
                 color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Center(
-                child: Icon(Icons.image_outlined, color: Colors.grey.shade400, size: 40),
+                child: Icon(
+                  Icons.image_outlined,
+                  color: Colors.grey.shade400,
+                  size: 40,
+                ),
               ),
             ),
           ),

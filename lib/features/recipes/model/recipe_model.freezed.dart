@@ -431,6 +431,245 @@ abstract class _RecipeDetailsResponse implements RecipeDetailsResponse {
       get copyWith => throw _privateConstructorUsedError;
 }
 
+RecipeIngredientModel _$RecipeIngredientModelFromJson(
+    Map<String, dynamic> json) {
+  return _RecipeIngredientModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$RecipeIngredientModel {
+  int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'chemical_name')
+  String? get chemicalName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'trade_name')
+  String? get tradeName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'chemical_formula')
+  String? get chemicalFormula => throw _privateConstructorUsedError;
+  String? get percentage => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $RecipeIngredientModelCopyWith<RecipeIngredientModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $RecipeIngredientModelCopyWith<$Res> {
+  factory $RecipeIngredientModelCopyWith(RecipeIngredientModel value,
+          $Res Function(RecipeIngredientModel) then) =
+      _$RecipeIngredientModelCopyWithImpl<$Res, RecipeIngredientModel>;
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'chemical_name') String? chemicalName,
+      @JsonKey(name: 'trade_name') String? tradeName,
+      @JsonKey(name: 'chemical_formula') String? chemicalFormula,
+      String? percentage});
+}
+
+/// @nodoc
+class _$RecipeIngredientModelCopyWithImpl<$Res,
+        $Val extends RecipeIngredientModel>
+    implements $RecipeIngredientModelCopyWith<$Res> {
+  _$RecipeIngredientModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? chemicalName = freezed,
+    Object? tradeName = freezed,
+    Object? chemicalFormula = freezed,
+    Object? percentage = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      chemicalName: freezed == chemicalName
+          ? _value.chemicalName
+          : chemicalName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tradeName: freezed == tradeName
+          ? _value.tradeName
+          : tradeName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      chemicalFormula: freezed == chemicalFormula
+          ? _value.chemicalFormula
+          : chemicalFormula // ignore: cast_nullable_to_non_nullable
+              as String?,
+      percentage: freezed == percentage
+          ? _value.percentage
+          : percentage // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$RecipeIngredientModelImplCopyWith<$Res>
+    implements $RecipeIngredientModelCopyWith<$Res> {
+  factory _$$RecipeIngredientModelImplCopyWith(
+          _$RecipeIngredientModelImpl value,
+          $Res Function(_$RecipeIngredientModelImpl) then) =
+      __$$RecipeIngredientModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'chemical_name') String? chemicalName,
+      @JsonKey(name: 'trade_name') String? tradeName,
+      @JsonKey(name: 'chemical_formula') String? chemicalFormula,
+      String? percentage});
+}
+
+/// @nodoc
+class __$$RecipeIngredientModelImplCopyWithImpl<$Res>
+    extends _$RecipeIngredientModelCopyWithImpl<$Res,
+        _$RecipeIngredientModelImpl>
+    implements _$$RecipeIngredientModelImplCopyWith<$Res> {
+  __$$RecipeIngredientModelImplCopyWithImpl(_$RecipeIngredientModelImpl _value,
+      $Res Function(_$RecipeIngredientModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? chemicalName = freezed,
+    Object? tradeName = freezed,
+    Object? chemicalFormula = freezed,
+    Object? percentage = freezed,
+  }) {
+    return _then(_$RecipeIngredientModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      chemicalName: freezed == chemicalName
+          ? _value.chemicalName
+          : chemicalName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tradeName: freezed == tradeName
+          ? _value.tradeName
+          : tradeName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      chemicalFormula: freezed == chemicalFormula
+          ? _value.chemicalFormula
+          : chemicalFormula // ignore: cast_nullable_to_non_nullable
+              as String?,
+      percentage: freezed == percentage
+          ? _value.percentage
+          : percentage // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$RecipeIngredientModelImpl implements _RecipeIngredientModel {
+  const _$RecipeIngredientModelImpl(
+      {required this.id,
+      @JsonKey(name: 'chemical_name') this.chemicalName,
+      @JsonKey(name: 'trade_name') this.tradeName,
+      @JsonKey(name: 'chemical_formula') this.chemicalFormula,
+      this.percentage});
+
+  factory _$RecipeIngredientModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$RecipeIngredientModelImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  @JsonKey(name: 'chemical_name')
+  final String? chemicalName;
+  @override
+  @JsonKey(name: 'trade_name')
+  final String? tradeName;
+  @override
+  @JsonKey(name: 'chemical_formula')
+  final String? chemicalFormula;
+  @override
+  final String? percentage;
+
+  @override
+  String toString() {
+    return 'RecipeIngredientModel(id: $id, chemicalName: $chemicalName, tradeName: $tradeName, chemicalFormula: $chemicalFormula, percentage: $percentage)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RecipeIngredientModelImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.chemicalName, chemicalName) ||
+                other.chemicalName == chemicalName) &&
+            (identical(other.tradeName, tradeName) ||
+                other.tradeName == tradeName) &&
+            (identical(other.chemicalFormula, chemicalFormula) ||
+                other.chemicalFormula == chemicalFormula) &&
+            (identical(other.percentage, percentage) ||
+                other.percentage == percentage));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, id, chemicalName, tradeName, chemicalFormula, percentage);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RecipeIngredientModelImplCopyWith<_$RecipeIngredientModelImpl>
+      get copyWith => __$$RecipeIngredientModelImplCopyWithImpl<
+          _$RecipeIngredientModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RecipeIngredientModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _RecipeIngredientModel implements RecipeIngredientModel {
+  const factory _RecipeIngredientModel(
+      {required final int id,
+      @JsonKey(name: 'chemical_name') final String? chemicalName,
+      @JsonKey(name: 'trade_name') final String? tradeName,
+      @JsonKey(name: 'chemical_formula') final String? chemicalFormula,
+      final String? percentage}) = _$RecipeIngredientModelImpl;
+
+  factory _RecipeIngredientModel.fromJson(Map<String, dynamic> json) =
+      _$RecipeIngredientModelImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  @JsonKey(name: 'chemical_name')
+  String? get chemicalName;
+  @override
+  @JsonKey(name: 'trade_name')
+  String? get tradeName;
+  @override
+  @JsonKey(name: 'chemical_formula')
+  String? get chemicalFormula;
+  @override
+  String? get percentage;
+  @override
+  @JsonKey(ignore: true)
+  _$$RecipeIngredientModelImplCopyWith<_$RecipeIngredientModelImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
 RecipeModel _$RecipeModelFromJson(Map<String, dynamic> json) {
   return _RecipeModel.fromJson(json);
 }
@@ -441,7 +680,8 @@ mixin _$RecipeModel {
   String? get order => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
-  String? get ingredients => throw _privateConstructorUsedError;
+  List<RecipeIngredientModel>? get ingredients =>
+      throw _privateConstructorUsedError;
   String? get measurements => throw _privateConstructorUsedError;
   @JsonKey(name: 'preparation_instructions')
   String? get preparationInstructions => throw _privateConstructorUsedError;
@@ -464,7 +704,7 @@ abstract class $RecipeModelCopyWith<$Res> {
       String? order,
       String? name,
       String? description,
-      String? ingredients,
+      List<RecipeIngredientModel>? ingredients,
       String? measurements,
       @JsonKey(name: 'preparation_instructions')
       String? preparationInstructions,
@@ -513,7 +753,7 @@ class _$RecipeModelCopyWithImpl<$Res, $Val extends RecipeModel>
       ingredients: freezed == ingredients
           ? _value.ingredients
           : ingredients // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<RecipeIngredientModel>?,
       measurements: freezed == measurements
           ? _value.measurements
           : measurements // ignore: cast_nullable_to_non_nullable
@@ -543,7 +783,7 @@ abstract class _$$RecipeModelImplCopyWith<$Res>
       String? order,
       String? name,
       String? description,
-      String? ingredients,
+      List<RecipeIngredientModel>? ingredients,
       String? measurements,
       @JsonKey(name: 'preparation_instructions')
       String? preparationInstructions,
@@ -588,9 +828,9 @@ class __$$RecipeModelImplCopyWithImpl<$Res>
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
       ingredients: freezed == ingredients
-          ? _value.ingredients
+          ? _value._ingredients
           : ingredients // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<RecipeIngredientModel>?,
       measurements: freezed == measurements
           ? _value.measurements
           : measurements // ignore: cast_nullable_to_non_nullable
@@ -615,10 +855,11 @@ class _$RecipeModelImpl implements _RecipeModel {
       this.order,
       this.name,
       this.description,
-      this.ingredients,
+      final List<RecipeIngredientModel>? ingredients,
       this.measurements,
       @JsonKey(name: 'preparation_instructions') this.preparationInstructions,
-      this.image});
+      this.image})
+      : _ingredients = ingredients;
 
   factory _$RecipeModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$RecipeModelImplFromJson(json);
@@ -631,8 +872,16 @@ class _$RecipeModelImpl implements _RecipeModel {
   final String? name;
   @override
   final String? description;
+  final List<RecipeIngredientModel>? _ingredients;
   @override
-  final String? ingredients;
+  List<RecipeIngredientModel>? get ingredients {
+    final value = _ingredients;
+    if (value == null) return null;
+    if (_ingredients is EqualUnmodifiableListView) return _ingredients;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final String? measurements;
   @override
@@ -656,8 +905,8 @@ class _$RecipeModelImpl implements _RecipeModel {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.ingredients, ingredients) ||
-                other.ingredients == ingredients) &&
+            const DeepCollectionEquality()
+                .equals(other._ingredients, _ingredients) &&
             (identical(other.measurements, measurements) ||
                 other.measurements == measurements) &&
             (identical(
@@ -668,8 +917,16 @@ class _$RecipeModelImpl implements _RecipeModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, order, name, description,
-      ingredients, measurements, preparationInstructions, image);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      order,
+      name,
+      description,
+      const DeepCollectionEquality().hash(_ingredients),
+      measurements,
+      preparationInstructions,
+      image);
 
   @JsonKey(ignore: true)
   @override
@@ -691,7 +948,7 @@ abstract class _RecipeModel implements RecipeModel {
       final String? order,
       final String? name,
       final String? description,
-      final String? ingredients,
+      final List<RecipeIngredientModel>? ingredients,
       final String? measurements,
       @JsonKey(name: 'preparation_instructions')
       final String? preparationInstructions,
@@ -709,7 +966,7 @@ abstract class _RecipeModel implements RecipeModel {
   @override
   String? get description;
   @override
-  String? get ingredients;
+  List<RecipeIngredientModel>? get ingredients;
   @override
   String? get measurements;
   @override

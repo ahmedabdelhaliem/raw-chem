@@ -41,7 +41,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDftJ6t10klyJ5-miCqknmYaAX9VZ_-ZjI',
-    appId: '1:632822449676:android:41609b6b1d0f9505e49029',
+    appId: '1:632822449676:android:d54ba3ab032eb3eae49029',
     messagingSenderId: '632822449676',
     projectId: 'rowchem-4c7a3',
     databaseURL: 'https://rowchem-4c7a3-default-rtdb.firebaseio.com',
