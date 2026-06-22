@@ -30,7 +30,8 @@ class RecipeDetailsView extends StatelessWidget {
         // final String category = 'Default';
 
         final String desc = currentRecipe.description ?? '';
-        final List<RecipeIngredientModel> ingredients = currentRecipe.ingredients ?? [];
+        final List<RecipeIngredientModel> ingredients =
+            currentRecipe.ingredients ?? [];
         final String measurements = currentRecipe.measurements ?? '';
         final String preparation = currentRecipe.preparationInstructions ?? '';
 
@@ -44,7 +45,10 @@ class RecipeDetailsView extends StatelessWidget {
             actions: context.locale.languageCode == 'ar'
                 ? [
                     IconButton(
-                      icon: const Icon(Icons.arrow_forward_ios_rounded, color: ColorManager.black),
+                      icon: const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: ColorManager.black,
+                      ),
                       onPressed: () => context.pop(),
                     ),
                   ]
@@ -135,18 +139,28 @@ class RecipeDetailsView extends StatelessWidget {
                     height: 50.h,
                     isIcon: true,
                     textFirst: true,
-                    iconBuilder: Icon(Icons.copy_rounded, color: ColorManager.white, size: 20.sp),
+                    iconBuilder: Icon(
+                      Icons.copy_rounded,
+                      color: ColorManager.white,
+                      size: 20.sp,
+                    ),
                     onPressed: () {
-                      final formattedIngredients = ingredients.map((item) {
-                        final formula = item.chemicalFormula ?? '';
-                        final name = item.chemicalName ?? '';
-                        final trade = item.tradeName ?? '';
-                        final pct = item.percentage ?? '';
-                        return '$formula - $name - $trade - $pct%';
-                      }).join('\n');
+                      final formattedIngredients = ingredients
+                          .map((item) {
+                            final formula = item.chemicalFormula ?? '';
+                            final name = item.chemicalName ?? '';
+                            final trade = item.tradeName ?? '';
+                            final pct = item.percentage ?? '';
+                            return '$formula - $name - $trade - $pct%';
+                          })
+                          .join('\n');
                       final fullRecipe =
                           '${AppStrings.recipe.tr()}: $title\n\n${AppStrings.ingredients.tr()}:\n$formattedIngredients\n\n${AppStrings.measurements.tr()}:\n$measurements\n\n${AppStrings.preparationInstructions.tr()}:\n$preparation';
-                      AppFunctions.copyText(context: context, mounted: true, text: fullRecipe);
+                      AppFunctions.copyText(
+                        context: context,
+                        mounted: true,
+                        text: fullRecipe,
+                      );
                     },
                   ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.5),
                 ),
@@ -166,8 +180,9 @@ class RecipeDetailsView extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: imageUrl,
         fit: BoxFit.cover,
-        placeholder: (context, url) =>
-            const Center(child: CircularProgressIndicator(color: ColorManager.primary)),
+        placeholder: (context, url) => const Center(
+          child: CircularProgressIndicator(color: ColorManager.primary),
+        ),
         errorWidget: (context, url, error) =>
             const Icon(Icons.error, color: ColorManager.greyTextColor),
       ),
@@ -216,7 +231,9 @@ class RecipeDetailsView extends StatelessWidget {
               height: 1.5,
               fontWeight: FontWeight.w600,
             ),
-            textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+            textAlign: context.locale.languageCode == 'ar'
+                ? TextAlign.right
+                : TextAlign.left,
           ),
         SizedBox(height: 15.h),
       ],
@@ -234,7 +251,13 @@ class RecipeDetailsView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildSection(context, title: title, content: content, isLoading: isLoading, delay: delay),
+        _buildSection(
+          context,
+          title: title,
+          content: content,
+          isLoading: isLoading,
+          delay: delay,
+        ),
         if (!isLoading || content.isNotEmpty)
           Align(
             alignment: context.locale.languageCode == 'ar'
@@ -242,7 +265,11 @@ class RecipeDetailsView extends StatelessWidget {
                 : Alignment.centerLeft,
             child: InkWell(
               onTap: () {
-                AppFunctions.copyText(context: context, mounted: true, text: content);
+                AppFunctions.copyText(
+                  context: context,
+                  mounted: true,
+                  text: content,
+                );
               },
               borderRadius: BorderRadius.circular(8.r),
               child: Container(
@@ -263,7 +290,11 @@ class RecipeDetailsView extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 5.w),
-                    Icon(Icons.copy_rounded, color: ColorManager.primary, size: 16.sp),
+                    Icon(
+                      Icons.copy_rounded,
+                      color: ColorManager.primary,
+                      size: 16.sp,
+                    ),
                   ],
                 ),
               ),
@@ -301,14 +332,20 @@ class RecipeDetailsView extends StatelessWidget {
                 : Alignment.centerLeft,
             child: InkWell(
               onTap: () {
-                final formattedIngredients = ingredients.map((item) {
-                  final formula = item.chemicalFormula ?? '';
-                  final name = item.chemicalName ?? '';
-                  final trade = item.tradeName ?? '';
-                  final pct = item.percentage ?? '';
-                  return '$formula - $name - $trade - $pct%';
-                }).join('\n');
-                AppFunctions.copyText(context: context, mounted: true, text: formattedIngredients);
+                final formattedIngredients = ingredients
+                    .map((item) {
+                      final formula = item.chemicalFormula ?? '';
+                      final name = item.chemicalName ?? '';
+                      final trade = item.tradeName ?? '';
+                      final pct = item.percentage ?? '';
+                      return '$formula - $name - $trade - $pct%';
+                    })
+                    .join('\n');
+                AppFunctions.copyText(
+                  context: context,
+                  mounted: true,
+                  text: formattedIngredients,
+                );
               },
               borderRadius: BorderRadius.circular(8.r),
               child: Container(
@@ -329,7 +366,11 @@ class RecipeDetailsView extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 5.w),
-                    Icon(Icons.copy_rounded, color: ColorManager.primary, size: 16.sp),
+                    Icon(
+                      Icons.copy_rounded,
+                      color: ColorManager.primary,
+                      size: 16.sp,
+                    ),
                   ],
                 ),
               ),
@@ -340,7 +381,11 @@ class RecipeDetailsView extends StatelessWidget {
     );
   }
 
-  Widget _buildIngredientsTable(BuildContext context, List<RecipeIngredientModel> ingredients, bool isLoading) {
+  Widget _buildIngredientsTable(
+    BuildContext context,
+    List<RecipeIngredientModel> ingredients,
+    bool isLoading,
+  ) {
     if (isLoading && ingredients.isEmpty) {
       return SkeletonWidget(
         isLoading: true,
@@ -402,10 +447,10 @@ class RecipeDetailsView extends StatelessWidget {
             ),
           ),
           columnWidths: const {
-            0: FlexColumnWidth(1.0), // Chemical Formula (short)
-            1: FlexColumnWidth(1.6), // Chemical Name (long)
-            2: FlexColumnWidth(1.4), // Trade Name (medium)
-            3: FlexColumnWidth(0.8), // Percentage (very short)
+            0: FlexColumnWidth(1.6), // Chemical Name (long)
+            1: FlexColumnWidth(1.4), // Trade Name (medium)
+            2: FlexColumnWidth(0.7), // Percentage (very short)
+            3: FlexColumnWidth(1.4), // Chem// Chemical Formula / Notes (short)
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: [
@@ -415,10 +460,26 @@ class RecipeDetailsView extends StatelessWidget {
                 color: ColorManager.primary.withValues(alpha: 0.06),
               ),
               children: [
-                _buildHeaderCell(AppStrings.chemicalFormula.tr(), context, isShort: true),
-                _buildHeaderCell(AppStrings.chemicalName.tr(), context, isShort: false),
-                _buildHeaderCell(AppStrings.tradeName.tr(), context, isShort: false),
-                _buildHeaderCell(AppStrings.percentage.tr(), context, isShort: true),
+                _buildHeaderCell(
+                  AppStrings.chemicalName.tr(),
+                  context,
+                  isShort: false,
+                ),
+                _buildHeaderCell(
+                  AppStrings.tradeName.tr(),
+                  context,
+                  isShort: false,
+                ),
+                _buildHeaderCell(
+                  AppStrings.percentage.tr(),
+                  context,
+                  isShort: true,
+                ),
+                _buildHeaderCell(
+                  AppStrings.chemicalFormula.tr(),
+                  context,
+                  isShort: true,
+                ),
               ],
             ),
             // Data Rows
@@ -430,8 +491,11 @@ class RecipeDetailsView extends StatelessWidget {
                   color: isOdd ? ColorManager.fillColor : ColorManager.white,
                 ),
                 children: [
-                  _buildDataCell(item.chemicalFormula ?? '', context, isShort: true),
-                  _buildDataCell(item.chemicalName ?? '', context, isShort: false),
+                  _buildDataCell(
+                    item.chemicalName ?? '',
+                    context,
+                    isShort: false,
+                  ),
                   _buildDataCell(item.tradeName ?? '', context, isShort: false),
                   _buildDataCell(
                     item.percentage != null ? '${item.percentage}%' : '',
@@ -439,6 +503,11 @@ class RecipeDetailsView extends StatelessWidget {
                     isShort: true,
                     isBold: true,
                     textColor: ColorManager.primary,
+                  ),
+                  _buildDataCell(
+                    item.chemicalFormula ?? '',
+                    context,
+                    isShort: true,
                   ),
                 ],
               );
@@ -449,7 +518,11 @@ class RecipeDetailsView extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderCell(String text, BuildContext context, {required bool isShort}) {
+  Widget _buildHeaderCell(
+    String text,
+    BuildContext context, {
+    required bool isShort,
+  }) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
       child: Text(
@@ -462,7 +535,9 @@ class RecipeDetailsView extends StatelessWidget {
         ),
         textAlign: isShort
             ? TextAlign.center
-            : (context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left),
+            : (context.locale.languageCode == 'ar'
+                  ? TextAlign.right
+                  : TextAlign.left),
       ),
     );
   }
@@ -486,7 +561,9 @@ class RecipeDetailsView extends StatelessWidget {
         ),
         textAlign: isShort
             ? TextAlign.center
-            : (context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left),
+            : (context.locale.languageCode == 'ar'
+                  ? TextAlign.right
+                  : TextAlign.left),
       ),
     );
   }

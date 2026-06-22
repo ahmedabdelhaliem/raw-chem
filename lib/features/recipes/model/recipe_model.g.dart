@@ -50,7 +50,7 @@ _$RecipeIngredientModelImpl _$$RecipeIngredientModelImplFromJson(
       id: (json['id'] as num).toInt(),
       chemicalName: json['chemical_name'] as String?,
       tradeName: json['trade_name'] as String?,
-      chemicalFormula: json['chemical_formula'] as String?,
+      chemicalFormula: json['notes'] as String?,
       percentage: json['percentage'] as String?,
     );
 
@@ -60,7 +60,7 @@ Map<String, dynamic> _$$RecipeIngredientModelImplToJson(
       'id': instance.id,
       'chemical_name': instance.chemicalName,
       'trade_name': instance.tradeName,
-      'chemical_formula': instance.chemicalFormula,
+      'notes': instance.chemicalFormula,
       'percentage': instance.percentage,
     };
 

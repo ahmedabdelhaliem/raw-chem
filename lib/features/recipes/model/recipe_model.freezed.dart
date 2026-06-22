@@ -443,7 +443,7 @@ mixin _$RecipeIngredientModel {
   String? get chemicalName => throw _privateConstructorUsedError;
   @JsonKey(name: 'trade_name')
   String? get tradeName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'chemical_formula')
+  @JsonKey(name: 'notes')
   String? get chemicalFormula => throw _privateConstructorUsedError;
   String? get percentage => throw _privateConstructorUsedError;
 
@@ -463,7 +463,7 @@ abstract class $RecipeIngredientModelCopyWith<$Res> {
       {int id,
       @JsonKey(name: 'chemical_name') String? chemicalName,
       @JsonKey(name: 'trade_name') String? tradeName,
-      @JsonKey(name: 'chemical_formula') String? chemicalFormula,
+      @JsonKey(name: 'notes') String? chemicalFormula,
       String? percentage});
 }
 
@@ -525,7 +525,7 @@ abstract class _$$RecipeIngredientModelImplCopyWith<$Res>
       {int id,
       @JsonKey(name: 'chemical_name') String? chemicalName,
       @JsonKey(name: 'trade_name') String? tradeName,
-      @JsonKey(name: 'chemical_formula') String? chemicalFormula,
+      @JsonKey(name: 'notes') String? chemicalFormula,
       String? percentage});
 }
 
@@ -579,7 +579,7 @@ class _$RecipeIngredientModelImpl implements _RecipeIngredientModel {
       {required this.id,
       @JsonKey(name: 'chemical_name') this.chemicalName,
       @JsonKey(name: 'trade_name') this.tradeName,
-      @JsonKey(name: 'chemical_formula') this.chemicalFormula,
+      @JsonKey(name: 'notes') this.chemicalFormula,
       this.percentage});
 
   factory _$RecipeIngredientModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -594,7 +594,7 @@ class _$RecipeIngredientModelImpl implements _RecipeIngredientModel {
   @JsonKey(name: 'trade_name')
   final String? tradeName;
   @override
-  @JsonKey(name: 'chemical_formula')
+  @JsonKey(name: 'notes')
   final String? chemicalFormula;
   @override
   final String? percentage;
@@ -645,7 +645,7 @@ abstract class _RecipeIngredientModel implements RecipeIngredientModel {
       {required final int id,
       @JsonKey(name: 'chemical_name') final String? chemicalName,
       @JsonKey(name: 'trade_name') final String? tradeName,
-      @JsonKey(name: 'chemical_formula') final String? chemicalFormula,
+      @JsonKey(name: 'notes') final String? chemicalFormula,
       final String? percentage}) = _$RecipeIngredientModelImpl;
 
   factory _RecipeIngredientModel.fromJson(Map<String, dynamic> json) =
@@ -660,7 +660,7 @@ abstract class _RecipeIngredientModel implements RecipeIngredientModel {
   @JsonKey(name: 'trade_name')
   String? get tradeName;
   @override
-  @JsonKey(name: 'chemical_formula')
+  @JsonKey(name: 'notes')
   String? get chemicalFormula;
   @override
   String? get percentage;

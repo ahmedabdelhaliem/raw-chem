@@ -18,26 +18,26 @@ class AppStrings {
   static const String noInternetTitle = "noInternetTitle";
 
   //=unKnownError
-  static const String unknownError = "Something went wrong";
+  static const String unknownError = "unknownError";
   //==back
-  static const String back = "Back";
+  static const String back = "back";
   //==textCopied
-  static const String textCopied = "Text copied";
+  static const String textCopied = "textCopied";
   //==confirm
-  static const String confirm = "Confirm";
+  static const String confirm = "confirm";
   //==cancel
-  static const String cancel = "Cancel";
+  static const String cancel = "cancel";
   static const String yes = "yes";
   static const String no = "no";
   //==guest
-  static const String guest = "Guest";
+  static const String guest = "guest";
   //==chooseFile
-  static const String chooseFile = "Choose file";
+  static const String chooseFile = "chooseFile";
   //==noFileSelected
 
-  static const String noFileSelected = "No file selected";
+  static const String noFileSelected = "noFileSelected";
   //==uploadImage
-  static const String uploadImage = "Upload image";
+  static const String uploadImage = "uploadImage";
   //==uploadVideo
   static const String uploadVideo = "Upload video";
   //=download

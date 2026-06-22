@@ -35,7 +35,7 @@ class RecipeIngredientModel with _$RecipeIngredientModel {
     required int id,
     @JsonKey(name: 'chemical_name') String? chemicalName,
     @JsonKey(name: 'trade_name') String? tradeName,
-    @JsonKey(name: 'chemical_formula') String? chemicalFormula,
+    @JsonKey(name: 'notes') String? chemicalFormula,
     String? percentage,
   }) = _RecipeIngredientModel;
 
